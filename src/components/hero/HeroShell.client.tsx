@@ -124,49 +124,81 @@ export function HeroShell() {
     let ro: ResizeObserver | null = null;
     let cancelled = false;
 
-    // ---- frames mode: progressive loader + canvas painter -------------------
+    // ---- frames mode: progressive loader + blended canvas painter -----------
+    // HTMLImageElement (not ImageBitmap) keeps frames compressed in memory — a
+    // 361-frame ImageBitmap cache would decode to gigabytes. The browser's own
+    // decode cache keeps nearby frames warm while scrubbing.
     const images: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
     const loadedFlags: boolean[] = new Array(frameCount).fill(false);
-    let currentIdx = 0;
+    let currentF = 0; // fractional frame position
+    let lastDrawnF = -1;
 
-    const draw = (idx: number) => {
+    const nearestLoaded = (idx: number) => {
+      for (let d = 0; d < frameCount; d++) {
+        if (idx - d >= 0 && loadedFlags[idx - d]) return idx - d;
+        if (idx + d < frameCount && loadedFlags[idx + d]) return idx + d;
+      }
+      return -1;
+    };
+
+    const paint = (
+      ctx: CanvasRenderingContext2D,
+      img: HTMLImageElement,
+      cw: number,
+      ch: number,
+      alpha: number
+    ) => {
+      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+      const dw = img.naturalWidth * scale;
+      const dh = img.naturalHeight * scale;
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    };
+
+    // Draw fractional frame f by crossfading frame ⌊f⌋ → ⌈f⌉ (removes stepping).
+    const drawBlend = (f: number, force = false) => {
+      if (!force && Math.abs(f - lastDrawnF) < 0.006) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
-      // nearest loaded frame (search outward)
-      let use = -1;
-      for (let d = 0; d < frameCount; d++) {
-        if (idx - d >= 0 && loadedFlags[idx - d]) {
-          use = idx - d;
-          break;
-        }
-        if (idx + d < frameCount && loadedFlags[idx + d]) {
-          use = idx + d;
-          break;
-        }
-      }
-      if (use < 0) return;
-      const img = images[use]!;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
       const cw = canvas.width;
       const ch = canvas.height;
-      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-      const dw = img.naturalWidth * scale;
-      const dh = img.naturalHeight * scale;
+
+      const i0 = Math.floor(f);
+      const frac = f - i0;
+      const i1 = Math.min(i0 + 1, frameCount - 1);
+
+      const use0 = loadedFlags[i0] ? i0 : nearestLoaded(i0);
+      if (use0 < 0) return; // nothing loaded near here yet
+      const use1 = loadedFlags[i1] ? i1 : -1;
+
+      ctx.globalAlpha = 1;
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, cw, ch);
-      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      paint(ctx, images[use0]!, cw, ch, 1);
+      // source-over with alpha = frac gives a true linear crossfade
+      if (use1 >= 0 && use1 !== use0 && frac > 0.001) {
+        paint(ctx, images[use1]!, cw, ch, frac);
+      }
+      ctx.globalAlpha = 1;
+      lastDrawnF = f;
     };
 
     const loadFrame = (i: number) =>
       new Promise<void>((resolve) => {
         if (loadedFlags[i]) return resolve();
         const img = new Image();
-        img.onload = () => {
+        const done = () => {
           images[i] = img;
           loadedFlags[i] = true;
-          if (Math.abs(i - currentIdx) < 4) draw(currentIdx);
+          if (Math.abs(i - currentF) < 3) drawBlend(currentF, true);
           resolve();
+        };
+        img.onload = () => {
+          // Prime the decode so the first paint of this frame never stalls.
+          if (img.decode) img.decode().then(done, done);
+          else done();
         };
         img.onerror = () => resolve();
         img.src = frameSrc(i);
@@ -174,7 +206,7 @@ export function HeroShell() {
 
     const loadProgressively = async () => {
       // coarse-to-fine passes so scrubbing works almost immediately
-      for (const stride of [12, 4, 1]) {
+      for (const stride of [16, 4, 1]) {
         const batch: Promise<void>[] = [];
         for (let i = 0; i < frameCount; i += stride) batch.push(loadFrame(i));
         await Promise.all(batch);
@@ -188,14 +220,14 @@ export function HeroShell() {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.round(canvas.clientWidth * dpr);
       canvas.height = Math.round(canvas.clientHeight * dpr);
-      draw(currentIdx);
+      drawBlend(currentF, true);
     };
 
     // ---- shared per-progress application ------------------------------------
     const apply = (p: number) => {
       if (mode === "frames") {
-        currentIdx = Math.round(p * (frameCount - 1));
-        draw(currentIdx);
+        currentF = p * (frameCount - 1);
+        drawBlend(currentF);
       } else {
         SCENES.forEach((s, i) => {
           const el = sceneRefs.current[i];
@@ -326,7 +358,7 @@ export function HeroShell() {
         {/* Intro copy — server-rendered, present from first paint */}
         <div ref={introRef} className="wrap relative z-10">
           <p className="micro-label micro-label--blue mb-6">
-            BATTERY INTELLIGENCE / 12V—1200V
+            BATTERY MANAGEMENT SYSTEMS
           </p>
           <h1 className="type-display max-w-[10ch]">Rewire the Planet.</h1>
           <p className="type-lead mt-8 max-w-[46ch]">

@@ -19,18 +19,18 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://webberec.com"),
   title: {
-    default: "Webber Electro Corp — Battery Intelligence / 12V—1200V",
-    template: "%s — Webber Electro Corp",
+    default: "Webber Electrocorp",
+    template: "%s — Webber Electrocorp",
   },
   description:
     "Electronics and software engineered in India, powering electric mobility and energy storage worldwide. BMS from 12V to 1200V, 4G/IoT telematics and BESS intelligence.",
   openGraph: {
-    siteName: "Webber Electro Corp",
+    siteName: "Webber Electrocorp",
     type: "website",
     images: ["/og/og-default.png"],
   },
   icons: {
-    icon: [{ url: "/favicon.png", sizes: "360x360", type: "image/png" }],
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
     apple: [{ url: "/apple-icon.png", sizes: "360x360", type: "image/png" }],
   },
 };

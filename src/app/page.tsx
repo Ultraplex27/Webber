@@ -12,7 +12,7 @@ import { SectionIntro } from "@/components/ui/TechnicalLabel";
 import { customerLogos, partners } from "@/content/company";
 
 export const metadata: Metadata = {
-  title: "Webber Electro Corp — Battery Intelligence / 12V—1200V",
+  title: "Webber Electrocorp",
   description:
     "One control layer, mobility to grid. BMS from 12V to 1200V, 75K+ deployments, engineered in India for electric mobility and energy storage worldwide.",
 };

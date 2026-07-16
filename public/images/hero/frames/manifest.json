@@ -1,6 +1,6 @@
 {
-  "count": 120,
+  "count": 361,
   "dir": "/images/hero/frames",
   "pattern": "frame-%04d.webp",
-  "source": "clip-full-15s.mp4 (Kling 3.0 via Higgsfield, 15s 1080p, extracted at 8fps)"
+  "source": "clip-full-15s.mp4 (Kling 3.0 via Higgsfield, 15s 1080p, extracted at native 24fps)"
 }
