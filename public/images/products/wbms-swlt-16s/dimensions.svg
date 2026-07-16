@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" fill="none">
+    <style>text{font-family:ui-monospace,Consolas,monospace;font-size:24px;fill:#465366} .s{stroke:#465366;stroke-width:1.2} .g{stroke:#94A0B2;stroke-width:1}</style>
+    <rect x="215" y="120" width="470" height="250" rx="18" class="s"/>
+    <circle cx="253" cy="158" r="14" class="s"/><circle cx="647" cy="158" r="14" class="s"/>
+    <circle cx="253" cy="332" r="14" class="s"/><circle cx="647" cy="332" r="14" class="s"/>
+    <rect x="265" y="178" width="120" height="50" rx="5" class="g"/>
+    <rect x="495" y="285" width="140" height="48" rx="5" class="g"/>
+    <path d="M 215 426 h470" class="s"/><path d="M 215 412 v28 M 685 412 v28" class="s"/>
+    <path d="M 432 426 l-16 -8 v16 z M 468 426 l16 -8 v16 z" fill="#465366"/>
+    <text x="392" y="468">104 mm</text>
+    <path d="M 159 120 v250" class="s"/><path d="M 145 120 h28 M 145 370 h28" class="s"/>
+    <path d="M 159 227 l-8 -16 h16 z M 159 263 l-8 16 h16 z" fill="#465366"/>
+    <text x="85" y="255" transform="rotate(-90 85 255)">58 mm</text>
+    <text x="64" y="72">WBMS-SWLT 16S / ORTHOGRAPHIC OUTLINE</text>
+  </svg>
