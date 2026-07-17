@@ -43,8 +43,10 @@ const moduleVisuals: Record<string, React.ReactNode> = {
   thermal: (
     <SmartImage
       src="/images/technology/thermal-comparison.webp"
+      // ratio tracks the trimmed artwork, so the card hugs it instead of
+      // stretching around baked-in whitespace
+      ratio="1542 / 729"
       alt="Thermal map comparison: standard FR-4 board versus cooler metal-core board"
-      ratio="16 / 9"
       placeholderLabel="THERMAL MAP / FR-4 VS METAL-CORE"
     />
   ),

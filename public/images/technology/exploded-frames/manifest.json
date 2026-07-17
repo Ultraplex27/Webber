@@ -2,6 +2,5 @@
   "count": 97,
   "dir": "/images/technology/exploded-frames",
   "pattern": "frame-%04d.webp",
-  "poster": "/images/technology/board-exploded.webp",
   "source": "exploded-reveal.mp4 (Kling 2.5 Turbo via Higgsfield, assembled board -> exploded stack, 4s 24fps)"
 }

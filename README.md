@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Webber Electro Corp
 
-## Getting Started
+Marketing site for Webber Electro Corp: battery management systems from 12V to 1200V.
 
-First, run the development server:
+Next.js (App Router) + TypeScript + Tailwind v4. All content is server-rendered;
+motion is a progressive enhancement layered on top.
+
+## Running
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # production build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Layout
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+  app/                     routes; one folder per page, plus sitemap/robots
+  components/
+    hero/                  home hero: scroll-scrubbed frame sequence
+    home/                  home-page sections
+    product/               catalogue, filters, comparison, spec tables
+    technology/            exploded board, technical charts
+    contact/               enquiry + careers forms
+    motion/                shared motion primitives and the motion provider
+    ui/                    header, footer, cards, logos, CTAs
+  content/                 typed content (products, company, differentiators)
+docs/                      asset briefs and generation specs
+Assets/                    source material (not served): PDFs, logos, video
+public/                    served assets
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design system
 
-## Learn More
+Tokens live in `src/app/globals.css`: colour, type scale, spacing, easing.
 
-To learn more about Next.js, take a look at the following resources:
+Two ideas drive the visual language, and most layout decisions follow from them:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Drafting paper.** Pages sit on `.pencil-grid`, a faint modular grid, and
+  `BlueprintMeasure` draws a CAD dimension line down each section. Panels are
+  frosted rather than opaque so the grid reads through and stays continuous.
+- **The modular grid.** `--module` is the content column divided by 11/23/35/47
+  depending on breakpoint. Those divisors (all ≡ 11 mod 12) are what let 2-, 3-
+  and 4-up card grids land on the rules with a one-module gutter (`.gap-module`).
+  Changing them breaks card alignment.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Motion
 
-## Deploy on Vercel
+`MotionProvider` owns the reduced-motion decision and starts Lenis (desktop,
+fine pointer only). Everything checks `useMotion()`; under reduced motion,
+animations resolve to their finished state rather than being skipped, and there
+is a persistent "Reduce motion" toggle in the footer that overrides the OS
+setting.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Lenis owns the scroll position on desktop, so programmatic scrolling goes
+through `lenisInstance`, never `window.scrollTo`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Assets
+
+Imagery is generated/sourced against the briefs in `docs/`. `SmartImage` renders
+a technical placeholder when a file is missing, so assets can land incrementally.
+
+The hero is a video (`Assets/hero-video/`) extracted to a still sequence at
+`public/images/hero/frames/` with a `manifest.json` giving the frame count; the
+hero scrubs those on a canvas. To swap the footage, re-extract at 24fps and
+update the count. Same pattern for the exploded board on the technology page.
+
+## Before launch
+
+- Wire the contact form to a real backend (it currently validates and confirms
+  client-side only)
+- Confirm patent statuses, AIS 156 certificate references and the timeline dates
+  marked `DATE TBC`
+- Founder quote needs approval; privacy policy is a placeholder
+- Product specs marked `TBC` need confirming against controlled product data
+- Partner and customer logos should be replaced with official vector originals
+  where available

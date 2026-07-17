@@ -17,7 +17,7 @@ interface SmartImageProps {
 /**
  * Renders the real asset when it exists; falls back to a technical
  * placeholder tile when the file has not been generated yet
- * (see IMAGE-ASSETS.md for the asset manifest).
+ * (see docs/IMAGE-ASSETS.md for the asset manifest).
  */
 export function SmartImage({
   src,

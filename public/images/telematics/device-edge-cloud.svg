@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" fill="none">
-    <style>text{font-family:ui-monospace,Consolas,monospace;font-size:28px;fill:#465366} .box{stroke:#94A0B2;stroke-width:1.4;fill:#fff}.path{stroke:#0B5FFF;stroke-width:2.4}.thin{stroke:#94A0B2;stroke-width:1.2}</style>
-    <rect width="1280" height="520" fill="transparent"/>
-    <rect class="box" x="90" y="150" width="260" height="170" rx="12"/><text x="166" y="246">ASSET</text>
-    <rect class="box" x="510" y="150" width="260" height="170" rx="12"/><text x="548" y="235">EDGE DEVICE</text><text x="585" y="274">4G / CAN</text>
-    <rect class="box" x="930" y="150" width="260" height="170" rx="12"/><text x="978" y="235">WEBBER</text><text x="982" y="274">CLOUD/API</text>
-    <path class="path" d="M350 235 H510"/><path class="path" d="M770 235 H930"/>
-    <path class="thin" d="M220 320 v80 h840 v-80" stroke-dasharray="7 8"/><text x="470" y="430">telemetry + diagnostics loop</text>
-  </svg>

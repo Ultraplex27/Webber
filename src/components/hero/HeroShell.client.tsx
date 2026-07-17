@@ -5,74 +5,30 @@ import { useEffect, useRef, useState } from "react";
 import { useMotion } from "@/components/motion/MotionProvider.client";
 import { useIsDesktop } from "@/components/motion/useViewport";
 import { getLenis } from "@/components/motion/lenisInstance";
-import { HeroPoster } from "./HeroPoster";
 
 /**
- * Scroll-scrubbed hero with three progressive modes:
+ * The home hero.
  *
- *  1. "frames": canvas scrubbing of the extracted video frame sequence
- *     (public/images/hero/frames/ + manifest.json; see HERO-VIDEO-HIGGSFIELD.md)
- *  2. "scenes": 13 keyframe stills crossfading (public/images/hero/seq/;
- *     see HERO-SEQUENCE-ASSETS.md) when no frame sequence exists
- *  3. "poster": static composition on mobile / reduced motion / missing assets
+ * Desktop with motion gets the cinematic sequence: the page opens on the big
+ * Webber logo, which shrinks into the header masthead as a scroll-scrubbed
+ * frame sequence plays (public/images/hero/frames + manifest.json, extracted
+ * from Assets/hero-video — see docs/HERO-VIDEO-HIGGSFIELD.md), snapping through
+ * five composed stops and resolving on the "Rewire the Planet" finale.
  *
- * All modes server-render the same copy; labels and copy are overlaid HTML.
+ * Everywhere else (mobile, reduced motion, missing frames) gets a static hero
+ * of the same copy. The h1 is server-rendered in both.
  */
 
 const FRAMES_DIR = "/images/hero/frames";
-const SEQ_DIR = "/images/hero/seq";
 const MASTHEAD = "/logos/webber-masthead.png";
-// Scroll fraction over which the big intro logo shrinks into the header corner.
+/** Scroll fraction over which the big intro logo shrinks into the header corner. */
 const INTRO_END = 0.12;
-
-/**
- * The hero snaps through five composed stops: the logo splash, three key video
- * frames (sensing macro, metal-core plane, the packs) and the finale, so each
- * scroll glides to the next stage rather than needing precise scrubbing.
- */
+/** Composed stops: logo splash, sensing macro, metal-core plane, packs, finale. */
 const SNAP_POINTS = [0, 0.24, 0.4, 0.62, 1];
 /** Seconds the auto-playthrough takes to travel the whole pinned hero. */
 const AUTOPLAY_SECONDS = 9;
 
-interface Scene {
-  file: string;
-  from: number;
-  to: number;
-  driftX: number;
-  driftY: number;
-}
-
-const SCENES: Scene[] = [
-  { file: "scene-01-white-field.webp", from: 0.0, to: 0.1, driftX: -20, driftY: 0 },
-  { file: "scene-02-board-approach.webp", from: 0.1, to: 0.2, driftX: -26, driftY: -10 },
-  { file: "scene-03-sensing-macro.webp", from: 0.2, to: 0.3, driftX: -34, driftY: 0 },
-  { file: "scene-04-balancing.webp", from: 0.3, to: 0.38, driftX: -30, driftY: 6 },
-  { file: "scene-05-thermal.webp", from: 0.38, to: 0.46, driftX: -30, driftY: 0 },
-  { file: "scene-06-isolation.webp", from: 0.46, to: 0.53, driftX: -26, driftY: -6 },
-  { file: "scene-07-protection.webp", from: 0.53, to: 0.62, driftX: -26, driftY: 0 },
-  { file: "scene-08-pack-assembly.webp", from: 0.62, to: 0.72, driftX: 0, driftY: -14 },
-  { file: "scene-09-pack-charged.webp", from: 0.72, to: 0.78, driftX: 0, driftY: -8 },
-  { file: "scene-10-vehicle-2w.webp", from: 0.78, to: 0.84, driftX: 14, driftY: 0 },
-  { file: "scene-11-vehicle-3w.webp", from: 0.84, to: 0.885, driftX: 14, driftY: 0 },
-  { file: "scene-12-bess.webp", from: 0.885, to: 0.945, driftX: 0, driftY: -10 },
-  { file: "scene-13-network.webp", from: 0.945, to: 1.0, driftX: -12, driftY: 0 },
-];
-
-const FADE = 0.022;
-
-/** Energy-pulse waypoints (scenes mode only; the video bakes its own pulse). */
-const PULSE_PATH: { p: number; x: number; y: number }[] = [
-  { p: 0.0, x: 40, y: 55 },
-  { p: 0.1, x: 55, y: 50 },
-  { p: 0.2, x: 30, y: 55 },
-  { p: 0.3, x: 35, y: 42 },
-  { p: 0.38, x: 58, y: 55 },
-  { p: 0.46, x: 62, y: 45 },
-  { p: 0.53, x: 45, y: 48 },
-  { p: 0.62, x: 70, y: 40 },
-];
-
-type Mode = "probing" | "frames" | "scenes" | "poster";
+type Mode = "probing" | "frames" | "static";
 
 function clamp01(v: number) {
   return Math.min(1, Math.max(0, v));
@@ -92,8 +48,6 @@ export function HeroShell() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const introLogoRef = useRef<HTMLImageElement>(null);
   const finaleRef = useRef<HTMLDivElement>(null);
-  const sceneRefs = useRef<(HTMLImageElement | null)[]>([]);
-  const pulseRef = useRef<HTMLDivElement>(null);
   // Where the big intro logo flies to (the header masthead), computed on resize.
   const logoTargets = useRef({ tx: 0, ty: 0, scale: 0.32 });
   // Auto-playthrough runs at most once per page load.
@@ -102,9 +56,9 @@ export function HeroShell() {
   const [frameCount, setFrameCount] = useState(0);
 
   const wantsCinematic = motionOn && isDesktop;
-  const cinematic = wantsCinematic && (mode === "frames" || mode === "scenes");
+  const cinematic = wantsCinematic && mode === "frames";
 
-  // Probe assets: frame-sequence manifest first, then keyframes, else poster.
+  // Probe the frame manifest; without it the hero stays static.
   useEffect(() => {
     if (!wantsCinematic || mode !== "probing") return;
     let cancelled = false;
@@ -120,12 +74,9 @@ export function HeroShell() {
           }
         }
       } catch {
-        /* fall through to keyframe probe */
+        /* fall through */
       }
-      const probe = new Image();
-      probe.onload = () => !cancelled && setMode("scenes");
-      probe.onerror = () => !cancelled && setMode("poster");
-      probe.src = `${SEQ_DIR}/${SCENES[0].file}`;
+      if (!cancelled) setMode("static");
     })();
     return () => {
       cancelled = true;
@@ -227,7 +178,7 @@ export function HeroShell() {
       };
     };
 
-    // ---- frames mode: progressive loader + blended canvas painter -----------
+    // ---- progressive loader + blended canvas painter ------------------------
     // HTMLImageElement (not ImageBitmap) keeps frames compressed in memory; a
     // 361-frame ImageBitmap cache would decode to gigabytes. The browser's own
     // decode cache keeps nearby frames warm while scrubbing.
@@ -326,44 +277,15 @@ export function HeroShell() {
       drawBlend(currentF, true);
     };
 
-    // ---- shared per-progress application ------------------------------------
     const apply = (p: number) => {
       // First sign of scrolling from the top: take over and play it through.
       if (!autoplayed.current && finePointer && p > 0.006) {
         autoplayed.current = true;
         startAuto();
       }
-      if (mode === "frames") {
-        currentF = p * (frameCount - 1);
-        drawBlend(currentF);
-      } else {
-        SCENES.forEach((s, i) => {
-          const el = sceneRefs.current[i];
-          if (!el) return;
-          const fadeIn = s.from === 0 ? 1 : smooth(p, s.from - FADE, s.from + FADE);
-          const fadeOut = s.to === 1 ? 0 : smooth(p, s.to - FADE, s.to + FADE);
-          const opacity = clamp01(fadeIn - fadeOut);
-          el.style.opacity = String(opacity);
-          if (opacity > 0) {
-            const local = clamp01((p - s.from) / (s.to - s.from));
-            const scale = 1.06 - 0.06 * local;
-            el.style.transform = `translate3d(${s.driftX * (local - 0.5)}px, ${
-              s.driftY * (local - 0.5)
-            }px, 0) scale(${scale})`;
-          }
-        });
-        const pulse = pulseRef.current;
-        if (pulse) {
-          let k = 0;
-          while (k < PULSE_PATH.length - 2 && PULSE_PATH[k + 1].p < p) k++;
-          const a = PULSE_PATH[k];
-          const b = PULSE_PATH[k + 1];
-          const t = smooth(p, a.p, b.p);
-          pulse.style.left = `${a.x + (b.x - a.x) * t}%`;
-          pulse.style.top = `${a.y + (b.y - a.y) * t}%`;
-          pulse.style.opacity = String(0.9 * (1 - smooth(p, 0.6, 0.66)));
-        }
-      }
+
+      currentF = p * (frameCount - 1);
+      drawBlend(currentF);
 
       // Big intro logo shrinks + flies to the header masthead; the header logo
       // fades in as it lands, so it reads as one logo travelling to the corner.
@@ -393,15 +315,13 @@ export function HeroShell() {
       ]);
       if (cancelled) return;
       gsap.registerPlugin(ScrollTrigger);
-      if (mode === "frames") {
-        resizeCanvas();
-        ro = new ResizeObserver(resizeCanvas);
-        if (canvasRef.current) ro.observe(canvasRef.current);
-        void loadProgressively();
-      }
+      resizeCanvas();
+      ro = new ResizeObserver(resizeCanvas);
+      if (canvasRef.current) ro.observe(canvasRef.current);
+      void loadProgressively();
       computeLogoTargets();
       window.addEventListener("resize", computeLogoTargets);
-      // Snap-assist so each scroll glides to the next chapter — pointer devices
+      // Snap-assist so each scroll settles on the next stop — pointer devices
       // only (touch keeps native scrubbing to avoid fighting momentum). Snap
       // stays out of the auto-playthrough's way on its own: it only fires once
       // scrolling stops, which during the glide it never does.
@@ -436,62 +356,21 @@ export function HeroShell() {
       // Restore the header logo when leaving the cinematic hero.
       if (headerLogo) headerLogo.style.opacity = "";
     };
-  }, [cinematic, mode, frameCount]);
+  }, [cinematic, frameCount]);
 
   return (
     <div ref={wrapRef} className={cinematic ? "relative h-[460vh]" : "relative"} data-hero>
       <section
         className={`${
           cinematic ? "sticky top-0 h-screen" : "relative min-h-screen"
-        } flex flex-col justify-center overflow-hidden bg-canvas`}
+        } flex flex-col justify-center overflow-hidden`}
         aria-label="Webber battery intelligence from 12V to 1200V"
       >
-        {/* Poster: LCP-safe base layer; the sequence covers it once active */}
-        <HeroPoster
-          className={cinematic ? "opacity-0 transition-opacity duration-700" : "opacity-100"}
-        />
-
-        {/* Frame-sequence canvas */}
-        {mode === "frames" && cinematic && (
-          <canvas
-            ref={canvasRef}
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full"
-          />
+        {cinematic && (
+          <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 h-full w-full" />
         )}
 
-        {/* Keyframe crossfade stack */}
-        {mode === "scenes" && cinematic && (
-          <div className="absolute inset-0" aria-hidden="true">
-            {SCENES.map((s, i) => (
-              // eslint-disable-next-line @next/next/no-img-element -- scrubbed full-bleed keyframes, opacity driven imperatively
-              <img
-                key={s.file}
-                ref={(el) => {
-                  sceneRefs.current[i] = el;
-                }}
-                src={`${SEQ_DIR}/${s.file}`}
-                alt=""
-                decoding="async"
-                fetchPriority={i === 0 ? "high" : "low"}
-                draggable={false}
-                className="absolute inset-0 h-full w-full object-cover opacity-0 will-change-[opacity,transform]"
-              />
-            ))}
-            <div
-              ref={pulseRef}
-              className="pointer-events-none absolute h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
-              style={{ background: "var(--energy-glow)" }}
-            >
-              <div
-                className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                style={{ background: "var(--energy-white)", boxShadow: "var(--trace-glow)" }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* SEO / a11y heading — always in the DOM, conveyed visually by the hero */}
+        {/* SEO / a11y heading: always in the DOM, conveyed visually by the hero */}
         <h1 className="sr-only">
           Rewire the Planet. Battery management systems from 12V to 1200V by
           Webber Electro Corp.
@@ -513,14 +392,13 @@ export function HeroShell() {
             />
           </div>
         ) : (
-          /* Static hero: mobile / reduced motion / no frames */
+          /* Static hero: mobile / reduced motion / no frames. No masthead here —
+             the header already carries it, and the cinematic splash is the only
+             place the lockup earns a second showing. */
           <div className="wrap relative z-10">
-            {/* eslint-disable-next-line @next/next/no-img-element -- brand lockup */}
-            <img
-              src={MASTHEAD}
-              alt="Webber Electro Corp"
-              className="mb-10 w-[min(72vw,360px)]"
-            />
+            <p className="micro-label micro-label--blue mb-6">
+              BATTERY MANAGEMENT SYSTEMS
+            </p>
             <p className="type-display max-w-[10ch]" aria-hidden="true">
               Rewire the Planet.
             </p>
