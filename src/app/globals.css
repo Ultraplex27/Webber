@@ -389,6 +389,13 @@ html[data-reduced-motion="true"] *::after {
   max-width: 100%;
   object-fit: contain;
 }
+/* Compact card for inline use (e.g. the partner table) */
+.logo-card--sm {
+  height: 64px;
+  width: 150px;
+  padding: 10px 16px;
+  margin-right: 0;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .marquee {

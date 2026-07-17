@@ -43,7 +43,8 @@ export function LogoRail({
   );
 }
 
-function Logo({ name, logo }: LogoItem) {
+/** A single logo image with a typographic fallback if the file is missing. */
+export function Logo({ name, logo }: LogoItem) {
   const [failed, setFailed] = useState(false);
   if (failed) {
     return <span className="micro-label text-grey-500">{name}</span>;

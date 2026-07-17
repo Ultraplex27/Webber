@@ -4,6 +4,7 @@ import Link from "next/link";
 import { partners, team, timeline } from "@/content/company";
 import { Recognition } from "@/components/home/Recognition";
 import { SmartImage } from "@/components/ui/SmartImage.client";
+import { Logo } from "@/components/ui/LogoRail";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { CountUp } from "@/components/motion/CountUp.client";
@@ -221,8 +222,21 @@ export default function CompanyPage() {
               <tbody>
                 {partners.map((p) => (
                   <tr key={p.role}>
-                    <td className="text-ink-soft">{p.role}</td>
-                    <td className="spec-value">{p.names.join(" · ")}</td>
+                    <td className="align-middle text-ink-soft">{p.role}</td>
+                    <td>
+                      {/* White cards so partner logos with solid backgrounds
+                          sit cleanly against the tinted table rows */}
+                      <ul className="flex flex-wrap items-start gap-4">
+                        {p.names.map((name, i) => (
+                          <li key={name} className="flex flex-col items-center gap-2">
+                            <span className="logo-card logo-card--sm">
+                              <Logo name={name} logo={p.logos[i]} />
+                            </span>
+                            <span className="micro-label text-center">{name}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
                   </tr>
                 ))}
               </tbody>
