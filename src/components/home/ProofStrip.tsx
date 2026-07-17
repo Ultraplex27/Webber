@@ -2,7 +2,7 @@ import { CountUp } from "@/components/motion/CountUp.client";
 
 const metrics = [
   { value: 75, suffix: "K+", label: "BMS deployments" },
-  { text: "12V—1200V", label: "System range" },
+  { text: "12V–1200V", label: "System range" },
   { value: 75, suffix: "+", label: "Engineers and operators" },
   { text: "AIS 156 PH-2", label: "Certified BMS variants" },
 ] as const;

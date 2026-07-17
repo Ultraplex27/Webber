@@ -12,7 +12,7 @@ export type Comms = "CAN" | "Isolated CAN" | "Bluetooth" | "UART" | "4G";
 export type ProductStatus = "Production" | "Upcoming";
 
 /**
- * Deployment disclosure levels — exact counts are commercially sensitive.
+ * Deployment disclosure levels: exact counts are commercially sensitive.
  * Use rounded public figures ("10K+"), "Series production", or hide entirely.
  */
 export type DeploymentDisclosure =
@@ -280,13 +280,13 @@ export const products: Product[] = [
     name: "4G/IoT Telematics",
     family: "Connectivity",
     positioning:
-      "The connection above the BMS — live location, geofencing, system health and remote visibility.",
+      "The connection above the BMS: live location, geofencing, system health and remote visibility.",
     applications: ["2W", "3W", "ESS", "Telecom"],
     architecture: "Telematics",
-    cellCount: "—",
+    cellCount: "N/A",
     systemVoltage: "12–96 V input",
-    continuousCurrent: "—",
-    balancingCurrent: "—",
+    continuousCurrent: "N/A",
+    balancingCurrent: "N/A",
     comms: ["4G", "CAN", "Bluetooth"],
     status: "Production",
     deployment: { kind: "field-deployed" },

@@ -64,7 +64,7 @@ export function Footer() {
         <div className="mt-16 flex flex-col gap-6 border-t border-grey-200 pt-8 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-[560] tracking-tight text-ink">WEBBER ELECTRO CORP</p>
-            <p className="micro-label mt-1">BATTERY INTELLIGENCE / 12V—1200V</p>
+            <p className="micro-label mt-1">BATTERY INTELLIGENCE / 12V–1200V</p>
           </div>
           <div className="flex items-center gap-6">
             <ReduceMotionToggle />

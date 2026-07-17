@@ -7,7 +7,7 @@ interface SmartImageProps {
   alt: string;
   className?: string;
   imgClassName?: string;
-  /** aspect ratio, e.g. "4 / 3" — applied to the placeholder frame */
+  /** aspect ratio, e.g. "4 / 3", applied to the placeholder frame */
   ratio?: string;
   /** label shown on the technical placeholder when the asset is missing */
   placeholderLabel?: string;

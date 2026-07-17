@@ -12,9 +12,9 @@ export default function PrivacyPage() {
         <p className="micro-label micro-label--blue mb-6">LEGAL</p>
         <h1 className="type-h2">Privacy policy.</h1>
         <p className="type-body mt-8">
-          This page is a placeholder. The production privacy policy — covering
+          This page is a placeholder. The production privacy policy, covering
           enquiry-form data handling, résumé storage, telematics data
-          processing and cookie usage — must be supplied by Webber’s legal
+          processing and cookie usage, must be supplied by Webber’s legal
           counsel before launch.
         </p>
       </div>

@@ -57,7 +57,7 @@ export function SpecificationTable({ product }: { product: Product }) {
       </table>
       {hasPending && (
         <p className="type-small mt-3 text-grey-400">
-          *TBC — indicative value pending confirmation from controlled product data. Request the
+          *TBC: indicative value pending confirmation from controlled product data. Request the
           datasheet for released specifications.
         </p>
       )}

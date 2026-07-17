@@ -12,9 +12,9 @@ export function LogoRail({ items, label }: { items: readonly LogoItem[]; label: 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
       <p className="micro-label w-40 shrink-0">{label}</p>
-      <ul className="flex flex-wrap items-center gap-x-10 gap-y-4">
+      <ul className="flex flex-wrap items-center gap-x-6 gap-y-4">
         {items.map((item) => (
-          <li key={item.name}>
+          <li key={item.name} className="flex h-20 w-44 items-center justify-center">
             <Logo {...item} />
           </li>
         ))}
@@ -33,11 +33,11 @@ function Logo({ name, logo }: LogoItem) {
     );
   }
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- logos are tiny SVGs with a text fallback
+    // eslint-disable-next-line @next/next/no-img-element -- logo files are static assets with a text fallback
     <img
       src={logo}
       alt={name}
-      className="h-7 w-auto opacity-70 grayscale transition-opacity hover:opacity-100"
+      className="max-h-14 max-w-full object-contain opacity-90 transition-opacity hover:opacity-100"
       loading="lazy"
       onError={() => setFailed(true)}
     />

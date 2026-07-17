@@ -21,7 +21,7 @@ export async function generateMetadata({
   const product = getProduct(slug);
   if (!product) return {};
   return {
-    title: `${product.name} — ${product.family} (${product.systemVoltage})`,
+    title: `${product.name}: ${product.family} (${product.systemVoltage})`,
     description: product.positioning,
   };
 }
@@ -89,7 +89,7 @@ export default async function ProductDetailPage({
             </div>
             <SmartImage
               src={`${product.imageDir}/front.webp`}
-              alt={`${product.name} — front three-quarter view`}
+              alt={`${product.name}, front three-quarter view`}
               ratio="4 / 3"
               loading="eager"
               placeholderLabel={product.name.toUpperCase()}
@@ -127,7 +127,7 @@ export default async function ProductDetailPage({
                   <SmartImage
                     key={v.file}
                     src={`${product.imageDir}/${v.file}`}
-                    alt={`${product.name} — ${v.label}`}
+                    alt={`${product.name}: ${v.label}`}
                     ratio="4 / 3"
                     placeholderLabel={v.label.toUpperCase()}
                   />
@@ -149,7 +149,7 @@ export default async function ProductDetailPage({
 
       <ClosingCta
         title="Integrate this system."
-        body="Share the operating envelope — voltage, current, packaging, communication, certification and volume — and our applications team will respond with an integration path."
+        body="Share the operating envelope: voltage, current, packaging, communication, certification and volume, and our applications team will respond with an integration path."
         ctaLabel="Start an integration brief"
         ctaHref="/contact"
       />

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="190" viewBox="0 0 560 190" role="img" aria-labelledby="title">
+  <title id="title">General Aeronautics</title>
+  <rect width="560" height="190" fill="none"/>
+  <text x="52" y="72" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800" fill="#174a86">General</text>
+  <path d="M270 74 436 116 284 108z" fill="none" stroke="#9a8f47" stroke-width="8" stroke-linejoin="round"/>
+  <line x1="52" y1="92" x2="432" y2="92" stroke="#9a8f47" stroke-width="6"/>
+  <text x="52" y="142" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800" fill="#174a86">Aeronautics</text>
+</svg>

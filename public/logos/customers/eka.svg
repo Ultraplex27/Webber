@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="140" viewBox="0 0 420 140" role="img" aria-labelledby="title">
+  <title id="title">EKA</title>
+  <rect width="420" height="140" fill="none"/>
+  <path d="M35 58h44v20H35c-8 0-14 6-14 14s6 14 14 14h44v20H35C16 126 1 111 1 92s15-34 34-34Z" fill="#0b87d1"/>
+  <rect x="96" y="58" width="34" height="68" fill="#0b87d1"/>
+  <path d="M138 58h38l-45 34 50 34h-42l-42-31z" fill="#0b87d1"/>
+  <path d="M190 126 236 58h45l46 68h-38l-8-14h-50l-8 14zm52-32h28l-14-24z" fill="#0b87d1"/>
+</svg>

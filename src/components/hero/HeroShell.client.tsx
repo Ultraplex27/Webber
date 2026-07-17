@@ -9,17 +9,20 @@ import { HeroPoster } from "./HeroPoster";
 /**
  * Scroll-scrubbed hero with three progressive modes:
  *
- *  1. "frames" — canvas scrubbing of the extracted video frame sequence
+ *  1. "frames": canvas scrubbing of the extracted video frame sequence
  *     (public/images/hero/frames/ + manifest.json; see HERO-VIDEO-HIGGSFIELD.md)
- *  2. "scenes" — 13 keyframe stills crossfading (public/images/hero/seq/;
+ *  2. "scenes": 13 keyframe stills crossfading (public/images/hero/seq/;
  *     see HERO-SEQUENCE-ASSETS.md) when no frame sequence exists
- *  3. "poster" — static composition on mobile / reduced motion / missing assets
+ *  3. "poster": static composition on mobile / reduced motion / missing assets
  *
  * All modes server-render the same copy; labels and copy are overlaid HTML.
  */
 
 const FRAMES_DIR = "/images/hero/frames";
 const SEQ_DIR = "/images/hero/seq";
+const MASTHEAD = "/logos/webber-masthead.png";
+// Scroll fraction over which the big intro logo shrinks into the header corner.
+const INTRO_END = 0.12;
 
 interface Scene {
   file: string;
@@ -47,7 +50,7 @@ const SCENES: Scene[] = [
 
 const FADE = 0.022;
 
-/** Energy-pulse waypoints (scenes mode only — the video bakes its own pulse). */
+/** Energy-pulse waypoints (scenes mode only; the video bakes its own pulse). */
 const PULSE_PATH: { p: number; x: number; y: number }[] = [
   { p: 0.0, x: 40, y: 55 },
   { p: 0.1, x: 55, y: 50 },
@@ -77,10 +80,12 @@ export function HeroShell() {
   const isDesktop = useIsDesktop();
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const introRef = useRef<HTMLDivElement>(null);
+  const introLogoRef = useRef<HTMLImageElement>(null);
   const finaleRef = useRef<HTMLDivElement>(null);
   const sceneRefs = useRef<(HTMLImageElement | null)[]>([]);
   const pulseRef = useRef<HTMLDivElement>(null);
+  // Where the big intro logo flies to (the header masthead), computed on resize.
+  const logoTargets = useRef({ tx: 0, ty: 0, scale: 0.32 });
   const [mode, setMode] = useState<Mode>("probing");
   const [frameCount, setFrameCount] = useState(0);
 
@@ -124,8 +129,27 @@ export function HeroShell() {
     let ro: ResizeObserver | null = null;
     let cancelled = false;
 
+    // The persistent header masthead logo we hand off to (rendered by Header).
+    const headerLogo = document.querySelector<HTMLElement>("[data-hero-logo-target]");
+
+    // Measure where the big intro logo must fly to (centre of the header logo).
+    const computeLogoTargets = () => {
+      const img = introLogoRef.current;
+      if (!img || !headerLogo) return;
+      const bigW = img.offsetWidth;
+      if (!bigW) return;
+      const hr = headerLogo.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      logoTargets.current = {
+        scale: hr.width / bigW,
+        tx: hr.left + hr.width / 2 - vw / 2,
+        ty: hr.top + hr.height / 2 - vh / 2,
+      };
+    };
+
     // ---- frames mode: progressive loader + blended canvas painter -----------
-    // HTMLImageElement (not ImageBitmap) keeps frames compressed in memory — a
+    // HTMLImageElement (not ImageBitmap) keeps frames compressed in memory; a
     // 361-frame ImageBitmap cache would decode to gigabytes. The browser's own
     // decode cache keeps nearby frames warm while scrubbing.
     const images: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
@@ -257,12 +281,19 @@ export function HeroShell() {
         }
       }
 
-      if (introRef.current) {
-        const out = clamp01((p - 0.02) / 0.1);
-        introRef.current.style.opacity = String(1 - out);
-        introRef.current.style.transform = `translateY(${out * -40}px)`;
-        introRef.current.style.pointerEvents = out > 0.6 ? "none" : "auto";
+      // Big intro logo shrinks + flies to the header masthead; the header logo
+      // fades in as it lands, so it reads as one logo travelling to the corner.
+      const t = logoTargets.current;
+      const w = smooth(p, 0, INTRO_END);
+      if (introLogoRef.current) {
+        const scale = 1 + (t.scale - 1) * w;
+        introLogoRef.current.style.transform = `translate3d(${t.tx * w}px, ${t.ty * w}px, 0) scale(${scale})`;
+        introLogoRef.current.style.opacity = String(1 - smooth(p, INTRO_END * 0.72, INTRO_END));
       }
+      if (headerLogo) {
+        headerLogo.style.opacity = String(smooth(p, INTRO_END * 0.72, INTRO_END));
+      }
+
       if (finaleRef.current) {
         const inn = clamp01((p - 0.94) / 0.05);
         finaleRef.current.style.opacity = String(inn);
@@ -284,6 +315,8 @@ export function HeroShell() {
         if (canvasRef.current) ro.observe(canvasRef.current);
         void loadProgressively();
       }
+      computeLogoTargets();
+      window.addEventListener("resize", computeLogoTargets);
       const trigger = ScrollTrigger.create({
         trigger: wrap,
         start: "top top",
@@ -299,6 +332,9 @@ export function HeroShell() {
       cancelled = true;
       st?.kill();
       ro?.disconnect();
+      window.removeEventListener("resize", computeLogoTargets);
+      // Restore the header logo when leaving the cinematic hero.
+      if (headerLogo) headerLogo.style.opacity = "";
     };
   }, [cinematic, mode, frameCount]);
 
@@ -308,7 +344,7 @@ export function HeroShell() {
         className={`${
           cinematic ? "sticky top-0 h-screen" : "relative min-h-screen"
         } flex flex-col justify-center overflow-hidden bg-canvas`}
-        aria-label="Webber — battery intelligence from 12V to 1200V"
+        aria-label="Webber battery intelligence from 12V to 1200V"
       >
         {/* Poster: LCP-safe base layer; the sequence covers it once active */}
         <HeroPoster
@@ -355,25 +391,53 @@ export function HeroShell() {
           </div>
         )}
 
-        {/* Intro copy — server-rendered, present from first paint */}
-        <div ref={introRef} className="wrap relative z-10">
-          <p className="micro-label micro-label--blue mb-6">
-            BATTERY MANAGEMENT SYSTEMS
-          </p>
-          <h1 className="type-display max-w-[10ch]">Rewire the Planet.</h1>
-          <p className="type-lead mt-8 max-w-[46ch]">
-            Electronics and software engineered in India, powering electric
-            mobility and energy storage worldwide.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/products" className="btn btn-primary">
-              Explore the BMS stack
-            </Link>
-            <Link href="/contact" className="btn btn-secondary">
-              Talk to engineering
-            </Link>
+        {/* SEO / a11y heading — always in the DOM, conveyed visually by the hero */}
+        <h1 className="sr-only">
+          Rewire the Planet. Battery management systems from 12V to 1200V by
+          Webber Electro Corp.
+        </h1>
+
+        {cinematic ? (
+          /* Opening splash: the big Webber logo, which shrinks into the header
+             masthead as the scroll sequence begins. */
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element -- transformed imperatively each scroll frame */}
+            <img
+              ref={introLogoRef}
+              src={MASTHEAD}
+              alt=""
+              aria-hidden="true"
+              fetchPriority="high"
+              draggable={false}
+              className="w-[min(78vw,520px)] will-change-transform"
+            />
           </div>
-        </div>
+        ) : (
+          /* Static hero: mobile / reduced motion / no frames */
+          <div className="wrap relative z-10">
+            {/* eslint-disable-next-line @next/next/no-img-element -- brand lockup */}
+            <img
+              src={MASTHEAD}
+              alt="Webber Electro Corp"
+              className="mb-10 w-[min(72vw,360px)]"
+            />
+            <p className="type-display max-w-[10ch]" aria-hidden="true">
+              Rewire the Planet.
+            </p>
+            <p className="type-lead mt-8 max-w-[46ch]">
+              Electronics and software engineered in India, powering electric
+              mobility and energy storage worldwide.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link href="/products" className="btn btn-primary">
+                Explore the BMS stack
+              </Link>
+              <Link href="/contact" className="btn btn-secondary">
+                Talk to engineering
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Finale copy, with a soft white backdrop for legibility over linework */}
         {cinematic && (
@@ -417,9 +481,9 @@ export function HeroShell() {
         {/* Screen-reader summary of the visual sequence */}
         <p className="sr-only">
           Animated sequence: an energy pulse travels through a Webber battery
-          management system — sensing cell voltage, balancing cells, monitoring
+          management system, sensing cell voltage, balancing cells, monitoring
           thermal state across a metal-core PCB, crossing an isolated CAN
-          boundary and closing off a short-circuit path — then the board is
+          boundary and closing off a short-circuit path, then the board is
           assembled into a battery pack that powers a two-wheeler, a
           three-wheeler and grid-scale battery energy storage.
         </p>

@@ -44,15 +44,16 @@ export function Header() {
         <Link
           href="/"
           className="flex items-center gap-3"
-          aria-label="Webber Electro Corp — home"
+          aria-label="Webber Electro Corp home"
         >
           <Image
             src="/logos/webber-masthead.png"
             alt="Webber Electro Corp"
             width={520}
             height={109}
-            className="h-9 w-auto"
+            className="h-9 w-auto transition-opacity duration-300"
             priority
+            data-hero-logo-target
           />
         </Link>
 
@@ -99,7 +100,7 @@ export function Header() {
         </button>
       </div>
 
-      {/* Full-screen white index — mobile */}
+      {/* Full-screen white index: mobile */}
       {open && (
         <nav
           id="mobile-nav"

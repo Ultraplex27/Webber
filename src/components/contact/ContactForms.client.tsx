@@ -160,7 +160,7 @@ function EngineeringFields({ intent }: { intent: "oem" | "bess" }) {
   return (
     <fieldset className="grid gap-6 md:grid-cols-2">
       <legend className="type-h4 mb-8">
-        {intent === "oem" ? "Engineering enquiry — battery integration" : "Engineering enquiry — energy systems"}
+        {intent === "oem" ? "Engineering enquiry: battery integration" : "Engineering enquiry: energy systems"}
       </legend>
       <Field label="NAME" name="name" required />
       <Field label="COMPANY" name="company" required />

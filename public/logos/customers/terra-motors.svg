@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="180" viewBox="0 0 480 180" role="img" aria-labelledby="title">
+  <title id="title">Terra Motors</title>
+  <rect width="480" height="180" fill="none"/>
+  <defs>
+    <radialGradient id="tmSilver" cx=".5" cy=".42" r=".58">
+      <stop stop-color="#ffffff"/>
+      <stop offset=".38" stop-color="#d8dde1"/>
+      <stop offset=".72" stop-color="#7b858d"/>
+      <stop offset="1" stop-color="#f7f8f9"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="240" cy="58" rx="82" ry="44" fill="url(#tmSilver)" stroke="#8a9299" stroke-width="5"/>
+  <path d="M196 48c36-30 74-30 110 0-27-10-45-5-53 15v39h-26V63c-8-20-26-25-53-15z" fill="#777f86"/>
+  <text x="65" y="146" font-family="Georgia, 'Times New Roman', serif" font-size="42" fill="#6e7377">TERRA MOTORS</text>
+</svg>

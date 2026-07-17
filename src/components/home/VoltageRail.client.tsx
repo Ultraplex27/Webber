@@ -21,7 +21,7 @@ const STOPS: RailStop[] = [
     voltage: "96V",
     position: 27,
     title: "Mobility platforms",
-    body: "Two-wheelers, three-wheelers, drones and swappable packs — 75K+ units deployed.",
+    body: "Two-wheelers, three-wheelers, drones and swappable packs; 75K+ units deployed.",
   },
   {
     voltage: "400V",

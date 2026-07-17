@@ -4,6 +4,7 @@ import { SmartImage } from "@/components/ui/SmartImage.client";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { ClosingCta } from "@/components/ui/ClosingCta";
+import { ExplodedReveal } from "@/components/technology/ExplodedReveal.client";
 import {
   ArchitectureFlow,
   ChargingCurveChart,
@@ -12,9 +13,9 @@ import {
 } from "@/components/technology/TechCharts";
 
 export const metadata: Metadata = {
-  title: "Technology — First-Principle BMS Design",
+  title: "Technology: First-Principle BMS Design",
   description:
-    "Safety is a system, not a checklist. Battery control architectures designed around real operating conditions — paralleling, charging control, high-current balancing, metal-core thermal design and isolation.",
+    "Safety is a system, not a checklist. Battery control architectures designed around real operating conditions: paralleling, charging control, high-current balancing, metal-core thermal design and isolation.",
   openGraph: { images: ["/og/og-technology.png"] },
 };
 
@@ -74,10 +75,10 @@ const moduleVisuals: Record<string, React.ReactNode> = {
 export default function TechnologyPage() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero: interactive exploded board */}
       <section className="section border-b border-grey-200 pt-40">
-        <div className="wrap grid items-center gap-16 lg:grid-cols-2">
-          <div>
+        <div className="wrap">
+          <div className="max-w-3xl">
             <TechnicalLabel blue className="mb-6">
               FIRST-PRINCIPLE DESIGN
             </TechnicalLabel>
@@ -86,16 +87,13 @@ export default function TechnologyPage() {
             </h1>
             <p className="type-lead mt-8">
               Battery control architectures designed around real operating
-              conditions — not ideal laboratory assumptions.
+              conditions, not ideal laboratory assumptions. Click the board to
+              separate the metal-core stack.
             </p>
           </div>
-          <SmartImage
-            src="/images/technology/board-exploded.webp"
-            alt="Exploded BMS board stack showing copper, metal-core layer, isolation boundaries and protection zones"
-            ratio="4 / 3"
-            loading="eager"
-            placeholderLabel="EXPLODED BOARD STACK"
-          />
+          <div className="mt-16">
+            <ExplodedReveal />
+          </div>
         </div>
       </section>
 
@@ -159,7 +157,7 @@ export default function TechnologyPage() {
             <SectionIntro
               label="INTELLECTUAL PROPERTY"
               title="Patent ledger."
-              lead="Precise legal states only — no technology is presented as 'patentable'. All statuses pending legal confirmation before publication."
+              lead="Precise legal states only. No technology is presented as 'patentable'. All statuses pending legal confirmation before publication."
             />
           </Reveal>
           <div className="mt-12 overflow-x-auto">
@@ -221,7 +219,7 @@ export default function TechnologyPage() {
               </dl>
               <p className="type-small mt-6 text-grey-400">
                 Certification applies to tested configurations only. Individual products do not
-                inherit certification from other tested configurations — confirm applicability per
+                inherit certification from other tested configurations. Confirm applicability per
                 variant with our applications team.
               </p>
             </div>
@@ -242,7 +240,7 @@ export default function TechnologyPage() {
                   Proven in the field.
                 </>
               }
-              lead="Every design passes through thermal, abuse, vibration and environmental testing, hardware-in-loop validation, production end-of-line testing — and 75K+ systems of field data feed back into the next revision."
+              lead="Every design passes through thermal, abuse, vibration and environmental testing, hardware-in-loop validation, production end-of-line testing, and 75K+ systems of field data feed back into the next revision."
             />
           </Reveal>
           <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -276,7 +274,7 @@ export default function TechnologyPage() {
                   Fleet insight over millions of events.
                 </>
               }
-              lead="Firmware makes protection decisions at the edge. 4G/IoT telematics streams system health to the cloud, where fault detection and trend analysis run today — with predictive-maintenance models in development for BESS."
+              lead="Firmware makes protection decisions at the edge. 4G/IoT telematics streams system health to the cloud, where fault detection and trend analysis run today, with predictive-maintenance models in development for BESS."
             />
           </Reveal>
         </div>

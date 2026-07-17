@@ -1,5 +1,5 @@
 /**
- * Static hero composition — used as the LCP-safe poster behind the WebGL
+ * Static hero composition: used as the LCP-safe poster behind the WebGL
  * canvas, and as the full hero on mobile / reduced-motion / no-WebGL.
  * Pure inline SVG so it renders even before generated assets exist;
  * the raster poster from IMAGE-ASSETS.md §2 layers on top when present.

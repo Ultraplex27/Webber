@@ -27,7 +27,7 @@ export default function HomePage() {
       <HeroShell />
       <ProofStrip />
 
-      {/* Trajectory — no financial figures on the showcase site */}
+      {/* Trajectory: no financial figures on the showcase site */}
       <section className="section">
         <div className="wrap">
           <Reveal>
@@ -111,7 +111,7 @@ export default function HomePage() {
 
       <ClosingCta
         title="Build the next energy platform with Webber."
-        body="BMS integration, telematics or storage architecture — start with an engineering conversation."
+        body="BMS integration, telematics or storage architecture: start with an engineering conversation."
         ctaLabel="Talk to engineering"
         ctaHref="/contact"
       />

@@ -62,36 +62,44 @@ export const partners = [
   {
     role: "Incubation and investment",
     names: ["iCreate"],
-    logos: ["/logos/partners/icreate.svg"],
+    logos: ["/logos/partners/icreate.png"],
   },
   {
     role: "Semiconductor and design ecosystem",
     names: ["STMicroelectronics", "Texas Instruments"],
     logos: [
       "/logos/partners/stmicroelectronics.svg",
-      "/logos/partners/texas-instruments.svg",
+      "/logos/partners/texas-instruments.png",
     ],
   },
   {
     role: "Electronics manufacturing",
     names: ["Kinetic Communications"],
-    logos: ["/logos/partners/kinetic-communications.svg"],
+    logos: ["/logos/partners/kinetic-communications.png"],
   },
   {
     role: "Semiconductor supply chain",
     names: ["Arrow"],
-    logos: ["/logos/partners/arrow.svg"],
+    logos: ["/logos/partners/arrow.png"],
   },
 ] as const;
 
-/** Customer/OEM logo slots — replace with approved list (see IMAGE-ASSETS.md §6). */
 export const customerLogos = [
-  { name: "Customer 01", logo: "/logos/customers/customer-01.svg" },
-  { name: "Customer 02", logo: "/logos/customers/customer-02.svg" },
-  { name: "Customer 03", logo: "/logos/customers/customer-03.svg" },
-  { name: "Customer 04", logo: "/logos/customers/customer-04.svg" },
-  { name: "Customer 05", logo: "/logos/customers/customer-05.svg" },
-  { name: "Customer 06", logo: "/logos/customers/customer-06.svg" },
+  { name: "Greaves Electric Mobility", logo: "/logos/customers/greaves-electric-mobility.svg" },
+  { name: "Kinetic Green", logo: "/logos/customers/kinetic-green.svg" },
+  { name: "EKA Mobility", logo: "/logos/customers/eka.svg" },
+  { name: "Terra Motors", logo: "/logos/customers/terra-motors.svg" },
+  { name: "BAXY Mobility", logo: "/logos/customers/baxy-mobility.svg" },
+  { name: "General Aeronautics", logo: "/logos/customers/general-aeronautics.svg" },
+  { name: "Livguard", logo: "/logos/customers/livguard.svg" },
+  { name: "Eastman", logo: "/logos/customers/eastman.svg" },
+  { name: "Replus", logo: "/logos/customers/replus.png" },
+  { name: "Su-Kam", logo: "/logos/customers/su-kam.png" },
+  { name: "Trontek", logo: "/logos/customers/trontek.svg" },
+  { name: "Inverted", logo: "/logos/customers/inverted.svg" },
+  { name: "Battrixx", logo: "/logos/customers/battrixx.png" },
+  { name: "JP Minda Group", logo: "/logos/customers/jp-minda.svg" },
+  { name: "Cygni", logo: "/logos/customers/cygni.png" },
 ] as const;
 
 export const timeline = [

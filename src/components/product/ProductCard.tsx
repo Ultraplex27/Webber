@@ -21,7 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
     <article className="card flex h-full flex-col overflow-hidden transition-colors duration-200 hover:border-blue-300">
       <SmartImage
         src={`${product.imageDir}/front.webp`}
-        alt={`${product.name} — front three-quarter view`}
+        alt={`${product.name}, front three-quarter view`}
         ratio="4 / 3"
         placeholderLabel={product.name.toUpperCase()}
       />
@@ -33,7 +33,7 @@ export function ProductCard({ product }: { product: Product }) {
         <ul className="mt-5 space-y-1.5">
           <li className="spec-value">{product.cellCount}</li>
           <li className="spec-value">{product.continuousCurrent}</li>
-          {product.balancingCurrent !== "—" && (
+          {product.balancingCurrent !== "N/A" && (
             <li className="spec-value">{product.balancingCurrent} balancing</li>
           )}
           {product.certificationNote && (

@@ -1,6 +1,6 @@
 import { TechnicalLabel } from "@/components/ui/TechnicalLabel";
 
-/** Pale blue-grey interface panel — live asset status mock, pure HTML/CSS. */
+/** Pale blue-grey interface panel: live asset status mock, pure HTML/CSS. */
 export function TelematicsPanel() {
   return (
     <div
@@ -67,7 +67,7 @@ export function TelematicsPanel() {
             <div className="bg-white p-4">
               <TechnicalLabel>MAINTENANCE PREDICTION</TechnicalLabel>
               <p className="type-small mt-1 text-ink-soft">
-                WB-0673 — connector wear trend detected. Service window suggested within 3 weeks.
+                WB-0673: connector wear trend detected. Service window suggested within 3 weeks.
               </p>
             </div>
           </div>

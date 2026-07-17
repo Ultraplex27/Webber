@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://webberec.com"),
   title: {
     default: "Webber Electrocorp",
-    template: "%s — Webber Electrocorp",
+    template: "%s | Webber Electrocorp",
   },
   description:
     "Electronics and software engineered in India, powering electric mobility and energy storage worldwide. BMS from 12V to 1200V, 4G/IoT telematics and BESS intelligence.",

@@ -5,7 +5,7 @@ import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { contact, jobs } from "@/content/company";
 
 export const metadata: Metadata = {
-  title: "Contact & Careers — Build with Webber",
+  title: "Contact & Careers: Build with Webber",
   description:
     "Integrate a BMS, architect storage or join the team. Engineering enquiries, direct contact and open roles at Webber Electro Corp.",
 };
@@ -105,7 +105,7 @@ export default function ContactPage() {
             <h3 className="type-h4">Don’t see your role?</h3>
             <p className="type-body mt-3">
               Send a concise note explaining the system, product or technical
-              problem you are best equipped to solve — use the Careers option in
+              problem you are best equipped to solve. Use the Careers option in
               the enquiry form above.
             </p>
           </div>

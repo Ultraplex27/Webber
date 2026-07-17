@@ -5,7 +5,7 @@ export interface Differentiator {
   problem: string;
   approach: string;
   advantage: string;
-  /** legal status — never publish "patentable" as a right */
+  /** legal status: never publish "patentable" as a right */
   ipStatus: string;
   ipPending?: boolean;
 }
@@ -19,7 +19,7 @@ export const differentiators: Differentiator[] = [
     approach:
       "A proprietary paralleling architecture that does not depend on inter-pack CAN communication.",
     advantage: "Simpler swapping architecture and uninterrupted power delivery.",
-    ipStatus: "Proprietary architecture — patent status to be confirmed",
+    ipStatus: "Proprietary architecture, patent status to be confirmed",
     ipPending: true,
   },
   {
@@ -29,8 +29,8 @@ export const differentiators: Differentiator[] = [
     problem: "Voltage-only charging leaves capacity on the table and stresses outlier cells.",
     approach:
       "Enhanced charging algorithms with charging-profile control and balancing interventions during charge.",
-    advantage: "Enhanced usable capacity — the pack actually reaches full charge.",
-    ipStatus: "Proprietary algorithm — patent status to be confirmed",
+    advantage: "Enhanced usable capacity: the pack actually reaches full charge.",
+    ipStatus: "Proprietary algorithm, patent status to be confirmed",
     ipPending: true,
   },
   {

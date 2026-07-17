@@ -308,7 +308,7 @@ body {
   }
 }
 
-/* Reveal defaults — elements start hidden only when JS + motion are active */
+/* Reveal defaults: elements start hidden only when JS + motion are active */
 html[data-motion="on"] .reveal-init {
   opacity: 0;
   transform: translateY(24px);

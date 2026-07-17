@@ -9,9 +9,9 @@ import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { CountUp } from "@/components/motion/CountUp.client";
 
 export const metadata: Metadata = {
-  title: "Company — Built in India",
+  title: "Company: Built in India",
   description:
-    "A 75+ person team engineering the control layer for global electrification — electronics and software for mobility, storage and connected energy systems.",
+    "A 75+ person team engineering the control layer for global electrification: electronics and software for mobility, storage and connected energy systems.",
   openGraph: { images: ["/og/og-company.png"] },
 };
 
@@ -27,7 +27,7 @@ const scaleMetrics = [
     body: "Across two-wheelers, three-wheelers, ESS and drones.",
   },
   {
-    value: "12V—1200V",
+    value: "12V–1200V",
     label: "SYSTEM RANGE",
     body: "From compact mobility to high-voltage storage.",
   },
@@ -67,7 +67,7 @@ export default function CompanyPage() {
         <div className="wrap mt-16">
           <SmartImage
             src="/images/company/engineering-floor.webp"
-            alt="The Webber engineering floor — benches, oscilloscopes and boards under test"
+            alt="The Webber engineering floor: benches, oscilloscopes and boards under test"
             ratio="16 / 7"
             loading="eager"
             placeholderLabel="ENGINEERING FLOOR"
@@ -93,7 +93,7 @@ export default function CompanyPage() {
               designed around the realities of the machine it protects.”
             </blockquote>
             <p className="type-small mt-4 text-grey-400">
-              Draft statement — pending founder approval before publication.
+              Draft statement, pending founder approval before publication.
             </p>
             <p className="spec-value mt-6">
               MANUJ AGRAWAL / FOUNDER &amp; CEO

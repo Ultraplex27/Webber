@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="150" viewBox="0 0 560 150" role="img" aria-labelledby="title">
+  <title id="title">BAXY Mobility</title>
+  <rect width="560" height="150" fill="none"/>
+  <text x="24" y="92" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="58" font-weight="900" fill="#050505">BAXY</text>
+  <line x1="232" y1="46" x2="232" y2="106" stroke="#b42830" stroke-width="4"/>
+  <text x="258" y="94" font-family="Georgia, 'Times New Roman', serif" font-size="60" fill="#b42830">Mobility</text>
+</svg>

@@ -8,7 +8,7 @@ import { ClosingCta } from "@/components/ui/ClosingCta";
 import { roadmapItems } from "@/content/products";
 
 export const metadata: Metadata = {
-  title: "Products — BMS 12V–1200V + Telematics",
+  title: "Products: BMS 12V–1200V + Telematics",
   description:
     "One BMS stack from two-wheelers to grid-scale storage. 12V to 1200V battery intelligence, designed and deployed in India.",
   openGraph: { images: ["/og/og-products.png"] },
