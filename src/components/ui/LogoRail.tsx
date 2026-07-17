@@ -7,18 +7,38 @@ interface LogoItem {
   logo: string;
 }
 
-/** Restrained logo row; missing SVGs fall back to typographic chips. */
-export function LogoRail({ items, label }: { items: readonly LogoItem[]; label: string }) {
+/**
+ * Auto-scrolling logo carousel on white cards. The track holds two identical
+ * copies of the set; a CSS transform shifts by exactly half for a seamless
+ * loop. Pauses on hover / keyboard focus, and stops (becoming a scrollable
+ * row) under reduced motion — see the .marquee rules in globals.css.
+ */
+export function LogoRail({
+  items,
+  label,
+  reverse = false,
+}: {
+  items: readonly LogoItem[];
+  label: string;
+  reverse?: boolean;
+}) {
+  const sequence = [...items, ...items];
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
-      <p className="micro-label w-40 shrink-0">{label}</p>
-      <ul className="flex flex-wrap items-center gap-x-6 gap-y-4">
-        {items.map((item) => (
-          <li key={item.name} className="flex h-20 w-44 items-center justify-center">
-            <Logo {...item} />
-          </li>
-        ))}
-      </ul>
+    <div>
+      <p className="micro-label mb-5">{label}</p>
+      <div className="marquee" aria-label={label}>
+        <ul className={`marquee-track ${reverse ? "marquee-track--reverse" : ""}`}>
+          {sequence.map((item, i) => (
+            <li
+              key={`${item.name}-${i}`}
+              className="logo-card"
+              aria-hidden={i >= items.length ? true : undefined}
+            >
+              <Logo {...item} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -26,19 +46,16 @@ export function LogoRail({ items, label }: { items: readonly LogoItem[]; label: 
 function Logo({ name, logo }: LogoItem) {
   const [failed, setFailed] = useState(false);
   if (failed) {
-    return (
-      <span className="micro-label border border-grey-200 px-3 py-2 text-grey-500">
-        {name}
-      </span>
-    );
+    return <span className="micro-label text-grey-500">{name}</span>;
   }
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- logo files are static assets with a text fallback
+    // eslint-disable-next-line @next/next/no-img-element -- static logo asset with a text fallback
     <img
       src={logo}
       alt={name}
-      className="max-h-14 max-w-full object-contain opacity-90 transition-opacity hover:opacity-100"
+      className="max-h-full max-w-full object-contain"
       loading="lazy"
+      draggable={false}
       onError={() => setFailed(true)}
     />
   );

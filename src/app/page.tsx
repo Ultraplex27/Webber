@@ -44,10 +44,9 @@ export default function HomePage() {
       <section className="section--tight border-t border-grey-200 bg-canvas-soft">
         <div className="wrap">
           <p className="micro-label mb-12">BUILT ALONGSIDE THE ELECTRIFICATION ECOSYSTEM</p>
-          <div className="space-y-10">
+          <div className="space-y-12">
             <LogoRail label="DEPLOYED WITH" items={customerLogos} />
-            <div className="rule" />
-            <LogoRail label="ENGINEERED WITH" items={partnerLogoItems} />
+            <LogoRail label="ENGINEERED WITH" items={partnerLogoItems} reverse />
           </div>
         </div>
       </section>

@@ -85,21 +85,16 @@ export const partners = [
 ] as const;
 
 export const customerLogos = [
-  { name: "Greaves Electric Mobility", logo: "/logos/customers/greaves-electric-mobility.svg" },
-  { name: "Kinetic Green", logo: "/logos/customers/kinetic-green.svg" },
-  { name: "EKA Mobility", logo: "/logos/customers/eka.svg" },
-  { name: "Terra Motors", logo: "/logos/customers/terra-motors.svg" },
-  { name: "BAXY Mobility", logo: "/logos/customers/baxy-mobility.svg" },
-  { name: "General Aeronautics", logo: "/logos/customers/general-aeronautics.svg" },
-  { name: "Livguard", logo: "/logos/customers/livguard.svg" },
-  { name: "Eastman", logo: "/logos/customers/eastman.svg" },
-  { name: "Replus", logo: "/logos/customers/replus.png" },
-  { name: "Su-Kam", logo: "/logos/customers/su-kam.png" },
-  { name: "Trontek", logo: "/logos/customers/trontek.svg" },
-  { name: "Inverted", logo: "/logos/customers/inverted.svg" },
-  { name: "Battrixx", logo: "/logos/customers/battrixx.png" },
-  { name: "JP Minda Group", logo: "/logos/customers/jp-minda.svg" },
-  { name: "Cygni", logo: "/logos/customers/cygni.png" },
+  { name: "Greaves Electric Mobility", logo: "/logos/customers/greaves-electric-mobility.png" },
+  { name: "Kinetic Green", logo: "/logos/customers/kinetic-green.png" },
+  { name: "EKA Mobility", logo: "/logos/customers/eka.png" },
+  { name: "Terra Motors", logo: "/logos/customers/terra-motors.png" },
+  { name: "BAXY Mobility", logo: "/logos/customers/baxy-mobility.png" },
+  { name: "General Aeronautics", logo: "/logos/customers/general-aeronautics.png" },
+  { name: "Eastman", logo: "/logos/customers/eastman.png" },
+  { name: "Replus Green", logo: "/logos/customers/replus.png" },
+  { name: "Trontek", logo: "/logos/customers/trontek.png" },
+  { name: "Inverted", logo: "/logos/customers/inverted.png" },
 ] as const;
 
 export const timeline = [

@@ -335,6 +335,80 @@ html[data-reduced-motion="true"] *::after {
   transition-duration: 0.01ms !important;
 }
 
+/* ---------------------------------------------------------------------------
+   Logo marquee (auto-scrolling carousel)
+--------------------------------------------------------------------------- */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 46s linear infinite;
+}
+.marquee-track--reverse {
+  animation-direction: reverse;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* track holds two identical halves (each card carries its own trailing
+       margin), so shifting by exactly half loops seamlessly */
+    transform: translateX(-50%);
+  }
+}
+.logo-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  width: 200px;
+  flex: 0 0 auto;
+  margin-right: 20px;
+  padding: 20px 28px;
+  background: #ffffff;
+  border: 1px solid var(--grey-200);
+  border-radius: 6px;
+}
+.logo-card img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow-x: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
+html[data-reduced-motion="true"] .marquee-track {
+  animation: none;
+}
+html[data-reduced-motion="true"] .marquee {
+  -webkit-mask-image: none;
+  mask-image: none;
+  overflow-x: auto;
+}
+
 /* Tables */
 .spec-table {
   width: 100%;
