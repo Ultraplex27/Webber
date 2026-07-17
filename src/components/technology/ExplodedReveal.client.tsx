@@ -16,11 +16,34 @@ import { useMotion } from "@/components/motion/MotionProvider.client";
 const FRAMES_DIR = "/images/technology/exploded-frames";
 const ASSEMBLED_POSTER = "/images/products/wbms-sw-16s/front.webp";
 
+/**
+ * `balloon` is where each layer's callout sits, as a percentage of the frame,
+ * measured against the fully-exploded frame. The board box carries the video's
+ * own 1780/1160 aspect, so the footage fills it exactly and these percentages
+ * track the artwork at any size. Each sits in the white space left of its layer
+ * and reaches it with a leader line, as on an exploded assembly drawing.
+ */
 const LAYERS = [
-  { label: "COMPONENT LAYER", note: "MOSFET power stage, sensing, connectors and control." },
-  { label: "COPPER CIRCUIT", note: "High-current routing, pours and balancing network." },
-  { label: "DIELECTRIC", note: "Insulation isolating the circuit from the core." },
-  { label: "ALUMINIUM METAL CORE", note: "Spreads and extracts heat structurally: 2× thermal." },
+  {
+    label: "COMPONENT LAYER",
+    note: "MOSFET power stage, sensing, connectors and control.",
+    balloon: { x: 9, y: 13 },
+  },
+  {
+    label: "COPPER CIRCUIT",
+    note: "High-current routing, pours and balancing network.",
+    balloon: { x: 8, y: 40 },
+  },
+  {
+    label: "DIELECTRIC",
+    note: "Insulation isolating the circuit from the core.",
+    balloon: { x: 8.5, y: 54 },
+  },
+  {
+    label: "ALUMINIUM METAL CORE",
+    note: "Spreads and extracts heat structurally: 2× thermal.",
+    balloon: { x: 9, y: 71 },
+  },
 ];
 
 const DURATION = 1500; // ms for a full explode / reassemble
@@ -32,6 +55,7 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
   const layerRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const balloonRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [exploded, setExploded] = useState(false);
   const [framesReady, setFramesReady] = useState(false);
   // Tilt-to-flat entrance: the board lies back, then settles level, like
@@ -105,10 +129,19 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
   const updateCaptions = useCallback((progress: number) => {
     LAYERS.forEach((_, i) => {
       const el = layerRefs.current[i];
-      if (!el) return;
-      const on = progress >= 0.3 + i * 0.16;
-      el.style.opacity = on ? "1" : "0.3";
-      el.style.transform = on ? "translateX(0)" : "translateX(-6px)";
+      if (el) {
+        const on = progress >= 0.3 + i * 0.16;
+        el.style.opacity = on ? "1" : "0.3";
+        el.style.transform = on ? "translateX(0)" : "translateX(-6px)";
+      }
+      // Balloons only mean anything once the layers have actually separated, so
+      // hold them back until the tail of the explode.
+      const b = balloonRefs.current[i];
+      if (b) {
+        const t = Math.min(1, Math.max(0, (progress - 0.72) / 0.24));
+        b.style.opacity = String(t);
+        b.style.transform = `translateY(-50%) translateX(${(1 - t) * -8}px)`;
+      }
     });
   }, []);
 
@@ -292,6 +325,32 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
           }`}
         />
 
+        {/* Balloon callouts: circled item numbers on leader lines, as on an
+            exploded assembly drawing. Keyed to the numbered layer list. */}
+        <div aria-hidden="true">
+          {LAYERS.map((l, i) => (
+            <div
+              key={l.label}
+              ref={(el) => {
+                balloonRefs.current[i] = el;
+              }}
+              className="pointer-events-none absolute flex items-center opacity-0"
+              style={{
+                left: `${l.balloon.x}%`,
+                top: `${l.balloon.y}%`,
+                width: "8%",
+                transform: "translateY(-50%)",
+                transition: "opacity 260ms var(--ease-ui-out)",
+              }}
+            >
+              <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border border-blue-600 bg-white/90 text-[11px] font-[550] leading-none text-blue-700">
+                {i + 1}
+              </span>
+              <span className="h-px flex-1 bg-blue-300" />
+            </div>
+          ))}
+        </div>
+
         {/* Affordance chip */}
         <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-grey-200 bg-white/90 px-4 py-2 backdrop-blur-sm transition-colors group-hover:border-blue-300">
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
@@ -309,11 +368,29 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
     </div>
   );
 
-  // Media-only (e.g. beside hero copy): just the interactive board.
+  // Media-only (e.g. beside hero copy): the board plus a compact key, since
+  // without it the balloon numbers would reference nothing.
   if (variant === "media") {
     return (
       <div ref={wrapRef} className="relative">
         {board}
+        <ol className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2">
+          {LAYERS.map((l, i) => (
+            <li
+              key={l.label}
+              ref={(el) => {
+                layerRefs.current[i] = el;
+              }}
+              className="flex items-center gap-2 transition-all duration-300"
+              style={{ opacity: 0.3 }}
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-blue-600 text-[10px] font-[550] leading-none text-blue-700">
+                {i + 1}
+              </span>
+              <span className="micro-label">{l.label}</span>
+            </li>
+          ))}
+        </ol>
       </div>
     );
   }
@@ -331,8 +408,11 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
             className="border-l-2 border-blue-200 pl-4 transition-all duration-300"
             style={{ opacity: 0.3 }}
           >
-            <p className="micro-label micro-label--blue">
-              0{i + 1} / {l.label}
+            <p className="micro-label micro-label--blue flex items-center gap-2">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-blue-600 text-[10px] font-[550] leading-none">
+                {i + 1}
+              </span>
+              {l.label}
             </p>
             <p className="type-body mt-1 !text-[0.9375rem]">{l.note}</p>
           </li>
