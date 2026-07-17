@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMotion } from "@/components/motion/MotionProvider.client";
+import { useCanHover } from "@/components/motion/useViewport";
 
 /**
  * Click-to-explode board reveal for the metal-core section.
@@ -51,12 +52,20 @@ const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t 
 
 export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media" }) {
   const { motionOn } = useMotion();
+  const canHover = useCanHover();
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
   const layerRefs = useRef<(HTMLLIElement | null)[]>([]);
   const balloonRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [exploded, setExploded] = useState(false);
+  // Hover (or keyboard focus) explodes the board; clicking pins it open so it
+  // survives the pointer leaving. `suppressed` covers the one awkward case:
+  // clicking to un-pin while still hovering would otherwise re-explode
+  // instantly, so hover is ignored until the pointer actually leaves.
+  const [pinned, setPinned] = useState(false);
+  const [active, setActive] = useState(false);
+  const [suppressed, setSuppressed] = useState(false);
+  const exploded = pinned || (active && !suppressed);
   const [framesReady, setFramesReady] = useState(false);
   // Tilt-to-flat entrance: the board lies back, then settles level, like
   // hardware being laid out on the drafting table.
@@ -170,12 +179,22 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
     [motionOn, draw, updateCaptions]
   );
 
-  const toggle = useCallback(() => {
-    setExploded((prev) => {
-      animateTo(prev ? 0 : 1);
-      return !prev;
-    });
-  }, [animateTo]);
+  // Drive the animation off the derived state, guarding against re-tweening to
+  // a target we are already heading for.
+  const lastTarget = useRef<0 | 1 | null>(null);
+  useEffect(() => {
+    const target = exploded ? 1 : 0;
+    if (lastTarget.current === target) return;
+    lastTarget.current = target;
+    animateTo(target);
+  }, [exploded, animateTo]);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setPinned((p) => !p);
+    }
+  };
 
   // Settle the board flat once it comes into view. Deliberately an entrance
   // rather than a scroll-linked tilt: the board sits at the top of the page, so
@@ -279,25 +298,35 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
     };
   }, [draw]);
 
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggle();
-    }
-  };
-
   const board = (
     <div className="relative" style={{ perspective: "1400px" }}>
       <div
         role="button"
         tabIndex={0}
-        aria-pressed={exploded}
+        aria-pressed={pinned}
         aria-label={
-          exploded
+          pinned
             ? "Reassemble the battery management board"
             : "Explode the battery management board to view its four layers"
         }
-        onClick={toggle}
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => {
+          setActive(false);
+          setSuppressed(false);
+        }}
+        onFocus={() => setActive(true)}
+        onBlur={() => {
+          setActive(false);
+          setSuppressed(false);
+        }}
+        onClick={() => {
+          if (pinned) {
+            setPinned(false);
+            setSuppressed(true);
+          } else {
+            setPinned(true);
+          }
+        }}
         onKeyDown={onKeyDown}
         className="group relative block w-full cursor-pointer overflow-hidden rounded-[6px] border border-grey-200 bg-white"
         style={{
@@ -361,7 +390,11 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
             )}
           </svg>
           <span className="micro-label micro-label--blue">
-            {exploded ? "CLICK TO REASSEMBLE" : "CLICK TO EXPLODE"}
+            {pinned
+              ? "CLICK TO REASSEMBLE"
+              : canHover
+                ? "HOVER TO EXPLODE"
+                : "TAP TO EXPLODE"}
           </span>
         </span>
       </div>
