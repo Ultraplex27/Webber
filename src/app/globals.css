@@ -44,12 +44,29 @@
      The drafting grid is derived from the content column, not a fixed pixel
      mesh, so cards land on rules at every viewport rather than only at 1440.
 
-     The column is divided into 47 modules because 47 = 2a+1 = 3a+2 = 4a+3 for
-     whole a (23, 15, 11). So with a one-module gutter, a 2-, 3- or 4-up card
-     grid has whole-module card widths AND whole-module pitch, putting every
-     card edge on a rule. Any other divisor aligns only some of those counts. */
+     The column is divided into modules such that 2-, 3- and 4-up card grids all
+     land on rules: the divisor must satisfy 2a+1 = 3a+2 = 4a+3 for whole a,
+     i.e. divisor ≡ 11 (mod 12). 11, 23, 35 and 47 all qualify, so the divisor
+     steps up with the breakpoints. That keeps the module itself around 30px at
+     every size — a fixed divisor would collapse it to ~7px on a phone, turning
+     the grid into noise and card gutters into hairlines. */
   --content-w: calc(min(1440px, 100vw) - 2 * clamp(16px, 4vw, 48px));
-  --module: calc(var(--content-w) / 47);
+  --module: calc(var(--content-w) / 11);
+}
+@media (min-width: 640px) {
+  :root {
+    --module: calc(var(--content-w) / 23);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --module: calc(var(--content-w) / 35);
+  }
+}
+@media (min-width: 1440px) {
+  :root {
+    --module: calc(var(--content-w) / 47);
+  }
 }
 
 @theme inline {

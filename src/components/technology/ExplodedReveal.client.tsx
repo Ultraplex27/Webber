@@ -34,6 +34,9 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
   const layerRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [exploded, setExploded] = useState(false);
   const [framesReady, setFramesReady] = useState(false);
+  // Tilt-to-flat entrance: the board lies back, then settles level, like
+  // hardware being laid out on the drafting table.
+  const [settled, setSettled] = useState(false);
 
   // mutable animation state (kept in refs to avoid re-renders per frame)
   const state = useRef({
@@ -141,6 +144,31 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
     });
   }, [animateTo]);
 
+  // Settle the board flat once it comes into view. Deliberately an entrance
+  // rather than a scroll-linked tilt: the board sits at the top of the page, so
+  // a scroll-driven angle would have almost no runway and would leave the board
+  // stuck at an angle for anyone who never scrolls, hurting both the visual and
+  // its click target.
+  useEffect(() => {
+    if (!motionOn) return;
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setSettled(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -12% 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [motionOn]);
+
+  // Without motion the board is simply already level.
+  const level = settled || !motionOn;
+
   // Size the canvas to its box (device-pixel aware).
   useEffect(() => {
     const resize = () => {
@@ -226,7 +254,7 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
   };
 
   const board = (
-    <div className="relative">
+    <div className="relative" style={{ perspective: "1400px" }}>
       <div
         role="button"
         tabIndex={0}
@@ -239,7 +267,14 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
         onClick={toggle}
         onKeyDown={onKeyDown}
         className="group relative block w-full cursor-pointer overflow-hidden rounded-[6px] border border-grey-200 bg-white"
-        style={{ aspectRatio: "1780 / 1160" }}
+        style={{
+          aspectRatio: "1780 / 1160",
+          transformOrigin: "50% 100%",
+          transform: level ? "rotateX(0deg) scale(1)" : "rotateX(14deg) scale(0.95)",
+          transition:
+            "transform 1100ms var(--ease-technical), opacity 700ms var(--ease-ui-out)",
+          opacity: level ? 1 : 0,
+        }}
       >
         {/* Assembled poster: visible until the first canvas frame is drawn */}
         {/* eslint-disable-next-line @next/next/no-img-element -- swapped out for the canvas on load */}

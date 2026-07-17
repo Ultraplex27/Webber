@@ -45,8 +45,9 @@ export function ProductExplorer() {
 
   return (
     <div>
-      {/* Sticky filter bar */}
-      <div className="sticky top-16 z-30 -mx-4 border-y border-grey-200 bg-white/70 px-4 py-4 backdrop-blur-xl backdrop-saturate-150 md:mx-0 md:rounded-[6px] md:border-x">
+      {/* Filter bar. Only sticky from md up: on a phone the groups wrap into a
+          tall stack, and pinning that under the header would eat the screen. */}
+      <div className="z-30 -mx-4 border-y border-grey-200 bg-white/70 px-4 py-4 backdrop-blur-xl backdrop-saturate-150 md:sticky md:top-16 md:mx-0 md:rounded-[6px] md:border-x">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
           <FilterGroup
             legend="Application"
