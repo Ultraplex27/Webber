@@ -36,8 +36,10 @@ export function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         scrolled || open
-          ? "bg-white/90 backdrop-blur-sm border-b border-grey-200"
-          : "bg-transparent border-b border-transparent"
+          ? // frosted glass over the drafting paper: the grid stays legible
+            // through the bar rather than being covered by it
+            "border-b border-grey-200 bg-white/60 backdrop-blur-xl backdrop-saturate-150"
+          : "border-b border-transparent bg-transparent"
       }`}
     >
       <div className="wrap flex h-16 items-center justify-between gap-6">
@@ -105,7 +107,7 @@ export function Header() {
         <nav
           id="mobile-nav"
           aria-label="Primary mobile"
-          className="fixed inset-0 top-16 z-40 flex flex-col bg-white md:hidden"
+          className="fixed inset-0 top-16 z-40 flex flex-col bg-white/85 backdrop-blur-xl md:hidden"
         >
           <div className="wrap flex flex-1 flex-col gap-2 pt-10">
             <p className="micro-label mb-4">INDEX</p>

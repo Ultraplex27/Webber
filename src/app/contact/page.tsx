@@ -90,7 +90,7 @@ export default function ContactPage() {
           </Reveal>
           <ul className="mt-14 space-y-px overflow-hidden rounded-[6px] border border-grey-200 bg-grey-200">
             {jobs.map((job) => (
-              <li key={job.slug} className="bg-white">
+              <li key={job.slug} className="bg-white/60 backdrop-blur-xl backdrop-saturate-150">
                 <a
                   href="#enquiry"
                   className="grid gap-2 p-6 transition-colors hover:bg-blue-50 md:grid-cols-[2fr_1fr_1fr_1fr_1fr]"

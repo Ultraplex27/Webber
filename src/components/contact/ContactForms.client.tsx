@@ -73,7 +73,7 @@ export function ContactForms() {
             className={`min-h-[120px] rounded-[6px] border p-6 text-left transition-colors duration-200 ${
               intent === item.id
                 ? "border-blue-600 bg-blue-50"
-                : "border-grey-200 bg-white hover:border-grey-400"
+                : "border-grey-200 bg-white/60 backdrop-blur-xl backdrop-saturate-150 hover:border-grey-400"
             }`}
           >
             <span className={`type-h4 !text-[1.1rem] block ${intent === item.id ? "text-blue-800" : ""}`}>

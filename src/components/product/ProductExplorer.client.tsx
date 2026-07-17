@@ -46,7 +46,7 @@ export function ProductExplorer() {
   return (
     <div>
       {/* Sticky filter bar */}
-      <div className="sticky top-16 z-30 -mx-4 border-y border-grey-200 bg-white/95 px-4 py-4 backdrop-blur-sm md:mx-0 md:rounded-[6px] md:border-x">
+      <div className="sticky top-16 z-30 -mx-4 border-y border-grey-200 bg-white/70 px-4 py-4 backdrop-blur-xl backdrop-saturate-150 md:mx-0 md:rounded-[6px] md:border-x">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
           <FilterGroup
             legend="Application"
@@ -88,7 +88,7 @@ export function ProductExplorer() {
       </p>
 
       {/* Catalogue */}
-      <ul className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="mt-6 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((p, i) => (
           <Reveal as="li" key={p.slug} at={0.88} delayMs={(i % 3) * 50}>
             <div className="relative h-full">
@@ -130,7 +130,7 @@ export function ProductExplorer() {
             <caption className="micro-label mb-4 text-left">
               PRODUCT COMPARISON / DIFFERENCES IN BLUE
             </caption>
-            <thead className="sticky top-16 bg-white">
+            <thead className="sticky top-16 bg-white/80 backdrop-blur-xl">
               <tr>
                 <th scope="col">Specification</th>
                 {compared.map((p) => (

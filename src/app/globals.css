@@ -260,13 +260,23 @@ body {
 /* ---------------------------------------------------------------------------
    Technical texture helpers
 --------------------------------------------------------------------------- */
+/* Frosted glass: panels float on the drafting paper rather than covering it, so
+   the pencil grid reads through (softened) instead of being interrupted. This is
+   also why card edges need not land exactly on a rule — the grid is continuous
+   behind them. Logo cards are deliberately excluded below: their artwork is
+   flattened onto white, so a translucent tile would expose the logos' own white
+   backgrounds as boxes. */
 .card {
-  background: var(--surface-raised);
+  background: rgba(255, 255, 255, 0.58);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
   border: 1px solid var(--grey-200);
   border-radius: 6px;
 }
 .spec-panel {
-  background: var(--grey-50);
+  background: rgba(246, 248, 251, 0.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
   border: 1px solid var(--grey-200);
   border-radius: 3px;
 }
@@ -278,13 +288,22 @@ body {
 
 /* Faint drafting paper: minor rules every 32px, major every 160px. Applied to
    one wrapper so the grid stays continuous and aligned across sections, which
-   is why the tinted sections inside it are translucent rather than opaque. */
+   is why the tinted sections inside it are translucent rather than opaque.
+
+   Vertical rules are anchored to the layout's centre line rather than the page
+   edge: the wrap is centred at max-width 1440 with 48px padding, so its content
+   spans centre ±672px, and 672 = 21 × 32. Putting a rule exactly on the centre
+   therefore lands rules on the content edges (and on the column edges inside
+   it, since the 64px gutter and 640px columns are also multiples of 32).
+   calc(50% + 16px) resolves to (W - 32)/2 + 16 = W/2, i.e. a rule dead centre;
+   the major layer needs +80px for the same reason. */
 .pencil-grid {
   background-image: linear-gradient(90deg, rgba(70, 83, 102, 0.05) 1px, transparent 1px),
     linear-gradient(180deg, rgba(70, 83, 102, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(70, 83, 102, 0.08) 1px, transparent 1px),
     linear-gradient(180deg, rgba(70, 83, 102, 0.08) 1px, transparent 1px);
   background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px;
+  background-position: calc(50% + 16px) 0, 0 0, calc(50% + 80px) 0, 0 0;
 }
 
 /* Animated trace line used in CTA sections */
@@ -382,6 +401,8 @@ html[data-reduced-motion="true"] *::after {
     transform: translateX(-50%);
   }
 }
+/* Solid white on purpose, not frosted: the logo artwork is flattened onto white,
+   so the tile must match it or the logos show as boxes. */
 .logo-card {
   display: flex;
   align-items: center;
@@ -448,6 +469,7 @@ html[data-reduced-motion="true"] .marquee {
   font-weight: 500;
   color: var(--grey-500);
 }
+/* translucent so the drafting grid carries through the table */
 .spec-table tbody tr:nth-child(even) {
-  background: var(--grey-50);
+  background: rgba(246, 248, 251, 0.55);
 }

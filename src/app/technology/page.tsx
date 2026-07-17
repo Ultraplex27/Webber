@@ -246,7 +246,7 @@ export default function TechnologyPage() {
               lead="Every design passes through thermal, abuse, vibration and environmental testing, hardware-in-loop validation, production end-of-line testing, and 75K+ systems of field data feed back into the next revision."
             />
           </Reveal>
-          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {labShots.map((shot, i) => (
               <Reveal as="li" key={shot.file} delayMs={(i % 3) * 50}>
                 <figure>
