@@ -3,7 +3,7 @@ import { HeroShell } from "@/components/hero/HeroShell.client";
 import { ProofStrip } from "@/components/home/ProofStrip";
 import { VoltageRail } from "@/components/home/VoltageRail.client";
 import { FirstPrinciples } from "@/components/home/FirstPrinciples.client";
-import { TelematicsPanel } from "@/components/home/TelematicsPanel";
+import { FleetDashboard } from "@/components/telematics/FleetDashboard";
 import { Recognition } from "@/components/home/Recognition";
 import { ClosingCta } from "@/components/ui/ClosingCta";
 import { LogoRail } from "@/components/ui/LogoRail";
@@ -116,7 +116,7 @@ export default function HomePage() {
               />
             </Reveal>
             <Reveal delayMs={100}>
-              <TelematicsPanel />
+              <FleetDashboard />
             </Reveal>
           </div>
         </section>

@@ -10,7 +10,6 @@ import {
   ArchitectureFlow,
   ChargingCurveChart,
   DispersionChart,
-  IsolationDiagram,
 } from "@/components/technology/TechCharts";
 
 export const metadata: Metadata = {
@@ -39,7 +38,14 @@ const labShots = [
 const moduleVisuals: Record<string, React.ReactNode> = {
   charging: <ChargingCurveChart />,
   balancing: <DispersionChart />,
-  isolation: <IsolationDiagram />,
+  isolation: (
+    <SmartImage
+      src="/images/technology/isolation-architecture.webp"
+      alt="Low-voltage and high-voltage BMS domains separated by an isolation barrier with isolated CAN and insulation monitoring"
+      ratio="16 / 9"
+      placeholderLabel="ISOLATION ARCHITECTURE"
+    />
+  ),
   thermal: (
     <SmartImage
       src="/images/technology/thermal-comparison.webp"
@@ -51,27 +57,12 @@ const moduleVisuals: Record<string, React.ReactNode> = {
     />
   ),
   paralleling: (
-    <svg viewBox="0 0 400 220" className="w-full" role="img" aria-label="Two battery packs operating in parallel without inter-pack CAN communication">
-      {[40, 230].map((x, i) => (
-        <g key={i}>
-          <rect x={x} y="50" width="130" height="90" rx="4" fill="var(--grey-50)" stroke="var(--grey-300)" />
-          <text x={x + 14} y="75" style={{ font: "500 10px var(--font-mono)", letterSpacing: "0.08em", fill: "var(--grey-500)" }}>
-            PACK {i + 1}
-          </text>
-          <text x={x + 14} y="95" style={{ font: "500 12px var(--font-mono)", fill: "var(--ink-soft)" }}>
-            SOC {i === 0 ? "84%" : "51%"}
-          </text>
-          <path d={`M${x + 65} 140 V 175`} stroke="var(--blue-600)" strokeWidth="2" />
-        </g>
-      ))}
-      <path d="M105 175 H 295" stroke="var(--blue-600)" strokeWidth="2" />
-      <text x="140" y="200" style={{ font: "500 10px var(--font-mono)", letterSpacing: "0.08em", fill: "var(--blue-700)" }}>
-        SHARED BUS / NO INTER-PACK CAN
-      </text>
-      {/* struck-through CAN link */}
-      <path d="M170 95 H 230" stroke="var(--grey-400)" strokeDasharray="4 4" />
-      <line x1="190" y1="82" x2="210" y2="108" stroke="var(--error)" strokeWidth="1.5" />
-    </svg>
+    <SmartImage
+      src="/images/technology/pack-paralleling.webp"
+      alt="Two battery packs connected through a shared power bus with no inter-pack CAN connection"
+      ratio="16 / 9"
+      placeholderLabel="SHARED BUS / NO INTER-PACK CAN"
+    />
   ),
 };
 

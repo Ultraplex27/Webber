@@ -482,6 +482,96 @@ html[data-reduced-motion="true"] .marquee {
   overflow-x: auto;
 }
 
+/* ---------------------------------------------------------------------------
+   Fleet dashboard
+   CSS animations on purpose: the reduced-motion rules above neutralise every
+   animation globally, so this needs no separate JS gate.
+--------------------------------------------------------------------------- */
+.dash-live {
+  animation: dash-live 2s var(--ease-soft) infinite;
+}
+@keyframes dash-live {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+
+/* assets tracking their route */
+.dash-asset {
+  offset-rotate: 0deg;
+  animation: dash-travel 14s linear infinite;
+}
+@keyframes dash-travel {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+/* pack current trace scrolling right-to-left */
+.dash-trace {
+  animation: dash-scroll 6s linear infinite;
+}
+@keyframes dash-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-160px);
+  }
+}
+
+/* state-of-charge ring drawing in */
+.dash-ring {
+  animation: dash-ring 1.6s var(--ease-technical) both;
+}
+@keyframes dash-ring {
+  from {
+    stroke-dashoffset: 220;
+  }
+}
+
+/* the cell currently being balanced */
+.dash-balancing {
+  animation: dash-balancing 1.8s var(--ease-soft) infinite;
+}
+@keyframes dash-balancing {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* architecture spine: a pulse running each connector, showing flow direction */
+.arch-pulse {
+  animation: arch-pulse 2.4s var(--ease-soft) infinite;
+}
+@keyframes arch-pulse {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(233%);
+    opacity: 0;
+  }
+}
+
 /* Tables */
 .spec-table {
   width: 100%;

@@ -1,4 +1,4 @@
-/** Small technical SVG charts for the differentiator modules. */
+﻿/** Small technical SVG charts for the differentiator modules. */
 
 export function ChargingCurveChart() {
   return (
@@ -47,66 +47,94 @@ export function DispersionChart() {
   );
 }
 
-export function IsolationDiagram() {
-  return (
-    <svg viewBox="0 0 400 220" className="w-full" role="img" aria-label="Low-voltage and high-voltage domains separated by an isolation boundary with isolated CAN crossing">
-      <rect x="20" y="40" width="150" height="140" rx="4" fill="var(--grey-50)" stroke="var(--grey-300)" />
-      <rect x="230" y="40" width="150" height="140" rx="4" fill="var(--blue-50)" stroke="var(--blue-200)" />
-      <text x="45" y="70" style={{ font: "500 10px var(--font-mono)", letterSpacing: "0.08em", fill: "var(--grey-500)" }}>
-        LOW VOLTAGE
-      </text>
-      <text x="252" y="70" style={{ font: "500 10px var(--font-mono)", letterSpacing: "0.08em", fill: "var(--blue-700)" }}>
-        HIGH VOLTAGE
-      </text>
-      {/* isolation gap */}
-      <line x1="200" y1="30" x2="200" y2="190" stroke="var(--grey-400)" strokeDasharray="6 4" />
-      <text x="178" y="22" style={{ font: "500 9px var(--font-mono)", letterSpacing: "0.08em", fill: "var(--grey-500)" }}>
-        ISOLATION
-      </text>
-      {/* isolated CAN crossing */}
-      <path d="M170 110 H 230" stroke="var(--blue-600)" strokeWidth="2" />
-      <circle cx="200" cy="110" r="6" fill="var(--canvas)" stroke="var(--blue-600)" strokeWidth="1.5" />
-      <text x="150" y="135" style={{ font: "500 10px var(--font-mono)", letterSpacing: "0.08em", fill: "var(--blue-700)" }}>
-        ISOLATED CAN
-      </text>
-      {/* insulation monitor */}
-      <rect x="255" y="130" width="100" height="30" rx="3" fill="var(--canvas)" stroke="var(--blue-300)" />
-      <text x="263" y="149" style={{ font: "500 9px var(--font-mono)", letterSpacing: "0.06em", fill: "var(--ink-soft)" }}>
-        INSULATION MON.
-      </text>
-    </svg>
-  );
-}
+/**
+ * The signal path from cell to fleet, as a schematic rather than a stack of
+ * boxes: each stage carries what it actually does and the signal leaving it,
+ * and the stages Webber owns are marked as the core. A pulse runs the spine so
+ * the direction of flow is legible without arrowheads.
+ *
+ * Every descriptor maps to a real spec (16S to 32S, 400 mA balancing, isolated
+ * CAN, 4G/IoT).
+ */
+const ARCHITECTURE = [
+  {
+    label: "CELLS",
+    note: "16S to 32S packs, 12V to 1200V systems.",
+    tag: "mV",
+  },
+  {
+    label: "SENSING",
+    note: "Cell voltage, pack current and temperature channels.",
+    tag: "ANALOG",
+  },
+  {
+    label: "DECISION LAYER",
+    note: "State of charge and power, charging control, fault logic.",
+    tag: "FIRMWARE",
+    core: true,
+  },
+  {
+    label: "PROTECTION + BALANCING",
+    note: "Over/under voltage, over-current, short circuit, open wire. Up to 400 mA balancing.",
+    tag: "MOSFET / CONTACTOR",
+    core: true,
+  },
+  {
+    label: "VEHICLE / STORAGE CONTROLLER",
+    note: "Isolated CAN across the low- to high-voltage boundary.",
+    tag: "ISOLATED CAN",
+  },
+  {
+    label: "TELEMATICS + ANALYTICS",
+    note: "4G/IoT uplink: live location, geofencing, fleet visibility.",
+    tag: "4G",
+  },
+];
 
 export function ArchitectureFlow() {
-  const layers = [
-    "CELLS",
-    "SENSING",
-    "DECISION LAYER",
-    "PROTECTION + BALANCING",
-    "VEHICLE / STORAGE CONTROLLER",
-    "TELEMATICS + ANALYTICS",
-  ];
   return (
-    <ol className="mx-auto flex max-w-md flex-col items-stretch gap-0">
-      {layers.map((layer, i) => (
-        <li key={layer} className="flex flex-col items-center">
+    <ol className="mx-auto max-w-2xl">
+      {ARCHITECTURE.map((l, i) => (
+        <li key={l.label}>
+          {/* spine between stages, with the pulse showing flow direction */}
+          {i > 0 && (
+            <div
+              className="relative ml-[30px] h-7 w-px overflow-hidden bg-grey-300"
+              aria-hidden="true"
+            >
+              <span
+                className="arch-pulse absolute inset-x-[-1px] top-0 block h-3"
+                style={{
+                  background: "linear-gradient(to bottom, transparent, var(--blue-500))",
+                  animationDelay: `${i * 0.28}s`,
+                }}
+              />
+            </div>
+          )}
           <div
-            className={`w-full rounded-[3px] border px-6 py-4 text-center ${
-              i === 2 || i === 3
-                ? "border-blue-200 bg-blue-50"
-                : "border-grey-200 bg-white"
+            className={`flex items-start gap-4 rounded-[6px] border p-4 backdrop-blur-xl ${
+              l.core ? "border-blue-200 bg-blue-50/60" : "border-grey-200 bg-white/60"
             }`}
           >
-            <span className={`micro-label ${i === 2 || i === 3 ? "micro-label--blue" : "!text-ink-soft"}`}>
-              {layer}
+            <span
+              className={`flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border text-[11px] font-[550] leading-none ${
+                l.core
+                  ? "border-blue-600 bg-blue-600 text-white"
+                  : "border-grey-300 text-grey-500"
+              }`}
+              aria-hidden="true"
+            >
+              {i + 1}
             </span>
+            <div className="min-w-0 flex-1">
+              <p className={`micro-label ${l.core ? "micro-label--blue" : "!text-ink-soft"}`}>
+                {l.label}
+                {l.core && <span className="ml-2 text-grey-400">/ WEBBER</span>}
+              </p>
+              <p className="type-body mt-1 !max-w-none !text-[0.875rem]">{l.note}</p>
+            </div>
+            <span className="micro-label hidden shrink-0 pt-0.5 sm:block">{l.tag}</span>
           </div>
-          {i < layers.length - 1 && (
-            <span className="py-1 text-blue-600" aria-hidden="true">
-              ↓
-            </span>
-          )}
         </li>
       ))}
     </ol>

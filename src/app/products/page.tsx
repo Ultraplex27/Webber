@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductExplorer } from "@/components/product/ProductExplorer.client";
-import { SmartImage } from "@/components/ui/SmartImage.client";
+import { FleetDashboard } from "@/components/telematics/FleetDashboard";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
@@ -70,12 +70,7 @@ export default function ProductsPage() {
             </Link>
           </Reveal>
           <Reveal delayMs={100}>
-            <SmartImage
-              src="/images/telematics/dashboard.webp"
-              alt="Webber fleet telematics dashboard showing live assets, geofencing and battery state"
-              ratio="16 / 10"
-              placeholderLabel="TELEMATICS DASHBOARD"
-            />
+            <FleetDashboard />
           </Reveal>
         </div>
       </section>
