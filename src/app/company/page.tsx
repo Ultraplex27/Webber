@@ -139,7 +139,7 @@ export default function CompanyPage() {
       {/* Operating scale */}
       <section className="section relative">
         <BlueprintMeasure label="03 / OPERATING SCALE" />
-        <div className="wrap grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="wrap gap-module grid sm:grid-cols-2 lg:grid-cols-4">
           {scaleMetrics.map((m) => (
             <Reveal key={m.label}>
               <p className="spec-value !text-[2.25rem] !leading-none text-ink">{m.value}</p>
@@ -160,7 +160,7 @@ export default function CompanyPage() {
           <Reveal>
             <SectionIntro label="LEADERSHIP" title="Role relevance, not long biographies." />
           </Reveal>
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="gap-module mt-12 grid sm:grid-cols-2 lg:grid-cols-3">
             {team.map((member, i) => (
               <Reveal
                 as="li"
@@ -194,7 +194,7 @@ export default function CompanyPage() {
           <Reveal>
             <SectionIntro label="THE WIDER TEAM" title="Documentary, not stock." />
           </Reveal>
-          <ul className="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <ul className="gap-module mt-14 grid grid-cols-2 lg:grid-cols-3">
             {mosaic.map((m, i) => (
               <Reveal as="li" key={m.file} delayMs={(i % 3) * 50}>
                 <figure className="relative">

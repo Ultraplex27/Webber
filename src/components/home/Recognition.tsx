@@ -16,13 +16,14 @@ export function Recognition({
       {measure ? <BlueprintMeasure label={measure} /> : null}
       <div className="wrap">
         <p className="micro-label mb-10">{heading}</p>
-        <ol className="grid gap-px overflow-hidden rounded-[6px] border border-grey-200 bg-grey-200 md:grid-cols-3">
+        {/* one-module gutters so the cards sit on the drafting grid */}
+        <ol className="gap-module grid md:grid-cols-3">
           {awards.map((a, i) => (
             <Reveal
               key={a.title}
               as="li"
               delayMs={i * 50}
-              className="bg-white/60 p-8 backdrop-blur-xl backdrop-saturate-150"
+              className="card p-8"
             >
               <p className="spec-value !text-grey-400">0{i + 1}</p>
               <h3 className="type-h4 mt-4">{a.title}</h3>

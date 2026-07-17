@@ -39,6 +39,17 @@
   --ease-ui-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-technical: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Modular grid ---------------------------------------------------------
+     The drafting grid is derived from the content column, not a fixed pixel
+     mesh, so cards land on rules at every viewport rather than only at 1440.
+
+     The column is divided into 47 modules because 47 = 2a+1 = 3a+2 = 4a+3 for
+     whole a (23, 15, 11). So with a one-module gutter, a 2-, 3- or 4-up card
+     grid has whole-module card widths AND whole-module pitch, putting every
+     card edge on a rule. Any other divisor aligns only some of those counts. */
+  --content-w: calc(min(1440px, 100vw) - 2 * clamp(16px, 4vw, 48px));
+  --module: calc(var(--content-w) / 47);
 }
 
 @theme inline {
@@ -286,24 +297,30 @@ body {
   background-size: 48px 48px;
 }
 
-/* Faint drafting paper: minor rules every 32px, major every 160px. Applied to
-   one wrapper so the grid stays continuous and aligned across sections, which
-   is why the tinted sections inside it are translucent rather than opaque.
+/* Faint drafting paper. Applied to one wrapper so the grid stays continuous
+   across sections, which is why the tinted sections inside it are translucent
+   rather than opaque, and why panels are frosted rather than solid.
 
-   Vertical rules are anchored to the layout's centre line rather than the page
-   edge: the wrap is centred at max-width 1440 with 48px padding, so its content
-   spans centre ±672px, and 672 = 21 × 32. Putting a rule exactly on the centre
-   therefore lands rules on the content edges (and on the column edges inside
-   it, since the 64px gutter and 640px columns are also multiples of 32).
-   calc(50% + 16px) resolves to (W - 32)/2 + 16 = W/2, i.e. a rule dead centre;
-   the major layer needs +80px for the same reason. */
+   Minor rules every module, major every 4. Vertical rules are anchored to the
+   content column's left edge (not the page edge) so they align with the cards
+   inside it; horizontal rules are page rhythm only, since section padding can
+   never put card tops on a rule. */
 .pencil-grid {
   background-image: linear-gradient(90deg, rgba(70, 83, 102, 0.05) 1px, transparent 1px),
     linear-gradient(180deg, rgba(70, 83, 102, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(70, 83, 102, 0.08) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(70, 83, 102, 0.08) 1px, transparent 1px);
-  background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px;
-  background-position: calc(50% + 16px) 0, 0 0, calc(50% + 80px) 0, 0 0;
+    linear-gradient(90deg, rgba(70, 83, 102, 0.09) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(70, 83, 102, 0.09) 1px, transparent 1px);
+  background-size: var(--module) var(--module), var(--module) var(--module),
+    calc(var(--module) * 4) calc(var(--module) * 4),
+    calc(var(--module) * 4) calc(var(--module) * 4);
+  background-position: calc(50% - var(--content-w) / 2) 0, 0 0,
+    calc(50% - var(--content-w) / 2) 0, 0 0;
+}
+
+/* One-module gutter: the gap that keeps card edges on the grid rules. Use on
+   any 2-, 3- or 4-up card grid inside the content column. */
+.gap-module {
+  gap: var(--module);
 }
 
 /* Animated trace line used in CTA sections */

@@ -87,7 +87,7 @@ export default function ProductsPage() {
           <Reveal>
             <SectionIntro label="ROADMAP" title="The stack is expanding." />
           </Reveal>
-          <ul className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="gap-module mt-14 grid sm:grid-cols-2 lg:grid-cols-4">
             {roadmapItems.map((item, i) => (
               <Reveal as="li" key={item.name} delayMs={i * 50} className="card p-6">
                 <span className="micro-label inline-block rounded-[3px] border border-grey-300 bg-grey-50 px-2 py-1">

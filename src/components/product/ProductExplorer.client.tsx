@@ -88,7 +88,7 @@ export function ProductExplorer() {
       </p>
 
       {/* Catalogue */}
-      <ul className="mt-6 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="gap-module mt-6 grid sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((p, i) => (
           <Reveal as="li" key={p.slug} at={0.88} delayMs={(i % 3) * 50}>
             <div className="relative h-full">

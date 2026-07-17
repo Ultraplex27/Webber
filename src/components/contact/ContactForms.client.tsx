@@ -62,7 +62,7 @@ export function ContactForms() {
   return (
     <div>
       {/* Intent selector */}
-      <div className="grid gap-4 md:grid-cols-3" role="tablist" aria-label="Enquiry type">
+      <div className="gap-module grid md:grid-cols-3" role="tablist" aria-label="Enquiry type">
         {intents.map((item) => (
           <button
             key={item.id}
