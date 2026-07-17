@@ -75,10 +75,10 @@ const moduleVisuals: Record<string, React.ReactNode> = {
 export default function TechnologyPage() {
   return (
     <>
-      {/* Hero: interactive exploded board */}
+      {/* Hero: interactive exploded board beside the copy */}
       <section className="section border-b border-grey-200 pt-40">
-        <div className="wrap">
-          <div className="max-w-3xl">
+        <div className="wrap grid items-center gap-16 lg:grid-cols-2">
+          <div>
             <TechnicalLabel blue className="mb-6">
               FIRST-PRINCIPLE DESIGN
             </TechnicalLabel>
@@ -87,13 +87,10 @@ export default function TechnologyPage() {
             </h1>
             <p className="type-lead mt-8">
               Battery control architectures designed around real operating
-              conditions, not ideal laboratory assumptions. Click the board to
-              separate the metal-core stack.
+              conditions, not ideal laboratory assumptions.
             </p>
           </div>
-          <div className="mt-16">
-            <ExplodedReveal />
-          </div>
+          <ExplodedReveal variant="media" />
         </div>
       </section>
 

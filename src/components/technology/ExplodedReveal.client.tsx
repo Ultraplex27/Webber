@@ -26,7 +26,7 @@ const LAYERS = [
 const DURATION = 1500; // ms for a full explode / reassemble
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-export function ExplodedReveal() {
+export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media" }) {
   const { motionOn } = useMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -225,55 +225,67 @@ export function ExplodedReveal() {
     }
   };
 
+  const board = (
+    <div className="relative">
+      <div
+        role="button"
+        tabIndex={0}
+        aria-pressed={exploded}
+        aria-label={
+          exploded
+            ? "Reassemble the battery management board"
+            : "Explode the battery management board to view its four layers"
+        }
+        onClick={toggle}
+        onKeyDown={onKeyDown}
+        className="group relative block w-full cursor-pointer overflow-hidden rounded-[6px] border border-grey-200 bg-white"
+        style={{ aspectRatio: "1780 / 1160" }}
+      >
+        {/* Assembled poster: visible until the first canvas frame is drawn */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- swapped out for the canvas on load */}
+        <img
+          ref={posterRef}
+          src={ASSEMBLED_POSTER}
+          alt="Assembled Webber battery management board"
+          className="absolute inset-0 h-full w-full object-contain transition-opacity duration-500"
+        />
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${
+            framesReady ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Affordance chip */}
+        <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-grey-200 bg-white/90 px-4 py-2 backdrop-blur-sm transition-colors group-hover:border-blue-300">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
+            {exploded ? (
+              <path d="M7 1v5M7 8v5M2 7h3M9 7h3" stroke="var(--blue-600)" strokeWidth="1.5" strokeLinecap="round" />
+            ) : (
+              <path d="M7 1v3M7 10v3M1 7h3M10 7h3M4 4l2 2M10 4L8 6M4 10l2-2M10 10L8 8" stroke="var(--blue-600)" strokeWidth="1.5" strokeLinecap="round" />
+            )}
+          </svg>
+          <span className="micro-label micro-label--blue">
+            {exploded ? "CLICK TO REASSEMBLE" : "CLICK TO EXPLODE"}
+          </span>
+        </span>
+      </div>
+    </div>
+  );
+
+  // Media-only (e.g. beside hero copy): just the interactive board.
+  if (variant === "media") {
+    return (
+      <div ref={wrapRef} className="relative">
+        {board}
+      </div>
+    );
+  }
+
   return (
     <div ref={wrapRef} className="grid items-center gap-10 lg:grid-cols-[1.6fr_1fr]">
-      <div className="relative">
-        <div
-          role="button"
-          tabIndex={0}
-          aria-pressed={exploded}
-          aria-label={
-            exploded
-              ? "Reassemble the battery management board"
-              : "Explode the battery management board to view its four layers"
-          }
-          onClick={toggle}
-          onKeyDown={onKeyDown}
-          className="group relative block w-full cursor-pointer overflow-hidden rounded-[6px] border border-grey-200 bg-white"
-          style={{ aspectRatio: "1780 / 1160" }}
-        >
-          {/* Assembled poster: visible until the first canvas frame is drawn */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- swapped out for the canvas on load */}
-          <img
-            ref={posterRef}
-            src={ASSEMBLED_POSTER}
-            alt="Assembled Webber battery management board"
-            className="absolute inset-0 h-full w-full object-contain transition-opacity duration-500"
-          />
-          <canvas
-            ref={canvasRef}
-            aria-hidden="true"
-            className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${
-              framesReady ? "opacity-100" : "opacity-0"
-            }`}
-          />
-
-          {/* Affordance chip */}
-          <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-grey-200 bg-white/90 px-4 py-2 backdrop-blur-sm transition-colors group-hover:border-blue-300">
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
-              {exploded ? (
-                <path d="M7 1v5M7 8v5M2 7h3M9 7h3" stroke="var(--blue-600)" strokeWidth="1.5" strokeLinecap="round" />
-              ) : (
-                <path d="M7 1v3M7 10v3M1 7h3M10 7h3M4 4l2 2M10 4L8 6M4 10l2-2M10 10L8 8" stroke="var(--blue-600)" strokeWidth="1.5" strokeLinecap="round" />
-              )}
-            </svg>
-            <span className="micro-label micro-label--blue">
-              {exploded ? "CLICK TO REASSEMBLE" : "CLICK TO EXPLODE"}
-            </span>
-          </span>
-        </div>
-      </div>
-
+      {board}
       <ol className="space-y-5">
         {LAYERS.map((l, i) => (
           <li
