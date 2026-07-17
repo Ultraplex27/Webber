@@ -12,6 +12,9 @@ interface SmartImageProps {
   /** label shown on the technical placeholder when the asset is missing */
   placeholderLabel?: string;
   loading?: "lazy" | "eager";
+  /** cover (default) crops to fill; contain shows the whole image, for
+   *  technical drawings that must not be cropped */
+  fit?: "cover" | "contain";
 }
 
 /**
@@ -27,6 +30,7 @@ export function SmartImage({
   ratio = "4 / 3",
   placeholderLabel,
   loading = "lazy",
+  fit = "cover",
 }: SmartImageProps) {
   const [failed, setFailed] = useState(false);
 
@@ -66,7 +70,7 @@ export function SmartImage({
       loading={loading}
       onError={() => setFailed(true)}
       className={`${className} ${imgClassName}`}
-      style={{ aspectRatio: ratio, objectFit: "cover", width: "100%" }}
+      style={{ aspectRatio: ratio, objectFit: fit, width: "100%" }}
     />
   );
 }

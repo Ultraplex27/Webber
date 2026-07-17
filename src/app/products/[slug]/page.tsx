@@ -27,11 +27,6 @@ export async function generateMetadata({
   };
 }
 
-const views = [
-  { file: "front.webp", label: "Front three-quarter view" },
-  { file: "top.webp", label: "Top view" },
-  { file: "connector.webp", label: "Connector-side view" },
-] as const;
 
 export default async function ProductDetailPage({
   params,
@@ -117,39 +112,29 @@ export default async function ProductDetailPage({
         </div>
       </section>
 
-      {/* Specification table */}
+      {/* Specifications */}
       <section className="section--tight relative">
         <BlueprintMeasure label="02 / SPECIFICATIONS" />
-        <div className="wrap grid gap-16 lg:grid-cols-[2fr_1fr]">
-          <div>
-            <h2 className="type-h3 mb-8">Full specifications</h2>
-            <SpecificationTable product={product} />
-          </div>
-          <aside className="space-y-8">
-            <div>
-              <TechnicalLabel className="mb-4">PRODUCT VIEWS</TechnicalLabel>
-              <div className="space-y-4">
-                {views.slice(1).map((v) => (
-                  <SmartImage
-                    key={v.file}
-                    src={`${product.imageDir}/${v.file}`}
-                    alt={`${product.name}: ${v.label}`}
-                    ratio="4 / 3"
-                    placeholderLabel={v.label.toUpperCase()}
-                  />
-                ))}
-              </div>
-            </div>
-            <div>
-              <TechnicalLabel className="mb-4">MECHANICAL</TechnicalLabel>
+        <div className="wrap">
+          <h2 className="type-h3 mb-8">Full specifications</h2>
+          <SpecificationTable product={product} />
+
+          {/* Mechanical drawing: the hero already shows the board itself, so the
+              only view worth repeating here is the dimensioned outline. */}
+          <div className="mt-14">
+            <TechnicalLabel className="mb-4">
+              MECHANICAL / ORTHOGRAPHIC OUTLINE
+            </TechnicalLabel>
+            <div className="card p-6">
               <SmartImage
                 src={`${product.imageDir}/dimensions.svg`}
                 alt={`${product.name} dimension drawing`}
-                ratio="4 / 3"
+                ratio="16 / 9"
+                fit="contain"
                 placeholderLabel="DIMENSION DRAWING"
               />
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 

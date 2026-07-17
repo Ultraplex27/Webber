@@ -572,6 +572,68 @@ html[data-reduced-motion="true"] .marquee {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Specification cards
+   One genuine table per category, presented as a frosted card: a caption bar
+   for the category, then field/value rows on hairlines.
+--------------------------------------------------------------------------- */
+.spec-card {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--grey-200);
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.58);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+  /* keeps the rounded corners while border-collapse is on */
+  border-spacing: 0;
+}
+.spec-card__caption {
+  caption-side: top;
+  text-align: left;
+  padding: 10px 16px;
+  background: rgba(237, 241, 246, 0.7);
+  border-bottom: 1px solid var(--grey-200);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue-700);
+}
+.spec-card th,
+.spec-card td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 16px;
+  border-top: 1px solid var(--grey-100);
+}
+.spec-card tr:first-child th,
+.spec-card tr:first-child td {
+  border-top: 0;
+}
+.spec-card th {
+  width: 42%;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--grey-500);
+}
+.spec-card td {
+  color: var(--ink-soft);
+}
+.spec-tbc {
+  margin-left: 8px;
+  padding: 1px 5px;
+  border: 1px solid var(--grey-300);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: var(--grey-400);
+  white-space: nowrap;
+}
+
 /* Tables */
 .spec-table {
   width: 100%;

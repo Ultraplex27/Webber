@@ -13,6 +13,15 @@ const CATEGORY_ORDER: SpecRow["category"][] = [
   "Deployment",
 ];
 
+/**
+ * Specifications as one small table per category rather than a single long
+ * table with rowspan'd category cells, which read as a data dump and left the
+ * category column stranded beside its rows.
+ *
+ * Still genuine tables (each category is a table with a caption and row
+ * headers), so the data stays navigable to screen readers and is not faked with
+ * divs; the cards are only how they are presented.
+ */
 export function SpecificationTable({ product }: { product: Product }) {
   const grouped = CATEGORY_ORDER.map((cat) => ({
     cat,
@@ -22,43 +31,36 @@ export function SpecificationTable({ product }: { product: Product }) {
   const hasPending = product.specs.some((s) => s.pendingVerification);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="spec-table">
-        <caption className="sr-only">Full specifications for {product.name}</caption>
-        <thead>
-          <tr>
-            <th scope="col" className="w-40">Category</th>
-            <th scope="col" className="w-52">Field</th>
-            <th scope="col">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {grouped.map((g) =>
-            g.rows.map((row, i) => (
-              <tr key={`${g.cat}-${row.field}`}>
-                {i === 0 ? (
-                  <th scope="rowgroup" rowSpan={g.rows.length} className="align-top">
-                    {g.cat}
-                  </th>
-                ) : null}
-                <td className="text-grey-700">{row.field}</td>
-                <td className="spec-value">
-                  {row.value}
-                  {row.pendingVerification && (
-                    <span className="micro-label ml-2 !text-grey-400" title="To be confirmed from controlled product data">
-                      TBC*
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+    <div>
+      <div className="gap-module grid md:grid-cols-2">
+        {grouped.map((g) => (
+          <table key={g.cat} className="spec-card">
+            <caption className="spec-card__caption">{g.cat}</caption>
+            <tbody>
+              {g.rows.map((row) => (
+                <tr key={row.field}>
+                  <th scope="row">{row.field}</th>
+                  <td>
+                    <span className="spec-value">{row.value}</span>
+                    {row.pendingVerification && (
+                      <span
+                        className="spec-tbc"
+                        title="To be confirmed from controlled product data"
+                      >
+                        TBC
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ))}
+      </div>
       {hasPending && (
-        <p className="type-small mt-3 text-grey-400">
-          *TBC: indicative value pending confirmation from controlled product data. Request the
-          datasheet for released specifications.
+        <p className="type-small mt-8 text-grey-400">
+          TBC: indicative value pending confirmation from controlled product
+          data. Request the datasheet for released specifications.
         </p>
       )}
     </div>
