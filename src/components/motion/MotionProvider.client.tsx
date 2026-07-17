@@ -9,6 +9,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+import { setLenis } from "./lenisInstance";
 
 interface MotionContextValue {
   /** true when animations should run (client hydrated, no reduced-motion request) */
@@ -104,6 +105,7 @@ export function MotionProvider({ children }: { children: ReactNode }) {
       if (cancelled) return;
       const lenis = new Lenis({ lerp: 0.12 });
       lenisRef.current = lenis;
+      setLenis(lenis);
       gsap.registerPlugin(ScrollTrigger);
       lenis.on("scroll", ScrollTrigger.update);
       const raf = (time: number) => {
@@ -118,6 +120,7 @@ export function MotionProvider({ children }: { children: ReactNode }) {
       cancelAnimationFrame(rafId);
       lenisRef.current?.destroy();
       lenisRef.current = null;
+      setLenis(null);
     };
   }, [motionOn]);
 

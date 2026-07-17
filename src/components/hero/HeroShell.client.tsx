@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useMotion } from "@/components/motion/MotionProvider.client";
 import { useIsDesktop } from "@/components/motion/useViewport";
+import { getLenis } from "@/components/motion/lenisInstance";
 import { HeroPoster } from "./HeroPoster";
 
 /**
@@ -30,6 +31,8 @@ const INTRO_END = 0.12;
  * scroll glides to the next stage rather than needing precise scrubbing.
  */
 const SNAP_POINTS = [0, 0.24, 0.4, 0.62, 1];
+/** Seconds the auto-playthrough takes to travel the whole pinned hero. */
+const AUTOPLAY_SECONDS = 9;
 
 interface Scene {
   file: string;
@@ -93,6 +96,8 @@ export function HeroShell() {
   const pulseRef = useRef<HTMLDivElement>(null);
   // Where the big intro logo flies to (the header masthead), computed on resize.
   const logoTargets = useRef({ tx: 0, ty: 0, scale: 0.32 });
+  // Auto-playthrough runs at most once per page load.
+  const autoplayed = useRef(false);
   const [mode, setMode] = useState<Mode>("probing");
   const [frameCount, setFrameCount] = useState(0);
 
@@ -135,6 +140,73 @@ export function HeroShell() {
     let st: { kill: () => void; progress: number } | null = null;
     let ro: ResizeObserver | null = null;
     let cancelled = false;
+
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+
+    // ---- auto-playthrough ---------------------------------------------------
+    // On the first scroll the page glides itself through the pinned hero, so the
+    // whole sequence plays without the viewer having to scrub 460vh by hand. Any
+    // real input hands control straight back, so this assists rather than traps:
+    // it drives the scroll position (not just the visuals), which is what lets
+    // the viewer end up genuinely past the hero when it finishes.
+    const auto = { active: false, raf: 0, graceUntil: 0 };
+
+    const onUserInput = () => {
+      // The gesture that *started* the playthrough keeps firing events (wheel
+      // momentum); ignore its tail so it doesn't cancel itself immediately.
+      if (performance.now() < auto.graceUntil) return;
+      stopAuto();
+    };
+
+    function stopAuto() {
+      if (!auto.active) return;
+      auto.active = false;
+      cancelAnimationFrame(auto.raf);
+      // Re-target Lenis at where we are now, which halts its programmatic glide
+      // without a jerk.
+      getLenis()?.scrollTo(window.scrollY, { immediate: true, force: true });
+      window.removeEventListener("wheel", onUserInput);
+      window.removeEventListener("touchstart", onUserInput);
+      window.removeEventListener("keydown", onUserInput);
+    }
+
+    const startAuto = () => {
+      const el = wrapRef.current;
+      if (!el) return;
+      const total = el.offsetHeight - window.innerHeight;
+      const endY = el.offsetTop + total;
+      const startY = window.scrollY;
+      const distance = endY - startY;
+      if (distance <= 8 || total <= 0) return;
+
+      auto.active = true;
+      auto.graceUntil = performance.now() + 700;
+      window.addEventListener("wheel", onUserInput, { passive: true });
+      window.addEventListener("touchstart", onUserInput, { passive: true });
+      window.addEventListener("keydown", onUserInput);
+
+      const seconds = AUTOPLAY_SECONDS * (distance / total);
+      const lenis = getLenis();
+      if (lenis) {
+        // linear easing so the footage plays at an even, video-like rate
+        lenis.scrollTo(endY, {
+          duration: seconds,
+          easing: (t) => t,
+          force: true,
+          onComplete: stopAuto,
+        });
+        return;
+      }
+      const t0 = performance.now();
+      const step = (now: number) => {
+        if (!auto.active) return;
+        const t = Math.min(1, (now - t0) / (seconds * 1000));
+        window.scrollTo(0, startY + distance * t);
+        if (t < 1) auto.raf = requestAnimationFrame(step);
+        else stopAuto();
+      };
+      auto.raf = requestAnimationFrame(step);
+    };
 
     // The persistent header masthead logo we hand off to (rendered by Header).
     const headerLogo = document.querySelector<HTMLElement>("[data-hero-logo-target]");
@@ -256,6 +328,11 @@ export function HeroShell() {
 
     // ---- shared per-progress application ------------------------------------
     const apply = (p: number) => {
+      // First sign of scrolling from the top: take over and play it through.
+      if (!autoplayed.current && finePointer && p > 0.006) {
+        autoplayed.current = true;
+        startAuto();
+      }
       if (mode === "frames") {
         currentF = p * (frameCount - 1);
         drawBlend(currentF);
@@ -325,8 +402,9 @@ export function HeroShell() {
       computeLogoTargets();
       window.addEventListener("resize", computeLogoTargets);
       // Snap-assist so each scroll glides to the next chapter — pointer devices
-      // only (touch keeps native scrubbing to avoid fighting momentum).
-      const finePointer = window.matchMedia("(pointer: fine)").matches;
+      // only (touch keeps native scrubbing to avoid fighting momentum). Snap
+      // stays out of the auto-playthrough's way on its own: it only fires once
+      // scrolling stops, which during the glide it never does.
       const trigger = ScrollTrigger.create({
         trigger: wrap,
         start: "top top",
@@ -343,11 +421,15 @@ export function HeroShell() {
         onUpdate: (self) => apply(self.progress),
       });
       st = trigger;
+      // Landing part-way in (a reload, or a #hash): the viewer is not at the
+      // top, so there is nothing to play them through.
+      if (trigger.progress > 0.02) autoplayed.current = true;
       apply(trigger.progress);
     })();
 
     return () => {
       cancelled = true;
+      stopAuto();
       st?.kill();
       ro?.disconnect();
       window.removeEventListener("resize", computeLogoTargets);
