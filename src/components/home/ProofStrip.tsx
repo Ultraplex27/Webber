@@ -1,4 +1,5 @@
-import { CountUp } from "@/components/motion/CountUp.client";
+﻿import { CountUp } from "@/components/motion/CountUp.client";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 
 const metrics = [
   { value: 75, suffix: "K+", label: "BMS deployments" },
@@ -9,7 +10,12 @@ const metrics = [
 
 export function ProofStrip() {
   return (
-    <section id="proof" className="border-y border-grey-200 bg-canvas-soft" aria-label="Key metrics">
+    <section
+      id="proof"
+      className="relative border-y border-grey-200 bg-canvas-soft/70"
+      aria-label="Key metrics"
+    >
+      <BlueprintMeasure label="01 / FIELD DATA" />
       <div className="wrap">
         <dl className="grid grid-cols-2 divide-grey-200 md:grid-cols-4 md:divide-x">
           {metrics.map((m) => (

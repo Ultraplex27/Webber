@@ -4,6 +4,7 @@ import { ProductExplorer } from "@/components/product/ProductExplorer.client";
 import { SmartImage } from "@/components/ui/SmartImage.client";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 import { ClosingCta } from "@/components/ui/ClosingCta";
 import { roadmapItems } from "@/content/products";
 
@@ -16,9 +17,9 @@ export const metadata: Metadata = {
 
 export default function ProductsPage() {
   return (
-    <>
+    <div className="pencil-grid">
       {/* Hero */}
-      <section className="section grid-bg border-b border-grey-200 pt-40">
+      <section className="section border-b border-grey-200 pt-40">
         <div className="wrap">
           <TechnicalLabel blue className="mb-6">
             PRODUCT SYSTEMS / BMS + CONNECTIVITY
@@ -33,14 +34,19 @@ export default function ProductsPage() {
       </section>
 
       {/* Explorer + catalogue */}
-      <section className="section--tight">
+      <section className="section--tight relative">
+        <BlueprintMeasure label="01 / CATALOGUE" />
         <div className="wrap">
           <ProductExplorer />
         </div>
       </section>
 
       {/* Telematics */}
-      <section id="telematics" className="section border-t border-grey-200 bg-canvas-soft">
+      <section
+        id="telematics"
+        className="section relative border-t border-grey-200 bg-canvas-soft/70"
+      >
+        <BlueprintMeasure label="02 / TELEMATICS" />
         <div className="wrap grid items-center gap-16 lg:grid-cols-2">
           <Reveal>
             <SectionIntro
@@ -75,7 +81,8 @@ export default function ProductsPage() {
       </section>
 
       {/* Roadmap */}
-      <section id="roadmap" className="section">
+      <section id="roadmap" className="section relative">
+        <BlueprintMeasure label="03 / ROADMAP" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="ROADMAP" title="The stack is expanding." />
@@ -102,7 +109,8 @@ export default function ProductsPage() {
         body="Discuss voltage, current, packaging, communication and certification requirements."
         ctaLabel="Start an integration brief"
         ctaHref="/contact"
+        measure="04 / INTEGRATION"
       />
-    </>
+    </div>
   );
 }

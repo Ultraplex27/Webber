@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContactForms } from "@/components/contact/ContactForms.client";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 import { contact, jobs } from "@/content/company";
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export default function ContactPage() {
   }));
 
   return (
-    <>
+    <div className="pencil-grid">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jobsJsonLd) }}
@@ -50,14 +51,16 @@ export default function ContactPage() {
       </section>
 
       {/* Intent selector + forms */}
-      <section id="enquiry" className="section--tight">
+      <section id="enquiry" className="section--tight relative">
+        <BlueprintMeasure label="01 / ENQUIRY" />
         <div className="wrap max-w-5xl">
           <ContactForms />
         </div>
       </section>
 
       {/* Direct contact */}
-      <section className="section--tight border-t border-grey-200 bg-canvas-soft">
+      <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
+        <BlueprintMeasure label="02 / DIRECT" />
         <div className="wrap grid gap-10 md:grid-cols-2">
           <div>
             <TechnicalLabel className="mb-3">GENERAL ENQUIRIES</TechnicalLabel>
@@ -75,7 +78,8 @@ export default function ContactPage() {
       </section>
 
       {/* Careers */}
-      <section id="careers" className="section">
+      <section id="careers" className="section relative">
+        <BlueprintMeasure label="03 / CAREERS" accent />
         <div className="wrap">
           <Reveal>
             <SectionIntro
@@ -111,6 +115,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

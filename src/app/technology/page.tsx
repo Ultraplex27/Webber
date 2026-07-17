@@ -5,6 +5,7 @@ import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { ClosingCta } from "@/components/ui/ClosingCta";
 import { ExplodedReveal } from "@/components/technology/ExplodedReveal.client";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 import {
   ArchitectureFlow,
   ChargingCurveChart,
@@ -74,7 +75,7 @@ const moduleVisuals: Record<string, React.ReactNode> = {
 
 export default function TechnologyPage() {
   return (
-    <>
+    <div className="pencil-grid">
       {/* Hero: interactive exploded board beside the copy */}
       <section className="section border-b border-grey-200 pt-40">
         <div className="wrap grid items-center gap-16 lg:grid-cols-2">
@@ -95,7 +96,8 @@ export default function TechnologyPage() {
       </section>
 
       {/* Architecture overview */}
-      <section className="section bg-canvas-soft">
+      <section className="section relative bg-canvas-soft/70">
+        <BlueprintMeasure label="01 / ARCHITECTURE" />
         <div className="wrap">
           <Reveal className="text-center">
             <TechnicalLabel className="mb-6">SYSTEM ARCHITECTURE</TechnicalLabel>
@@ -110,7 +112,8 @@ export default function TechnologyPage() {
       </section>
 
       {/* Differentiator modules */}
-      <section className="section">
+      <section className="section relative">
+        <BlueprintMeasure label="02 / FIRST PRINCIPLES" />
         <div className="wrap space-y-24">
           {differentiators.map((d, i) => (
             <Reveal key={d.id}>
@@ -148,7 +151,8 @@ export default function TechnologyPage() {
       </section>
 
       {/* Patent ledger */}
-      <section className="section--tight border-t border-grey-200">
+      <section className="section--tight relative border-t border-grey-200">
+        <BlueprintMeasure label="03 / IP LEDGER" />
         <div className="wrap">
           <Reveal>
             <SectionIntro
@@ -181,7 +185,8 @@ export default function TechnologyPage() {
       </section>
 
       {/* Certification */}
-      <section id="certification" className="section bg-canvas-soft">
+      <section id="certification" className="section relative bg-canvas-soft/70">
+        <BlueprintMeasure label="04 / COMPLIANCE" />
         <div className="wrap grid gap-16 lg:grid-cols-2">
           <Reveal>
             <SectionIntro
@@ -225,7 +230,8 @@ export default function TechnologyPage() {
       </section>
 
       {/* Validation and testing */}
-      <section id="validation" className="section">
+      <section id="validation" className="section relative">
+        <BlueprintMeasure label="05 / VALIDATION" />
         <div className="wrap">
           <Reveal>
             <SectionIntro
@@ -259,7 +265,8 @@ export default function TechnologyPage() {
       </section>
 
       {/* Software and data layer */}
-      <section className="section--tight border-t border-grey-200 bg-canvas-soft">
+      <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
+        <BlueprintMeasure label="06 / SOFTWARE" />
         <div className="wrap">
           <Reveal>
             <SectionIntro
@@ -282,7 +289,8 @@ export default function TechnologyPage() {
         body="Voltage. Current. Packaging. Thermal constraints. Communication. Certification. Deployment volume."
         ctaLabel="Speak with the engineering team"
         ctaHref="/contact"
+        measure="07 / ENGAGE"
       />
-    </>
+    </div>
   );
 }

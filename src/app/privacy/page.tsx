@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <section className="section pt-40">
+    <section className="section pencil-grid pt-40">
       <div className="wrap max-w-3xl">
         <p className="micro-label micro-label--blue mb-6">LEGAL</p>
         <h1 className="type-h2">Privacy policy.</h1>

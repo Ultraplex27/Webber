@@ -1,17 +1,22 @@
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal.client";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 
 interface ClosingCtaProps {
   title: React.ReactNode;
   body: React.ReactNode;
   ctaLabel: string;
   ctaHref: string;
+  /** Blueprint callout, where the home page's drafting thread resolves. */
+  measure?: string;
 }
 
 /** Wide white CTA with a blue trace entering from the left, terminating at the button. */
-export function ClosingCta({ title, body, ctaLabel, ctaHref }: ClosingCtaProps) {
+export function ClosingCta({ title, body, ctaLabel, ctaHref, measure }: ClosingCtaProps) {
   return (
-    <section className="section border-t border-grey-200">
+    <section className="section relative border-t border-grey-200">
+      {/* the drafting thread resolves here, in blue */}
+      {measure ? <BlueprintMeasure label={measure} accent /> : null}
       <div className="wrap">
         <Reveal>
           <h2 className="type-h2 max-w-[18ch]">{title}</h2>

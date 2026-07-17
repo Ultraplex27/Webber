@@ -8,6 +8,7 @@ import { Logo } from "@/components/ui/LogoRail";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { CountUp } from "@/components/motion/CountUp.client";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 
 export const metadata: Metadata = {
   title: "Company: Built in India",
@@ -50,7 +51,7 @@ const mosaic = [
 
 export default function CompanyPage() {
   return (
-    <>
+    <div className="pencil-grid">
       {/* Hero */}
       <section className="section border-b border-grey-200 pt-40">
         <div className="wrap">
@@ -77,7 +78,8 @@ export default function CompanyPage() {
       </section>
 
       {/* Founder-led narrative */}
-      <section className="section">
+      <section className="section relative">
+        <BlueprintMeasure label="01 / FOUNDER" />
         <div className="wrap grid items-center gap-16 lg:grid-cols-[1fr_1.4fr]">
           <Reveal>
             <SmartImage
@@ -109,7 +111,8 @@ export default function CompanyPage() {
       </section>
 
       {/* Timeline */}
-      <section className="section--tight border-t border-grey-200 bg-canvas-soft">
+      <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
+        <BlueprintMeasure label="02 / MILESTONES" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="MILESTONES" title="The company timeline." />
@@ -134,7 +137,8 @@ export default function CompanyPage() {
       </section>
 
       {/* Operating scale */}
-      <section className="section">
+      <section className="section relative">
+        <BlueprintMeasure label="03 / OPERATING SCALE" />
         <div className="wrap grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {scaleMetrics.map((m) => (
             <Reveal key={m.label}>
@@ -147,7 +151,11 @@ export default function CompanyPage() {
       </section>
 
       {/* Leadership grid */}
-      <section id="leadership" className="section border-t border-grey-200 bg-canvas-soft">
+      <section
+        id="leadership"
+        className="section relative border-t border-grey-200 bg-canvas-soft/70"
+      >
+        <BlueprintMeasure label="04 / LEADERSHIP" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="LEADERSHIP" title="Role relevance, not long biographies." />
@@ -180,7 +188,8 @@ export default function CompanyPage() {
       </section>
 
       {/* The wider team mosaic */}
-      <section className="section">
+      <section className="section relative">
+        <BlueprintMeasure label="05 / THE WIDER TEAM" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="THE WIDER TEAM" title="Documentary, not stock." />
@@ -206,7 +215,8 @@ export default function CompanyPage() {
       </section>
 
       {/* Partner ecosystem */}
-      <section className="section--tight border-t border-grey-200 bg-canvas-soft">
+      <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
+        <BlueprintMeasure label="06 / ECOSYSTEM" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="ECOSYSTEM" title="Partners, organised by role." />
@@ -245,10 +255,11 @@ export default function CompanyPage() {
         </div>
       </section>
 
-      <Recognition heading="AWARDS" />
+      <Recognition heading="AWARDS" measure="07 / AWARDS" />
 
       {/* Careers CTA */}
-      <section className="section border-t border-grey-200">
+      <section className="section relative border-t border-grey-200">
+        <BlueprintMeasure label="08 / JOIN US" accent />
         <div className="wrap">
           <Reveal>
             <h2 className="type-h2 max-w-[24ch]">
@@ -262,6 +273,6 @@ export default function CompanyPage() {
           </Reveal>
         </div>
       </section>
-    </>
+    </div>
   );
 }

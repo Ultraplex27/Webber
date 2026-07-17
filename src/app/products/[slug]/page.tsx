@@ -6,6 +6,7 @@ import { deploymentLabel } from "@/components/product/ProductCard";
 import { SpecificationTable } from "@/components/product/SpecificationTable";
 import { SmartImage } from "@/components/ui/SmartImage.client";
 import { TechnicalLabel } from "@/components/ui/TechnicalLabel";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 import { ClosingCta } from "@/components/ui/ClosingCta";
 
 export function generateStaticParams() {
@@ -54,7 +55,7 @@ export default async function ProductDetailPage({
   };
 
   return (
-    <>
+    <div className="pencil-grid">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -99,7 +100,11 @@ export default async function ProductDetailPage({
       </section>
 
       {/* Key metrics rail */}
-      <section className="border-b border-grey-200 bg-canvas-soft" aria-label="Key metrics">
+      <section
+        className="relative border-b border-grey-200 bg-canvas-soft/70"
+        aria-label="Key metrics"
+      >
+        <BlueprintMeasure label="01 / KEY METRICS" />
         <div className="wrap">
           <dl className="grid grid-cols-2 divide-grey-200 md:grid-cols-4 md:divide-x">
             {product.keyMetrics.map((m) => (
@@ -113,7 +118,8 @@ export default async function ProductDetailPage({
       </section>
 
       {/* Specification table */}
-      <section className="section--tight">
+      <section className="section--tight relative">
+        <BlueprintMeasure label="02 / SPECIFICATIONS" />
         <div className="wrap grid gap-16 lg:grid-cols-[2fr_1fr]">
           <div>
             <h2 className="type-h3 mb-8">Full specifications</h2>
@@ -152,7 +158,8 @@ export default async function ProductDetailPage({
         body="Share the operating envelope: voltage, current, packaging, communication, certification and volume, and our applications team will respond with an integration path."
         ctaLabel="Start an integration brief"
         ctaHref="/contact"
+        measure="03 / INTEGRATION"
       />
-    </>
+    </div>
   );
 }

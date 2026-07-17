@@ -1,10 +1,19 @@
 import { awards } from "@/content/company";
 import { Reveal } from "@/components/motion/Reveal.client";
+import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 
 /** Awards as technical credentials, not trophy cards. */
-export function Recognition({ heading = "RECOGNISED BY INDUSTRY" }: { heading?: string }) {
+export function Recognition({
+  heading = "RECOGNISED BY INDUSTRY",
+  measure,
+}: {
+  heading?: string;
+  /** Blueprint callout, when part of a page's drafting thread. */
+  measure?: string;
+}) {
   return (
-    <section className="section--tight border-t border-grey-200">
+    <section className="section--tight relative border-t border-grey-200">
+      {measure ? <BlueprintMeasure label={measure} /> : null}
       <div className="wrap">
         <p className="micro-label mb-10">{heading}</p>
         <ol className="grid gap-px overflow-hidden rounded-[6px] border border-grey-200 bg-grey-200 md:grid-cols-3">
