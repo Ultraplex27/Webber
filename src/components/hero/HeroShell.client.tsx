@@ -24,6 +24,18 @@ const MASTHEAD = "/logos/webber-masthead.png";
 // Scroll fraction over which the big intro logo shrinks into the header corner.
 const INTRO_END = 0.12;
 
+/**
+ * The hero snaps through five chapters. Stops 1 (logo) and 5 (finale) are the
+ * intro/outro handled separately; these three land on composed video frames
+ * with a feature line. `at` = video progress; verified against the frames.
+ */
+const CHAPTERS = [
+  { at: 0.24, label: "SENSING + BALANCING", text: "Cell-level sensing and active balancing." },
+  { at: 0.4, label: "METAL-CORE PCB", text: "Heat exits through the design. 2× thermal headroom." },
+  { at: 0.62, label: "BATTERY PARALLELING", text: "Parallel packs, no intercommunication." },
+];
+const SNAP_POINTS = [0, 0.24, 0.4, 0.62, 1];
+
 interface Scene {
   file: string;
   from: number;
@@ -84,6 +96,8 @@ export function HeroShell() {
   const finaleRef = useRef<HTMLDivElement>(null);
   const sceneRefs = useRef<(HTMLImageElement | null)[]>([]);
   const pulseRef = useRef<HTMLDivElement>(null);
+  const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const chapterBackdropRef = useRef<HTMLDivElement>(null);
   // Where the big intro logo flies to (the header masthead), computed on resize.
   const logoTargets = useRef({ tx: 0, ty: 0, scale: 0.32 });
   const [mode, setMode] = useState<Mode>("probing");
@@ -294,6 +308,21 @@ export function HeroShell() {
         headerLogo.style.opacity = String(smooth(p, INTRO_END * 0.72, INTRO_END));
       }
 
+      // Chapter captions: fade/rise in as the scroll settles on each checkpoint.
+      let maxChapter = 0;
+      CHAPTERS.forEach((c, i) => {
+        const el = chapterRefs.current[i];
+        if (!el) return;
+        const o = clamp01(1 - Math.abs(p - c.at) / 0.06);
+        const eased = o * o * (3 - 2 * o);
+        el.style.opacity = String(eased);
+        el.style.transform = `translateY(${(1 - eased) * 14}px)`;
+        if (eased > maxChapter) maxChapter = eased;
+      });
+      if (chapterBackdropRef.current) {
+        chapterBackdropRef.current.style.opacity = String(maxChapter);
+      }
+
       if (finaleRef.current) {
         const inn = clamp01((p - 0.94) / 0.05);
         finaleRef.current.style.opacity = String(inn);
@@ -317,11 +346,22 @@ export function HeroShell() {
       }
       computeLogoTargets();
       window.addEventListener("resize", computeLogoTargets);
+      // Snap-assist so each scroll glides to the next chapter — pointer devices
+      // only (touch keeps native scrubbing to avoid fighting momentum).
+      const finePointer = window.matchMedia("(pointer: fine)").matches;
       const trigger = ScrollTrigger.create({
         trigger: wrap,
         start: "top top",
         end: "bottom bottom",
         scrub: 0.45,
+        snap: finePointer
+          ? {
+              snapTo: SNAP_POINTS,
+              duration: { min: 0.25, max: 0.7 },
+              delay: 0.05,
+              ease: "power1.inOut",
+            }
+          : undefined,
         onUpdate: (self) => apply(self.progress),
       });
       st = trigger;
@@ -463,6 +503,36 @@ export function HeroShell() {
                 <Link href="/contact" className="btn btn-secondary">
                   Talk to engineering
                 </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Chapter captions, revealed as the scroll settles on each checkpoint */}
+        {cinematic && (
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 flex items-end">
+            <div
+              ref={chapterBackdropRef}
+              className="absolute bottom-0 left-0 h-2/3 w-2/3 opacity-0"
+              style={{
+                background:
+                  "linear-gradient(105deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.55) 40%, transparent 72%)",
+              }}
+            />
+            <div className="wrap relative w-full pb-[15vh]">
+              <div className="relative h-28">
+                {CHAPTERS.map((c, i) => (
+                  <div
+                    key={c.at}
+                    ref={(el) => {
+                      chapterRefs.current[i] = el;
+                    }}
+                    className="absolute bottom-0 left-0 max-w-[26ch] opacity-0"
+                  >
+                    <p className="micro-label micro-label--blue mb-3">{c.label}</p>
+                    <p className="type-h3">{c.text}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
