@@ -258,7 +258,7 @@ export default function CompanyPage() {
       <Recognition heading="AWARDS" measure="07 / AWARDS" />
 
       {/* Careers CTA */}
-      <section className="section relative border-t border-grey-200">
+      <section className="band-gradient section relative">
         <BlueprintMeasure label="08 / JOIN US" accent />
         <div className="wrap">
           <Reveal>

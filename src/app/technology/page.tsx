@@ -269,7 +269,7 @@ export default function TechnologyPage() {
                   Fleet insight over millions of events.
                 </>
               }
-              lead="Firmware makes protection decisions at the edge. 4G/IoT telematics streams system health to the cloud, where fault detection and trend analysis run today, with predictive-maintenance models in development for BESS."
+              lead="Firmware makes protection decisions at the edge. System health streams to the cloud, where fault detection and trend analysis run today, with predictive-maintenance models in development for BESS."
             />
           </Reveal>
         </div>

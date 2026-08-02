@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ProductExplorer } from "@/components/product/ProductExplorer.client";
-import { FleetDashboard } from "@/components/telematics/FleetDashboard";
 import { Reveal } from "@/components/motion/Reveal.client";
 import { SectionIntro, TechnicalLabel } from "@/components/ui/TechnicalLabel";
 import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
@@ -9,7 +7,7 @@ import { ClosingCta } from "@/components/ui/ClosingCta";
 import { roadmapItems } from "@/content/products";
 
 export const metadata: Metadata = {
-  title: "Products: BMS 12V–1200V + Telematics",
+  title: "Products: BMS 12V–1200V",
   description:
     "One BMS stack from two-wheelers to grid-scale storage. 12V to 1200V battery intelligence, designed and deployed in India.",
   openGraph: { images: ["/og/og-products.png"] },
@@ -41,43 +39,9 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* Telematics */}
-      <section
-        id="telematics"
-        className="section relative border-t border-grey-200 bg-canvas-soft/70"
-      >
-        <BlueprintMeasure label="02 / TELEMATICS" />
-        <div className="wrap grid items-center gap-16 lg:grid-cols-2">
-          <Reveal>
-            <SectionIntro
-              label="TELEMATICS"
-              title="The connection above the BMS."
-              lead="4G/IoT telematics for live location, geofencing, system health and remote visibility."
-            />
-            <div className="mt-10 space-y-4">
-              {["ASSET", "EDGE DEVICE", "WEBBER CLOUD/API"].map((layer, i) => (
-                <div key={layer} className="flex items-center gap-4">
-                  <span className="spec-value w-8 !text-grey-400">0{i + 1}</span>
-                  <div className="spec-panel flex-1 px-5 py-4">
-                    <span className="micro-label !text-ink-soft">{layer}</span>
-                  </div>
-                  {i < 2 && <span className="text-blue-600" aria-hidden="true">↓</span>}
-                </div>
-              ))}
-            </div>
-            <Link href="/products/telematics-4g" className="btn btn-secondary mt-8">
-              View telematics platform
-            </Link>
-          </Reveal>
-          <Reveal delayMs={100}>
-            <FleetDashboard />
-          </Reveal>
-        </div>
-      </section>
-
       {/* Roadmap */}
-      <section id="roadmap" className="section relative">
-        <BlueprintMeasure label="03 / ROADMAP" />
+      <section id="roadmap" className="section relative border-t border-grey-200 bg-canvas-soft/70">
+        <BlueprintMeasure label="02 / ROADMAP" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="ROADMAP" title="The stack is expanding." />
@@ -104,7 +68,7 @@ export default function ProductsPage() {
         body="Discuss voltage, current, packaging, communication and certification requirements."
         ctaLabel="Start an integration brief"
         ctaHref="/contact"
-        measure="04 / INTEGRATION"
+        measure="03 / INTEGRATION"
       />
     </div>
   );

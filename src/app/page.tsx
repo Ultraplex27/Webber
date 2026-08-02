@@ -1,9 +1,8 @@
 ﻿import type { Metadata } from "next";
 import { HeroShell } from "@/components/hero/HeroShell.client";
 import { ProofStrip } from "@/components/home/ProofStrip";
-import { VoltageRail } from "@/components/home/VoltageRail.client";
+import { ProductCarousel } from "@/components/home/ProductCarousel.client";
 import { FirstPrinciples } from "@/components/home/FirstPrinciples.client";
-import { FleetDashboard } from "@/components/telematics/FleetDashboard";
 import { Recognition } from "@/components/home/Recognition";
 import { ClosingCta } from "@/components/ui/ClosingCta";
 import { LogoRail } from "@/components/ui/LogoRail";
@@ -31,23 +30,9 @@ export default function HomePage() {
       <div className="pencil-grid">
         <ProofStrip />
 
-        {/* Trajectory: no financial figures on the showcase site */}
-        <section className="section relative">
-          <BlueprintMeasure label="02 / TRAJECTORY" />
-          <div className="wrap">
-            <Reveal>
-              <SectionIntro
-                label="ENGINEERING THAT SCALES"
-                title="From mobility electronics to a connected electrification stack."
-                lead="Webber is moving from mobility-focused electronics towards a connected electrification stack spanning vehicles, telecom and battery energy storage."
-              />
-            </Reveal>
-          </div>
-        </section>
-
         {/* OEM and ecosystem proof */}
         <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
-          <BlueprintMeasure label="03 / ECOSYSTEM" />
+          <BlueprintMeasure label="02 / ECOSYSTEM" />
           <div className="wrap">
             <p className="micro-label mb-12">
               BUILT ALONGSIDE THE ELECTRIFICATION ECOSYSTEM
@@ -63,9 +48,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Voltage-spectrum product teaser */}
+        {/* Product carousel */}
         <section className="section relative">
-          <BlueprintMeasure label="04 / VOLTAGE RANGE" />
+          <BlueprintMeasure label="03 / PRODUCTS" />
           <div className="wrap">
             <Reveal>
               <SectionIntro
@@ -74,13 +59,15 @@ export default function HomePage() {
                 lead="Modular battery intelligence for compact mobility, high-current platforms and stationary storage."
               />
             </Reveal>
-            <VoltageRail />
+            <div className="mt-16">
+              <ProductCarousel />
+            </div>
           </div>
         </section>
 
         {/* First-principle technology */}
         <section className="section relative border-t border-grey-200 bg-canvas-soft/70">
-          <BlueprintMeasure label="05 / FIRST PRINCIPLES" />
+          <BlueprintMeasure label="04 / FIRST PRINCIPLES" />
           <div className="wrap">
             <Reveal>
               <SectionIntro
@@ -98,37 +85,14 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Connected intelligence */}
-        <section className="section relative">
-          <BlueprintMeasure label="06 / TELEMATICS" />
-          <div className="wrap grid items-center gap-16 lg:grid-cols-[1fr_1.2fr]">
-            <Reveal>
-              <SectionIntro
-                label="FROM BATTERY DATA TO FLEET DECISIONS"
-                title="Connected intelligence above the BMS."
-                lead={
-                  <>
-                    4G/IoT telematics today.
-                    <br />
-                    Predictive BESS intelligence next.
-                  </>
-                }
-              />
-            </Reveal>
-            <Reveal delayMs={100}>
-              <FleetDashboard />
-            </Reveal>
-          </div>
-        </section>
-
-        <Recognition measure="07 / RECOGNITION" />
+        <Recognition measure="05 / RECOGNITION" />
 
         <ClosingCta
           title="Build the next energy platform with Webber."
-          body="BMS integration, telematics or storage architecture: start with an engineering conversation."
+          body="BMS integration or storage architecture: start with an engineering conversation."
           ctaLabel="Talk to engineering"
           ctaHref="/contact"
-          measure="08 / BUILD WITH WEBBER"
+          measure="06 / BUILD WITH WEBBER"
         />
       </div>
     </>

@@ -13,9 +13,8 @@ export default function PrivacyPage() {
         <h1 className="type-h2">Privacy policy.</h1>
         <p className="type-body mt-8">
           This page is a placeholder. The production privacy policy, covering
-          enquiry-form data handling, résumé storage, telematics data
-          processing and cookie usage, must be supplied by Webber’s legal
-          counsel before launch.
+          enquiry-form data handling, résumé storage and cookie usage, must be
+          supplied by Webber’s legal counsel before launch.
         </p>
       </div>
     </section>

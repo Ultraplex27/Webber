@@ -44,3 +44,7 @@ next-env.d.ts
 .claude/settings.local.json
 /tmp/
 *.log
+
+# tool caches / OS lock files
+/graphify-out/
+~$*

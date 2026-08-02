@@ -11,10 +11,10 @@ interface ClosingCtaProps {
   measure?: string;
 }
 
-/** Wide white CTA with a blue trace entering from the left, terminating at the button. */
+/** Wide gradient CTA with a blue trace entering from the left, terminating at the button. */
 export function ClosingCta({ title, body, ctaLabel, ctaHref, measure }: ClosingCtaProps) {
   return (
-    <section className="section relative border-t border-grey-200">
+    <section className="band-gradient section relative">
       {/* the drafting thread resolves here, in blue */}
       {measure ? <BlueprintMeasure label={measure} accent /> : null}
       <div className="wrap">

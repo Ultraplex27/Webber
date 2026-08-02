@@ -1,54 +1,27 @@
-import Link from "next/link";
 import type { Product } from "@/content/products";
 import { SmartImage } from "@/components/ui/SmartImage.client";
 
-export function deploymentLabel(p: Product): string | null {
-  switch (p.deployment.kind) {
-    case "rounded":
-      return `DEPLOYED / ${p.deployment.label} SYSTEMS`;
-    case "series-production":
-      return "FIELD STATUS / SERIES PRODUCTION";
-    case "field-deployed":
-      return "FIELD STATUS / FIELD DEPLOYED";
-    default:
-      return null;
-  }
-}
-
 export function ProductCard({ product }: { product: Product }) {
-  const dep = deploymentLabel(product);
   return (
-    <article className="card flex h-full flex-col overflow-hidden transition-colors duration-200 hover:border-blue-300">
-      <SmartImage
-        src={`${product.imageDir}/front.webp`}
-        alt={`${product.name}, front three-quarter view`}
-        ratio="4 / 3"
-        placeholderLabel={product.name.toUpperCase()}
-      />
-      <div className="flex flex-1 flex-col p-6">
+    <article className="card flex h-full flex-col overflow-hidden">
+      <div className="flex aspect-[4/3] items-center justify-center bg-white p-4">
+        <SmartImage
+          src={product.image}
+          alt={`${product.name} BMS render`}
+          ratio="4 / 3"
+          fit="contain"
+          className="h-full w-full object-center"
+          placeholderLabel={product.name.toUpperCase()}
+        />
+      </div>
+      <div className="p-6">
         <h3 className="type-h4">{product.name}</h3>
-        <p className="micro-label mt-1">
-          {product.family.toUpperCase()} / {product.applications.join(" + ")}
-        </p>
-        <ul className="mt-5 space-y-1.5">
-          <li className="spec-value">{product.cellCount}</li>
-          <li className="spec-value">{product.continuousCurrent}</li>
-          {product.balancingCurrent !== "N/A" && (
-            <li className="spec-value">{product.balancingCurrent} balancing</li>
-          )}
-          {product.certificationNote && (
-            <li className="spec-value !text-blue-700">{product.certificationNote}</li>
-          )}
-        </ul>
-        {dep && <p className="micro-label mt-4">{dep}</p>}
-        <div className="mt-auto pt-6">
-          <Link
-            href={`/products/${product.slug}`}
-            className="btn btn-secondary w-full"
-          >
-            View specifications
-          </Link>
-        </div>
+        <dl className="mt-6 grid grid-cols-2 gap-x-5 gap-y-5 border-t border-grey-100 pt-5">
+          <div><dt className="micro-label">Nominal pack voltage range</dt><dd className="spec-value mt-1 text-ink">{product.nominalVoltage}</dd></div>
+          <div><dt className="micro-label">Battery capacity range</dt><dd className="spec-value mt-1 text-ink">{product.batteryCapacity}</dd></div>
+          <div><dt className="micro-label">Cell configuration</dt><dd className="spec-value mt-1 text-ink">{product.cellConfiguration}</dd></div>
+          <div><dt className="micro-label">Applications</dt><dd className="spec-value mt-1 text-ink">{product.applications}</dd></div>
+        </dl>
       </div>
     </article>
   );

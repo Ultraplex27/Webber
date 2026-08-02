@@ -7,7 +7,6 @@ const columns = [
     heading: "Products",
     links: [
       { href: "/products", label: "BMS catalogue" },
-      { href: "/products#telematics", label: "Telematics" },
       { href: "/products#roadmap", label: "Roadmap" },
     ],
   },
@@ -39,7 +38,7 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-grey-200 bg-canvas-soft">
+    <footer className="band-dark">
       <div className="wrap section--tight">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           {columns.map((col) => (

@@ -12,12 +12,12 @@ export function ProofStrip() {
   return (
     <section
       id="proof"
-      className="relative border-y border-grey-200 bg-canvas-soft/70"
+      className="band-gradient relative"
       aria-label="Key metrics"
     >
       <BlueprintMeasure label="01 / FIELD DATA" />
       <div className="wrap">
-        <dl className="grid grid-cols-2 divide-grey-200 md:grid-cols-4 md:divide-x">
+        <dl className="grid grid-cols-2 divide-white/20 md:grid-cols-4 md:divide-x">
           {metrics.map((m) => (
             <div key={m.label} className="px-2 py-8 md:px-8">
               <dd className="spec-value !text-[1.75rem] !leading-tight text-ink order-first">

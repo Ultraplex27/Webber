@@ -1,5 +1,7 @@
 ﻿/** Small technical SVG charts for the differentiator modules. */
 
+import { TechnicalIcon, type TechnicalIconName } from "@/components/ui/TechnicalIcon";
+
 export function ChargingCurveChart() {
   return (
     <svg viewBox="0 0 400 220" className="w-full" role="img" aria-label="Charging curve with controlled balancing interventions">
@@ -54,40 +56,40 @@ export function DispersionChart() {
  * the direction of flow is legible without arrowheads.
  *
  * Every descriptor maps to a real spec (16S to 32S, 400 mA balancing, isolated
- * CAN, 4G/IoT).
+ * CAN).
  */
 const ARCHITECTURE = [
   {
     label: "CELLS",
     note: "16S to 32S packs, 12V to 1200V systems.",
     tag: "mV",
+    icon: "cells",
   },
   {
     label: "SENSING",
     note: "Cell voltage, pack current and temperature channels.",
     tag: "ANALOG",
+    icon: "sensing",
   },
   {
     label: "DECISION LAYER",
     note: "State of charge and power, charging control, fault logic.",
     tag: "FIRMWARE",
     core: true,
+    icon: "decision",
   },
   {
     label: "PROTECTION + BALANCING",
     note: "Over/under voltage, over-current, short circuit, open wire. Up to 400 mA balancing.",
     tag: "MOSFET / CONTACTOR",
     core: true,
+    icon: "protection",
   },
   {
     label: "VEHICLE / STORAGE CONTROLLER",
     note: "Isolated CAN across the low- to high-voltage boundary.",
     tag: "ISOLATED CAN",
-  },
-  {
-    label: "TELEMATICS + ANALYTICS",
-    note: "4G/IoT uplink: live location, geofencing, fleet visibility.",
-    tag: "4G",
+    icon: "can",
   },
 ];
 
@@ -117,14 +119,14 @@ export function ArchitectureFlow() {
             }`}
           >
             <span
-              className={`flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border text-[11px] font-[550] leading-none ${
+              className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[4px] border ${
                 l.core
                   ? "border-blue-600 bg-blue-600 text-white"
                   : "border-grey-300 text-grey-500"
               }`}
               aria-hidden="true"
             >
-              {i + 1}
+              <TechnicalIcon name={l.icon as TechnicalIconName} className="h-[18px] w-[18px]" />
             </span>
             <div className="min-w-0 flex-1">
               <p className={`micro-label ${l.core ? "micro-label--blue" : "!text-ink-soft"}`}>

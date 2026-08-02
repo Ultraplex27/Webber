@@ -4,37 +4,53 @@
    Webber design tokens
 --------------------------------------------------------------------------- */
 :root {
+  /* ---- Webber Brand Guidelines: source-of-truth swatches ----
+     See BRAND_GUIDELINES.md. Every other color below is derived from
+     these six values so the whole site inherits brand colors from one
+     place. */
+  --uniform-blue: #0f253f;
+  --aesthetic-blue: #234f8f;
+  --spindle: #b3cdeb;
+  --anchor-gray: #54595f;
+  --teal: #008080;
+  --pressed-indigo: #413e5f;
+  --btn-disabled-gray: #9b9c9f;
+  --gradient-start: #215090;
+  --gradient-end: var(--uniform-blue);
+  --brand-gradient: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+
   --canvas: #ffffff;
-  --canvas-soft: #f7f9fc;
-  --surface-raised: #fbfcfe;
-  --ink: #09111f;
-  --ink-soft: #263244;
-  --grey-700: #465366;
-  --grey-500: #718096;
-  --grey-400: #94a0b2;
-  --grey-300: #bac4d1;
-  --grey-200: #d9e1ea;
-  --grey-100: #edf1f6;
-  --grey-50: #f6f8fb;
-  --blue-800: #003ba6;
-  --blue-700: #004ccf;
-  --blue-600: #0b5fff;
-  --blue-500: #2e7bff;
-  --blue-300: #82b2ff;
-  --blue-200: #b7d2ff;
-  --blue-100: #dceaff;
-  --blue-50: #eff5ff;
-  --energy-white: #eaf4ff;
+  --canvas-soft: color-mix(in srgb, var(--spindle) 26%, white);
+  --surface-raised: color-mix(in srgb, var(--spindle) 14%, white);
+  --ink: var(--uniform-blue);
+  --ink-soft: color-mix(in srgb, var(--uniform-blue) 78%, white);
+  --grey-700: color-mix(in srgb, var(--anchor-gray) 92%, black);
+  --grey-500: var(--anchor-gray);
+  --grey-400: color-mix(in srgb, var(--anchor-gray) 62%, white);
+  --grey-300: color-mix(in srgb, var(--anchor-gray) 42%, white);
+  --grey-200: color-mix(in srgb, var(--anchor-gray) 22%, white);
+  --grey-100: color-mix(in srgb, var(--anchor-gray) 10%, white);
+  --grey-50: color-mix(in srgb, var(--anchor-gray) 4%, white);
+  --blue-800: color-mix(in srgb, var(--aesthetic-blue) 82%, black);
+  --blue-700: var(--aesthetic-blue);
+  --blue-600: color-mix(in srgb, var(--aesthetic-blue) 88%, white);
+  --blue-500: color-mix(in srgb, var(--aesthetic-blue) 72%, white);
+  --blue-300: color-mix(in srgb, var(--aesthetic-blue) 42%, white);
+  --blue-200: var(--spindle);
+  --blue-100: color-mix(in srgb, var(--spindle) 55%, white);
+  --blue-50: color-mix(in srgb, var(--spindle) 25%, white);
+  --energy-white: color-mix(in srgb, var(--spindle) 35%, white);
   --error: #b93832;
 
   --energy-glow: radial-gradient(
     circle,
-    rgba(46, 123, 255, 0.34) 0%,
-    rgba(46, 123, 255, 0.08) 42%,
+    color-mix(in srgb, var(--aesthetic-blue) 34%, transparent) 0%,
+    color-mix(in srgb, var(--aesthetic-blue) 8%, transparent) 42%,
     transparent 72%
   );
-  --technical-fade: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
-  --trace-glow: 0 0 6px rgba(46, 123, 255, 0.7), 0 0 22px rgba(46, 123, 255, 0.25);
+  --technical-fade: linear-gradient(180deg, #ffffff 0%, var(--canvas-soft) 100%);
+  --trace-glow: 0 0 6px color-mix(in srgb, var(--aesthetic-blue) 70%, transparent),
+    0 0 22px color-mix(in srgb, var(--aesthetic-blue) 25%, transparent);
 
   --ease-ui-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-technical: cubic-bezier(0.65, 0, 0.35, 1);
@@ -92,7 +108,13 @@
   --color-blue-50: var(--blue-50);
   --color-energy-white: var(--energy-white);
   --color-error: var(--error);
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --color-uniform-blue: var(--uniform-blue);
+  --color-aesthetic-blue: var(--aesthetic-blue);
+  --color-spindle: var(--spindle);
+  --color-anchor-gray: var(--anchor-gray);
+  --color-teal: var(--teal);
+  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-roboto), ui-sans-serif, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "Cascadia Mono", monospace;
 }
 
@@ -125,37 +147,42 @@ body {
    Type scale
 --------------------------------------------------------------------------- */
 .type-display {
+  font-family: var(--font-display);
   font-size: clamp(3.5rem, 7.6vw, 7rem);
   line-height: 0.94;
-  font-weight: 560;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-.type-h1 {
-  font-size: clamp(3rem, 6vw, 5.5rem);
-  line-height: 0.98;
-  font-weight: 560;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-.type-h2 {
-  font-size: clamp(2.4rem, 4.5vw, 4rem);
-  line-height: 1.02;
-  font-weight: 540;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-}
-.type-h3 {
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
-  line-height: 1.1;
-  font-weight: 530;
+  font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
+.type-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  line-height: 0.98;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.type-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.5vw, 4rem);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+}
+.type-h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
 .type-h4 {
+  font-family: var(--font-display);
   font-size: clamp(1.3rem, 2vw, 1.65rem);
   line-height: 1.2;
-  font-weight: 550;
+  font-weight: 600;
   color: var(--ink);
 }
 .type-lead {
@@ -224,45 +251,134 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 44px;
-  padding: 10px 22px;
-  border-radius: 4px;
+  min-height: 46px;
+  padding: 10px 24px;
+  border-radius: 12px;
   font-size: 0.9375rem;
-  font-weight: 520;
+  font-weight: 600;
   transition: background-color 180ms var(--ease-ui-out), color 180ms var(--ease-ui-out),
     border-color 180ms var(--ease-ui-out), transform 120ms var(--ease-ui-out);
   cursor: pointer;
 }
-.btn:active {
-  transform: translateY(1px);
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
 }
+/* Primary: filled, per brand guideline active/hover/click/disabled states */
 .btn-primary {
-  background: var(--blue-700);
+  background: var(--aesthetic-blue);
   color: #ffffff;
-  border: 1px solid var(--blue-700);
+  border: 1px solid var(--aesthetic-blue);
 }
 .btn-primary:hover {
-  background: var(--blue-600);
-  border-color: var(--blue-600);
+  background: var(--teal);
+  border-color: var(--teal);
 }
 .btn-primary:active {
-  background: var(--blue-800);
+  background: var(--pressed-indigo);
+  border-color: var(--pressed-indigo);
+  transform: translateY(1px);
 }
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  background: var(--btn-disabled-gray);
+  border-color: var(--btn-disabled-gray);
+  color: #ffffff;
+}
+/* Secondary: outline, same state colors as primary but on a white fill */
 .btn-secondary {
-  background: transparent;
-  color: var(--ink);
-  border: 1px solid var(--grey-300);
+  background: #ffffff;
+  color: var(--aesthetic-blue);
+  border: 1.5px solid var(--aesthetic-blue);
 }
 .btn-secondary:hover {
-  border-color: var(--ink-soft);
+  color: var(--teal);
+  border-color: var(--teal);
+}
+.btn-secondary:active {
+  color: var(--pressed-indigo);
+  border-color: var(--pressed-indigo);
+  transform: translateY(1px);
+}
+.btn-secondary:disabled,
+.btn-secondary[aria-disabled="true"] {
+  color: var(--btn-disabled-gray);
+  border-color: var(--btn-disabled-gray);
 }
 .btn-ghost {
   background: transparent;
-  color: var(--blue-700);
+  color: var(--aesthetic-blue);
   border: 1px solid transparent;
+  border-radius: 12px;
 }
 .btn-ghost:hover {
+  color: var(--teal);
   background: var(--blue-50);
+}
+.btn-ghost:active {
+  color: var(--pressed-indigo);
+}
+
+/* ---------------------------------------------------------------------------
+   Dark / gradient bands
+   Full-bleed sections in the brand's dark register (Uniform Blue, and the
+   Uniform Blue -> #215090 gradient from the brand guideline). Redefining the
+   shared ink/grey/border tokens locally — rather than overriding every
+   Tailwind utility — means any section already built from var(--ink) /
+   var(--grey-*) / var(--blue-*) inverts correctly with no per-component
+   changes. Keep these off sections that use .card/.spec-card/.spec-panel:
+   those tiles are frosted white and their text would vanish against the
+   inherited light-on-dark tokens.
+--------------------------------------------------------------------------- */
+.band-dark,
+.band-gradient {
+  --ink: #ffffff;
+  --ink-soft: rgba(255, 255, 255, 0.82);
+  --grey-700: rgba(255, 255, 255, 0.72);
+  --grey-500: rgba(255, 255, 255, 0.58);
+  --grey-400: rgba(255, 255, 255, 0.44);
+  --grey-300: rgba(255, 255, 255, 0.32);
+  --grey-200: rgba(255, 255, 255, 0.2);
+  --grey-100: rgba(255, 255, 255, 0.12);
+  --grey-50: rgba(255, 255, 255, 0.06);
+  --canvas-soft: rgba(255, 255, 255, 0.06);
+  --surface-raised: rgba(255, 255, 255, 0.08);
+  --blue-700: var(--spindle);
+  --blue-600: var(--spindle);
+  --blue-500: color-mix(in srgb, var(--spindle) 75%, white);
+  color: var(--ink);
+}
+.band-dark {
+  background: var(--uniform-blue);
+}
+.band-gradient {
+  background: var(--brand-gradient);
+}
+/* Buttons keep their brand fills, but get a hairline so they read as
+   distinct shapes against backgrounds in the same blue family. */
+.band-dark .btn-primary,
+.band-gradient .btn-primary {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+.band-dark .btn-secondary,
+.band-gradient .btn-secondary {
+  background: transparent;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.band-dark .btn-secondary:hover,
+.band-gradient .btn-secondary:hover {
+  color: var(--teal);
+  border-color: var(--teal);
+}
+.band-dark .btn-ghost,
+.band-gradient .btn-ghost {
+  color: #ffffff;
+}
+.band-dark .btn-ghost:hover,
+.band-gradient .btn-ghost:hover {
+  color: var(--teal);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 :focus-visible {

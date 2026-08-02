@@ -1,13 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, IBM_Plex_Mono } from "next/font/google";
+import { Space_Grotesk, Roboto, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion/MotionProvider.client";
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
 
-const geist = Geist({
-  variable: "--font-geist",
+// Brand primary typeface is Aguda Black, a paid Graviton font not available
+// as a webfont here — Space Grotesk is the free geometric substitute.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["500", "700"],
+});
+
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 const plexMono = IBM_Plex_Mono({
@@ -23,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Webber Electrocorp",
   },
   description:
-    "Electronics and software engineered in India, powering electric mobility and energy storage worldwide. BMS from 12V to 1200V, 4G/IoT telematics and BESS intelligence.",
+    "Electronics and software engineered in India, powering electric mobility and energy storage worldwide. BMS from 12V to 1200V and BESS intelligence.",
   openGraph: {
     siteName: "Webber Electrocorp",
     type: "website",
@@ -41,8 +50,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${plexMono.variable}`}>
-      <body>
+    <html
+      lang="en"
+      className={`${spaceGrotesk.variable} ${roboto.variable} ${plexMono.variable}`}
+    >
+      <body suppressHydrationWarning>
         <MotionProvider>
           <a href="#main" className="skip-link">
             Skip to content

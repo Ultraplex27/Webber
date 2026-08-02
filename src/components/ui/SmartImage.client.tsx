@@ -50,9 +50,13 @@ export function SmartImage({
             fill="none"
             aria-hidden="true"
           >
-            <rect x="1" y="1" width="46" height="34" rx="2" stroke="#BAC4D1" />
-            <path d="M6 24 L16 14 L24 22 L30 16 L42 28" stroke="#94A0B2" strokeWidth="1" />
-            <circle cx="36" cy="10" r="3" stroke="#2E7BFF" />
+            <rect x="1" y="1" width="46" height="34" rx="2" stroke="var(--grey-300)" />
+            <path
+              d="M6 24 L16 14 L24 22 L30 16 L42 28"
+              stroke="var(--grey-400)"
+              strokeWidth="1"
+            />
+            <circle cx="36" cy="10" r="3" stroke="var(--aesthetic-blue)" />
           </svg>
           <span className="micro-label">
             {placeholderLabel ?? "ASSET PENDING"}
@@ -70,7 +74,7 @@ export function SmartImage({
       loading={loading}
       onError={() => setFailed(true)}
       className={`${className} ${imgClassName}`}
-      style={{ aspectRatio: ratio, objectFit: fit, width: "100%" }}
+      style={{ aspectRatio: ratio, objectFit: fit, objectPosition: "center", width: "100%" }}
     />
   );
 }

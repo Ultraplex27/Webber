@@ -59,7 +59,7 @@ export default function ContactPage() {
       </section>
 
       {/* Direct contact */}
-      <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
+      <section className="band-gradient section--tight relative">
         <BlueprintMeasure label="02 / DIRECT" />
         <div className="wrap grid gap-10 md:grid-cols-2">
           <div>

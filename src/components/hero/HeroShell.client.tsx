@@ -4,16 +4,18 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useMotion } from "@/components/motion/MotionProvider.client";
 import { useIsDesktop } from "@/components/motion/useViewport";
-import { getLenis } from "@/components/motion/lenisInstance";
 
 /**
  * The home hero.
  *
  * Desktop with motion gets the cinematic sequence: the page opens on the big
- * Webber logo, which shrinks into the header masthead as a scroll-scrubbed
- * frame sequence plays (public/images/hero/frames + manifest.json, extracted
- * from Assets/hero-video — see docs/HERO-VIDEO-HIGGSFIELD.md), snapping through
- * five composed stops and resolving on the "Rewire the Planet" finale.
+ * Webber logo, which shrinks into the header masthead as a freely
+ * scroll-scrubbed frame sequence plays (public/images/hero/frames +
+ * manifest.json, extracted from Assets/hero-video/Webber Hero Video.mp4) —
+ * BMS board with energy pulse, a rider on a two-wheeler, an ESS container
+ * yard, and a white CAD/blueprint finale. Pillar call-out copy (PILLAR_COPY)
+ * fades in and out as the scrub passes each stop's SNAP_POINTS position;
+ * nothing forces the scroll itself to jump there anymore.
  *
  * Everywhere else (mobile, reduced motion, missing frames) gets a static hero
  * of the same copy. The h1 is server-rendered in both.
@@ -23,10 +25,41 @@ const FRAMES_DIR = "/images/hero/frames";
 const MASTHEAD = "/logos/webber-masthead.png";
 /** Scroll fraction over which the big intro logo shrinks into the header corner. */
 const INTRO_END = 0.12;
-/** Composed stops: logo splash, sensing macro, metal-core plane, packs, finale. */
-const SNAP_POINTS = [0, 0.24, 0.4, 0.62, 1];
-/** Seconds the auto-playthrough takes to travel the whole pinned hero. */
-const AUTOPLAY_SECONDS = 9;
+/**
+ * Must match `count` in public/images/hero/frames/manifest.json — every
+ * frame-number-based fraction below is computed from this. Re-derive them
+ * (via frameFraction) if the sequence is ever re-extracted at a different
+ * frame count.
+ */
+const FRAME_TOTAL = 246;
+/** Scroll fraction at which 1-indexed frame `n` of FRAME_TOTAL is shown. */
+function frameFraction(n: number) {
+  return (n - 1) / (FRAME_TOTAL - 1);
+}
+/** Composed stops: start (logo/board), scooter+rider (frame 103), ESS yard (frame 166), finale (last frame). */
+const SNAP_POINTS = [0, frameFraction(103), frameFraction(166), 1];
+
+/** Pillar call-outs that appear only while lingering at their snap point. */
+const PILLAR_COPY = [
+  {
+    center: frameFraction(24),
+    label: "ENGINEERING THAT SCALES",
+    heading: "From mobility electronics to a connected electrification stack.",
+    body: "Webber is moving from mobility-focused electronics towards a connected electrification stack spanning vehicles, telecom and battery energy storage.",
+  },
+  {
+    center: SNAP_POINTS[1],
+    label: "TWO-WHEELERS & THREE-WHEELERS",
+    heading: "Battery intelligence for daily mobility.",
+    body: "75K+ BMS units riding today, 12V–96V, cell to controller.",
+  },
+  {
+    center: SNAP_POINTS[2],
+    label: "ENERGY STORAGE SYSTEMS",
+    heading: "From C&I strings to utility-scale BESS.",
+    body: "Isolated CAN and insulation monitoring — sized for the grid.",
+  },
+] as const;
 
 type Mode = "probing" | "frames" | "static";
 
@@ -37,6 +70,11 @@ function smooth(p: number, a: number, b: number) {
   const t = clamp01((p - a) / (b - a));
   return t * t * (3 - 2 * t);
 }
+/** 1 while p sits within `hold` of `center`, easing to 0 over the next `ramp`. */
+function bump(p: number, center: number, hold: number, ramp: number) {
+  const dist = Math.abs(p - center);
+  return 1 - smooth(dist, hold, hold + ramp);
+}
 function frameSrc(i: number) {
   return `${FRAMES_DIR}/frame-${String(i + 1).padStart(4, "0")}.webp`;
 }
@@ -46,12 +84,12 @@ export function HeroShell() {
   const isDesktop = useIsDesktop();
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const introBgRef = useRef<HTMLDivElement>(null);
   const introLogoRef = useRef<HTMLImageElement>(null);
   const finaleRef = useRef<HTMLDivElement>(null);
+  const pillarRefs = useRef<(HTMLDivElement | null)[]>([]);
   // Where the big intro logo flies to (the header masthead), computed on resize.
   const logoTargets = useRef({ tx: 0, ty: 0, scale: 0.32 });
-  // Auto-playthrough runs at most once per page load.
-  const autoplayed = useRef(false);
   const [mode, setMode] = useState<Mode>("probing");
   const [frameCount, setFrameCount] = useState(0);
 
@@ -91,73 +129,6 @@ export function HeroShell() {
     let st: { kill: () => void; progress: number } | null = null;
     let ro: ResizeObserver | null = null;
     let cancelled = false;
-
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-
-    // ---- auto-playthrough ---------------------------------------------------
-    // On the first scroll the page glides itself through the pinned hero, so the
-    // whole sequence plays without the viewer having to scrub 460vh by hand. Any
-    // real input hands control straight back, so this assists rather than traps:
-    // it drives the scroll position (not just the visuals), which is what lets
-    // the viewer end up genuinely past the hero when it finishes.
-    const auto = { active: false, raf: 0, graceUntil: 0 };
-
-    const onUserInput = () => {
-      // The gesture that *started* the playthrough keeps firing events (wheel
-      // momentum); ignore its tail so it doesn't cancel itself immediately.
-      if (performance.now() < auto.graceUntil) return;
-      stopAuto();
-    };
-
-    function stopAuto() {
-      if (!auto.active) return;
-      auto.active = false;
-      cancelAnimationFrame(auto.raf);
-      // Re-target Lenis at where we are now, which halts its programmatic glide
-      // without a jerk.
-      getLenis()?.scrollTo(window.scrollY, { immediate: true, force: true });
-      window.removeEventListener("wheel", onUserInput);
-      window.removeEventListener("touchstart", onUserInput);
-      window.removeEventListener("keydown", onUserInput);
-    }
-
-    const startAuto = () => {
-      const el = wrapRef.current;
-      if (!el) return;
-      const total = el.offsetHeight - window.innerHeight;
-      const endY = el.offsetTop + total;
-      const startY = window.scrollY;
-      const distance = endY - startY;
-      if (distance <= 8 || total <= 0) return;
-
-      auto.active = true;
-      auto.graceUntil = performance.now() + 700;
-      window.addEventListener("wheel", onUserInput, { passive: true });
-      window.addEventListener("touchstart", onUserInput, { passive: true });
-      window.addEventListener("keydown", onUserInput);
-
-      const seconds = AUTOPLAY_SECONDS * (distance / total);
-      const lenis = getLenis();
-      if (lenis) {
-        // linear easing so the footage plays at an even, video-like rate
-        lenis.scrollTo(endY, {
-          duration: seconds,
-          easing: (t) => t,
-          force: true,
-          onComplete: stopAuto,
-        });
-        return;
-      }
-      const t0 = performance.now();
-      const step = (now: number) => {
-        if (!auto.active) return;
-        const t = Math.min(1, (now - t0) / (seconds * 1000));
-        window.scrollTo(0, startY + distance * t);
-        if (t < 1) auto.raf = requestAnimationFrame(step);
-        else stopAuto();
-      };
-      auto.raf = requestAnimationFrame(step);
-    };
 
     // The persistent header masthead logo we hand off to (rendered by Header).
     const headerLogo = document.querySelector<HTMLElement>("[data-hero-logo-target]");
@@ -278,12 +249,6 @@ export function HeroShell() {
     };
 
     const apply = (p: number) => {
-      // First sign of scrolling from the top: take over and play it through.
-      if (!autoplayed.current && finePointer && p > 0.006) {
-        autoplayed.current = true;
-        startAuto();
-      }
-
       currentF = p * (frameCount - 1);
       drawBlend(currentF);
 
@@ -291,6 +256,11 @@ export function HeroShell() {
       // fades in as it lands, so it reads as one logo travelling to the corner.
       const t = logoTargets.current;
       const w = smooth(p, 0, INTRO_END);
+      // Solid white behind the opening logo, clearing on the first scroll so
+      // the footage underneath isn't revealed until the viewer starts moving.
+      if (introBgRef.current) {
+        introBgRef.current.style.opacity = String(1 - w);
+      }
       if (introLogoRef.current) {
         const scale = 1 + (t.scale - 1) * w;
         introLogoRef.current.style.transform = `translate3d(${t.tx * w}px, ${t.ty * w}px, 0) scale(${scale})`;
@@ -306,6 +276,16 @@ export function HeroShell() {
         finaleRef.current.style.transform = `translateY(${(1 - inn) * 24}px)`;
         finaleRef.current.style.pointerEvents = inn > 0.5 ? "auto" : "none";
       }
+
+      // Pillar call-outs: fade in only while lingering at their own snap
+      // point, fade out again once the scroll moves on toward the next one.
+      PILLAR_COPY.forEach((pillar, i) => {
+        const el = pillarRefs.current[i];
+        if (!el) return;
+        const b = bump(p, pillar.center, 0.03, 0.06);
+        el.style.opacity = String(b);
+        el.style.transform = `translateY(${(1 - b) * 16}px)`;
+      });
     };
 
     (async () => {
@@ -321,35 +301,22 @@ export function HeroShell() {
       void loadProgressively();
       computeLogoTargets();
       window.addEventListener("resize", computeLogoTargets);
-      // Snap-assist so each scroll settles on the next stop — pointer devices
-      // only (touch keeps native scrubbing to avoid fighting momentum). Snap
-      // stays out of the auto-playthrough's way on its own: it only fires once
-      // scrolling stops, which during the glide it never does.
+      // Plain free scrubbing — no auto-jump to the next stop. SNAP_POINTS is
+      // still used to time the pillar call-outs and finale as the viewer
+      // scrubs past them (see apply/bump above), just not to force scroll.
       const trigger = ScrollTrigger.create({
         trigger: wrap,
         start: "top top",
         end: "bottom bottom",
         scrub: 0.45,
-        snap: finePointer
-          ? {
-              snapTo: SNAP_POINTS,
-              duration: { min: 0.25, max: 0.7 },
-              delay: 0.05,
-              ease: "power1.inOut",
-            }
-          : undefined,
         onUpdate: (self) => apply(self.progress),
       });
       st = trigger;
-      // Landing part-way in (a reload, or a #hash): the viewer is not at the
-      // top, so there is nothing to play them through.
-      if (trigger.progress > 0.02) autoplayed.current = true;
       apply(trigger.progress);
     })();
 
     return () => {
       cancelled = true;
-      stopAuto();
       st?.kill();
       ro?.disconnect();
       window.removeEventListener("resize", computeLogoTargets);
@@ -367,7 +334,17 @@ export function HeroShell() {
         aria-label="Webber battery intelligence from 12V to 1200V"
       >
         {cinematic && (
-          <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 h-full w-full" />
+          <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 z-0 h-full w-full" />
+        )}
+
+        {cinematic && (
+          /* Solid white behind the opening logo splash; fades out on the
+             first scroll to reveal the footage underneath. */
+          <div
+            ref={introBgRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[5] bg-white"
+          />
         )}
 
         {/* SEO / a11y heading: always in the DOM, conveyed visually by the hero */}
@@ -417,6 +394,37 @@ export function HeroShell() {
           </div>
         )}
 
+        {/* Pillar call-outs: brief copy that appears only while parked on the
+            two-wheeler/three-wheeler and ESS snap points, gone otherwise. */}
+        {cinematic &&
+          PILLAR_COPY.map((pillar, i) => (
+            <div
+              key={pillar.label}
+              ref={(el) => {
+                pillarRefs.current[i] = el;
+              }}
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 opacity-0"
+              aria-hidden="true"
+            >
+              {/* Backdrop runs flush to the section's actual bottom edge (not
+                  just to the text block) so it never leaves a strip of raw,
+                  unfaded footage showing between the text and the bottom. */}
+              <div
+                className="absolute inset-x-0 -top-28 bottom-0"
+                style={{
+                  background:
+                    "linear-gradient(0deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.92) 55%, transparent 100%)",
+                }}
+                aria-hidden="true"
+              />
+              <div className="wrap relative pb-[14%]">
+                <p className="micro-label micro-label--blue mb-4">{pillar.label}</p>
+                <p className="type-h2 max-w-[18ch]">{pillar.heading}</p>
+                <p className="type-body mt-3 max-w-[40ch]">{pillar.body}</p>
+              </div>
+            </div>
+          ))}
+
         {/* Finale copy, with a soft white backdrop for legibility over linework */}
         {cinematic && (
           <div
@@ -458,12 +466,13 @@ export function HeroShell() {
 
         {/* Screen-reader summary of the visual sequence */}
         <p className="sr-only">
-          Animated sequence: an energy pulse travels through a Webber battery
-          management system, sensing cell voltage, balancing cells, monitoring
-          thermal state across a metal-core PCB, crossing an isolated CAN
-          boundary and closing off a short-circuit path, then the board is
-          assembled into a battery pack that powers a two-wheeler, a
-          three-wheeler and grid-scale battery energy storage.
+          Animated sequence: a blue energy pulse travels along a Webber
+          battery management system circuit board, then carries the camera
+          out into the real world it powers — a rider on an electric
+          two-wheeler, a loaded electric three-wheeler, a battery energy
+          storage system container yard, and a drone lifting off — before
+          resolving into a white technical line drawing of all four
+          platforms together.
         </p>
       </section>
     </div>

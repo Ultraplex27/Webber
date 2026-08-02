@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { products } from "@/content/products";
 
 const BASE = "https://webberec.com";
 
@@ -11,9 +10,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/company`, priority: 0.7 },
     { url: `${BASE}/contact`, priority: 0.7 },
   ];
-  const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
-    url: `${BASE}/products/${p.slug}`,
-    priority: 0.8,
-  }));
-  return [...staticRoutes, ...productRoutes];
+  return staticRoutes;
 }
