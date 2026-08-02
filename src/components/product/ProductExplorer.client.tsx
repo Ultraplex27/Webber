@@ -1,39 +1,131 @@
 "use client";
 
 import { useState } from "react";
-import { products } from "@/content/products";
+import { products, type Product } from "@/content/products";
 import { ProductCard } from "./ProductCard";
 import { Reveal } from "@/components/motion/Reveal.client";
 
+type Category = "automotive" | "bess";
+type AutomotiveSub = "all" | "2w" | "3w";
+type BessSub = "all" | "12-24" | "48" | "96-102" | "120-500";
+
+const BESS_BANDS: Record<Exclude<BessSub, "all">, [number, number]> = {
+  "12-24": [12, 24],
+  "48": [48, 48],
+  "96-102": [96, 102],
+  "120-500": [120, 500],
+};
+
+function numbersIn(value: string): number[] {
+  return (value.match(/\d+(\.\d+)?/g) ?? []).map(Number);
+}
+
+function matchesAutomotive(product: Product, sub: AutomotiveSub): boolean {
+  if (!/2W|3W|Forklift/i.test(product.applications)) return false;
+  if (sub === "2w") return /2W/i.test(product.applications);
+  if (sub === "3w") return /3W/i.test(product.applications);
+  return true;
+}
+
+function matchesBess(product: Product, sub: BessSub): boolean {
+  if (!/ESS/i.test(product.applications)) return false;
+  if (sub === "all") return true;
+  const [min, max] = BESS_BANDS[sub];
+  return numbersIn(product.nominalVoltage).some((n) => n >= min && n <= max);
+}
+
 /** Single-page BMS catalogue. Details are intentionally kept in the cards. */
 export function ProductExplorer() {
-  const [activeFilters, setActiveFilters] = useState<("vehicle" | "ess")[]>([]);
-  const toggleFilter = (filter: "vehicle" | "ess") =>
-    setActiveFilters((current) =>
-      current.includes(filter) ? current.filter((item) => item !== filter) : [...current, filter],
+  const [activeCategories, setActiveCategories] = useState<Category[]>([]);
+  const [automotiveSub, setAutomotiveSub] = useState<AutomotiveSub>("all");
+  const [bessSub, setBessSub] = useState<BessSub>("all");
+
+  const toggleCategory = (category: Category) =>
+    setActiveCategories((current) =>
+      current.includes(category) ? current.filter((item) => item !== category) : [...current, category],
     );
+
   const visibleProducts =
-    activeFilters.length === 0
+    activeCategories.length === 0
       ? products
       : products.filter((product) =>
-          activeFilters.some((filter) =>
-            filter === "vehicle"
-              ? /2W|3W|Forklift/i.test(product.applications)
-              : /ESS/i.test(product.applications),
+          activeCategories.some((category) =>
+            category === "automotive"
+              ? matchesAutomotive(product, automotiveSub)
+              : matchesBess(product, bessSub),
           ),
         );
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-2" aria-label="Application filters">
+      <div className="flex flex-wrap items-center gap-3" aria-label="Application filters">
         <span className="micro-label mr-2">Application</span>
-        <button type="button" aria-pressed={activeFilters.includes("vehicle")} onClick={() => toggleFilter("vehicle")} className={`rounded-[3px] border px-3 py-1.5 text-[0.75rem] font-medium transition-colors ${activeFilters.includes("vehicle") ? "border-blue-700 bg-blue-50 text-blue-700" : "border-grey-200 bg-white text-grey-600 hover:border-blue-300 hover:text-blue-700"}`}>
-          Vehicle
+        <button
+          type="button"
+          aria-pressed={activeCategories.includes("automotive")}
+          onClick={() => toggleCategory("automotive")}
+          className={`rounded-[4px] border px-5 py-3 text-[0.9375rem] font-medium transition-colors ${activeCategories.includes("automotive") ? "border-blue-700 bg-blue-50 text-blue-700" : "border-grey-200 bg-white text-grey-600 hover:border-blue-300 hover:text-blue-700"}`}
+        >
+          Automotive
         </button>
-        <button type="button" aria-pressed={activeFilters.includes("ess")} onClick={() => toggleFilter("ess")} className={`rounded-[3px] border px-3 py-1.5 text-[0.75rem] font-medium transition-colors ${activeFilters.includes("ess") ? "border-blue-700 bg-blue-50 text-blue-700" : "border-grey-200 bg-white text-grey-600 hover:border-blue-300 hover:text-blue-700"}`}>
-          ESS
+        <button
+          type="button"
+          aria-pressed={activeCategories.includes("bess")}
+          onClick={() => toggleCategory("bess")}
+          className={`rounded-[4px] border px-5 py-3 text-[0.9375rem] font-medium transition-colors ${activeCategories.includes("bess") ? "border-blue-700 bg-blue-50 text-blue-700" : "border-grey-200 bg-white text-grey-600 hover:border-blue-300 hover:text-blue-700"}`}
+        >
+          BESS
         </button>
       </div>
+
+      {activeCategories.includes("automotive") && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 pl-1" aria-label="Automotive sub-filters">
+          <span className="micro-label mr-1 text-grey-400">Automotive</span>
+          {(
+            [
+              ["all", "All"],
+              ["2w", "Two-wheeler"],
+              ["3w", "3-wheeler"],
+            ] as [AutomotiveSub, string][]
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={automotiveSub === value}
+              onClick={() => setAutomotiveSub(value)}
+              className={`rounded-full border px-3 py-1.5 text-[0.75rem] font-medium transition-colors ${automotiveSub === value ? "border-blue-700 bg-blue-50 text-blue-700" : "border-grey-200 bg-white text-grey-500 hover:border-blue-300 hover:text-blue-700"}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {activeCategories.includes("bess") && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 pl-1" aria-label="BESS sub-filters">
+          <span className="micro-label mr-1 text-grey-400">BESS</span>
+          {(
+            [
+              ["all", "All"],
+              ["12-24", "12/24V"],
+              ["48", "48V"],
+              ["96-102", "96/102V"],
+              ["120-500", "120–500V"],
+            ] as [BessSub, string][]
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={bessSub === value}
+              onClick={() => setBessSub(value)}
+              className={`rounded-full border px-3 py-1.5 text-[0.75rem] font-medium transition-colors ${bessSub === value ? "border-blue-700 bg-blue-50 text-blue-700" : "border-grey-200 bg-white text-grey-500 hover:border-blue-300 hover:text-blue-700"}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <p className="micro-label mt-5" aria-live="polite">{visibleProducts.length} BMS PRODUCTS</p>
       <ul className="gap-module mt-6 grid sm:grid-cols-2 xl:grid-cols-3">
         {visibleProducts.map((product, index) => (

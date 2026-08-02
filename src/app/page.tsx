@@ -30,9 +30,26 @@ export default function HomePage() {
       <div className="pencil-grid">
         <ProofStrip />
 
+        {/* Product carousel */}
+        <section className="section relative border-t border-grey-200 bg-canvas-soft/70">
+          <BlueprintMeasure label="02 / PRODUCTS" />
+          <div className="wrap">
+            <Reveal>
+              <SectionIntro
+                label="ONE STACK. MULTIPLE ENERGY SYSTEMS."
+                title="Modular battery intelligence, 12V to 1200V."
+                lead="Modular battery intelligence for compact mobility, high-current platforms and stationary storage."
+              />
+            </Reveal>
+            <div className="mt-16">
+              <ProductCarousel />
+            </div>
+          </div>
+        </section>
+
         {/* OEM and ecosystem proof */}
-        <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
-          <BlueprintMeasure label="02 / ECOSYSTEM" />
+        <section className="section--tight relative">
+          <BlueprintMeasure label="03 / ECOSYSTEM" />
           <div className="wrap">
             <p className="micro-label mb-12">
               BUILT ALONGSIDE THE ELECTRIFICATION ECOSYSTEM
@@ -44,23 +61,6 @@ export default function HomePage() {
                 items={partnerLogoItems}
                 reverse
               />
-            </div>
-          </div>
-        </section>
-
-        {/* Product carousel */}
-        <section className="section relative">
-          <BlueprintMeasure label="03 / PRODUCTS" />
-          <div className="wrap">
-            <Reveal>
-              <SectionIntro
-                label="ONE STACK. MULTIPLE ENERGY SYSTEMS."
-                title="Modular battery intelligence, 12V to 1200V."
-                lead="Modular battery intelligence for compact mobility, high-current platforms and stationary storage."
-              />
-            </Reveal>
-            <div className="mt-16">
-              <ProductCarousel />
             </div>
           </div>
         </section>

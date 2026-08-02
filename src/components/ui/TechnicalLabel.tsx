@@ -29,7 +29,7 @@ export function SectionIntro({
       <TechnicalLabel blue className="mb-5">
         {label}
       </TechnicalLabel>
-      <h2 className="type-h2 max-w-[16ch]">{title}</h2>
+      <h2 className={`type-h2 ${typeof title === "string" ? "max-w-[16ch]" : ""}`}>{title}</h2>
       {lead ? <p className="type-lead mt-6">{lead}</p> : null}
     </div>
   );

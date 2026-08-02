@@ -419,7 +419,7 @@ export function HeroShell() {
               />
               <div className="wrap relative pb-[14%]">
                 <p className="micro-label micro-label--blue mb-4">{pillar.label}</p>
-                <p className="type-h2 max-w-[18ch]">{pillar.heading}</p>
+                <p className="type-h2 max-w-[34ch]">{pillar.heading}</p>
                 <p className="type-body mt-3 max-w-[40ch]">{pillar.body}</p>
               </div>
             </div>

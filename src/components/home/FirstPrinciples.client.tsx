@@ -139,7 +139,7 @@ function BoardDiagram({ active, progress }: { active: number; progress: number }
         <path d="M430 185 H 460" />
       </g>
       {zones.map((z, i) => (
-        <g key={i} style={{ opacity: active === i ? 1 : 0.64, transformOrigin: `${z.x + z.w / 2}px ${z.y + z.h / 2}px`, transform: active === i ? "scale(1)" : "scale(.965)", transition: "opacity 420ms var(--ease-ui-out), transform 420ms var(--ease-ui-out)" }}>
+        <g key={i} style={{ opacity: active === i ? 1 : 0.64, transformOrigin: `${z.x + z.w / 2}px ${z.y + z.h / 2}px`, transform: active === i ? "scale(1.2)" : "scale(.94)", transition: "opacity 420ms var(--ease-ui-out), transform 420ms var(--ease-ui-out)" }}>
           {active === i && <rect x={z.x - 5} y={z.y - 5} width={z.w + 10} height={z.h + 10} rx="6" fill="var(--blue-500)" opacity=".28" filter="url(#board-glow)" />}
           <rect
             x={z.x}

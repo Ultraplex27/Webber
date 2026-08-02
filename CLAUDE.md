@@ -9,12 +9,21 @@ checking that file first — it's the source of truth, not this summary.
 
 ## Product catalogue
 
-- Products are intentionally a **single page** at `/products`; do not recreate
-  `/products/[slug]` detail routes unless explicitly requested. The sitemap has
-  no per-product URLs.
+- `/products` is the catalogue grid; `/products/[slug]` (restored on explicit
+  request) is the per-product detail sheet. The `Product` interface in
+  `src/content/products.ts` mirrors every data column in
+  `docs/Webber_BMS_Product_Data_Template.xlsx` 1:1 (Overview, Electrical,
+  Balancing, Architecture, Applications, Communications, Mechanical,
+  Environmental, Safety, Compliance, Deployment), so `SpecificationTable.tsx`
+  can render the full category grid even though most fields are currently
+  `—`. The card (`ProductCard.tsx`) still only surfaces the four fields that
+  matter for scanning a grid; the detail page shows all of them. When intake
+  data lands in the workbook, copy it straight into the matching `Product`
+  field — the field names line up with the workbook's header row.
 - The live catalogue is defined in `src/content/products.ts` and currently
   mirrors the 12 supplied BMS render families. Cards render their data through
-  `ProductCard.tsx` and use a consistent centred, contained 4:3 image stage.
+  `ProductCard.tsx` (which links to the detail page) and use a consistent
+  centred, contained 4:3 image stage.
 - The source asset directory is `Assets/BMS Renders/`. Website-ready copies
   live in `public/images/products/bms-renders/`. The WBMS-SW 16S/32S Contactor
   image is extracted from `Assets/Webber_ElectroCorp Profile April 2026.pdf`
@@ -24,12 +33,18 @@ checking that file first — it's the source of truth, not this summary.
   2026 profile or a controlled datasheet must remain `—` on the site. The
   active profile reference is `Assets/Webber_ElectroCorp Profile April 2026.pdf`.
 - `docs/Webber_BMS_Product_Data_Template.xlsx` is the intake source for missing
-  catalogue data and later detail pages. Yellow cells are user-editable;
+  catalogue and detail-page data. Yellow cells are user-editable;
   unknown values stay blank in the workbook / `—` on the website, and the
-  Source / notes column should accompany every new specification.
-- Vehicle and ESS controls in `ProductExplorer.client.tsx` are active compact
-  filters. They derive their results from the current `applications` strings;
-  keep them small technical chips and do not add status text beside them.
+  Source / notes column should accompany every new specification (that column
+  is provenance for maintainers — it is deliberately not rendered on the
+  site).
+- Automotive and BESS controls in `ProductExplorer.client.tsx` are active
+  filters (renamed from Vehicle/ESS). Automotive has Two-wheeler/3-wheeler
+  sub-filters read from `applications`; BESS has voltage-band sub-filters
+  (12/24V, 48V, 96/102V, 120–500V) read from `nominalVoltage` — since that
+  field is `—` for every product today, the voltage sub-filters honestly
+  return zero results until intake data lands, which is correct, not a bug.
+  Sub-filter rows only appear once their parent chip is active.
 
 ## Brand & design tokens
 
