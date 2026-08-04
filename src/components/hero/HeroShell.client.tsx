@@ -11,11 +11,12 @@ import { useIsDesktop } from "@/components/motion/useViewport";
  * Desktop with motion gets the cinematic sequence: the page opens on the big
  * Webber logo, which shrinks into the header masthead as a freely
  * scroll-scrubbed frame sequence plays (public/images/hero/frames +
- * manifest.json, extracted from Assets/hero-video/Webber Hero Video.mp4) —
- * BMS board with energy pulse, a rider on a two-wheeler, an ESS container
- * yard, and a white CAD/blueprint finale. Pillar call-out copy (PILLAR_COPY)
- * fades in and out as the scrub passes each stop's SNAP_POINTS position;
- * nothing forces the scroll itself to jump there anymore.
+ * manifest.json, extracted from Assets/hero-video/Webber_Hero_Final.mp4) —
+ * a BMS board reveal, a rider on a two-wheeler, a loaded three-wheeler, a
+ * fleet depot with a BESS container and a drone overhead, and a white
+ * CAD/blueprint finale. Pillar call-out copy (PILLAR_COPY) fades in and out
+ * as the scrub passes each stop's SNAP_POINTS position; nothing forces the
+ * scroll itself to jump there anymore.
  *
  * Everywhere else (mobile, reduced motion, missing frames) gets a static hero
  * of the same copy. The h1 is server-rendered in both.
@@ -31,18 +32,18 @@ const INTRO_END = 0.12;
  * (via frameFraction) if the sequence is ever re-extracted at a different
  * frame count.
  */
-const FRAME_TOTAL = 246;
+const FRAME_TOTAL = 177;
 /** Scroll fraction at which 1-indexed frame `n` of FRAME_TOTAL is shown. */
 function frameFraction(n: number) {
   return (n - 1) / (FRAME_TOTAL - 1);
 }
-/** Composed stops: start (logo/board), scooter+rider (frame 103), ESS yard (frame 166), finale (last frame). */
-const SNAP_POINTS = [0, frameFraction(103), frameFraction(166), 1];
+/** Composed stops: start (logo/board), 2W/3W riding (frame 75), fleet + BESS yard (frame 125), finale (last frame). */
+const SNAP_POINTS = [0, frameFraction(75), frameFraction(125), 1];
 
 /** Pillar call-outs that appear only while lingering at their snap point. */
 const PILLAR_COPY = [
   {
-    center: frameFraction(24),
+    center: frameFraction(45),
     label: "ENGINEERING THAT SCALES",
     heading: "From mobility electronics to a connected electrification stack.",
     body: "Webber is moving from mobility-focused electronics towards a connected electrification stack spanning vehicles, telecom and battery energy storage.",
@@ -466,13 +467,12 @@ export function HeroShell() {
 
         {/* Screen-reader summary of the visual sequence */}
         <p className="sr-only">
-          Animated sequence: a blue energy pulse travels along a Webber
-          battery management system circuit board, then carries the camera
-          out into the real world it powers — a rider on an electric
-          two-wheeler, a loaded electric three-wheeler, a battery energy
-          storage system container yard, and a drone lifting off — before
-          resolving into a white technical line drawing of all four
-          platforms together.
+          Animated sequence: a Webber battery management system circuit board
+          installed inside a two-wheeler, then the camera carries out into the
+          real world it powers — a rider on an electric two-wheeler, a loaded
+          electric three-wheeler, a fleet depot with a battery energy storage
+          system container and a drone overhead — before resolving into a
+          white technical line drawing of all four platforms together.
         </p>
       </section>
     </div>

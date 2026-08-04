@@ -9,42 +9,43 @@ checking that file first — it's the source of truth, not this summary.
 
 ## Product catalogue
 
-- `/products` is the catalogue grid; `/products/[slug]` (restored on explicit
-  request) is the per-product detail sheet. The `Product` interface in
-  `src/content/products.ts` mirrors every data column in
-  `docs/Webber_BMS_Product_Data_Template.xlsx` 1:1 (Overview, Electrical,
-  Balancing, Architecture, Applications, Communications, Mechanical,
-  Environmental, Safety, Compliance, Deployment), so `SpecificationTable.tsx`
-  can render the full category grid even though most fields are currently
-  `—`. The card (`ProductCard.tsx`) still only surfaces the four fields that
-  matter for scanning a grid; the detail page shows all of them. When intake
-  data lands in the workbook, copy it straight into the matching `Product`
-  field — the field names line up with the workbook's header row.
-- The live catalogue is defined in `src/content/products.ts` and currently
-  mirrors the 12 supplied BMS render families. Cards render their data through
-  `ProductCard.tsx` (which links to the detail page) and use a consistent
-  centred, contained 4:3 image stage.
+- `/products` is the catalogue grid; `/products/[slug]` is the per-product
+  detail sheet. The `Product` interface in `src/content/products.ts` mirrors
+  the "Products" sheet of `Assets/Webber_BMS_Product_Data_Template.xlsx` 1:1
+  (Electrical, Balancing, Architecture, Applications, Communications,
+  Mechanical, Environmental, Safety, Compliance), so `SpecificationTable.tsx`
+  renders the full category grid and `product.positioning` becomes the
+  detail-page hero lead. The card (`ProductCard.tsx`) still only surfaces four
+  fields for scanning a grid; the detail page shows all of them. **That
+  workbook — not the identically-named blank one in `docs/` — is now the
+  live, filled-in catalogue of 11 products**; when it's updated again, re-read
+  it (its "Instructions" sheet explains the conventions) and copy values
+  straight into the matching `Product` field, field names line up with its
+  header row.
+- Slugs are exactly what's in the workbook's `Slug` column, including mixed
+  case (e.g. `SW-16S`, `SWLT-ESS`) — its Instructions sheet says not to change
+  them without an explicit remapping. The workbook's product roster doesn't
+  1:1 match the old render-photography folder names: some render families
+  were reassigned to a different/renamed product (e.g. the `Contactor C9 BMS`
+  photography is now `contactor-16S`'s images, `WBMS-SW-CAN V2 BMS` is now
+  `SW-16S`'s), one product (`SWLT v1.5 120A`) was dropped entirely, and one
+  (`contactor-32s-ess`) has no dedicated render yet and reuses
+  `contactor-32s`'s photography since it's stated to be the same board.
+- `application` is the categorical field (`"Automotive" | "BESS"`) that drives
+  the Automotive/BESS catalogue filters in `ProductExplorer.client.tsx`;
+  `otherApplications` is the granular free-text list (2W, 3W, Forklifts, ...)
+  the Automotive sub-filters regex-match against. BESS voltage sub-filters
+  band-match `nominalVoltage`; the "48V" band is widened to 40–67V because
+  that's the resting/charged voltage a 16S 48V-class pack actually reports,
+  not a literal "48".
 - The source asset directory is `Assets/BMS Renders/`. Website-ready copies
-  live in `public/images/products/bms-renders/`. The WBMS-SW 16S/32S Contactor
-  image is extracted from `Assets/Webber_ElectroCorp Profile April 2026.pdf`
-  and uses `contactor-profile-transparent.png` so it does not show a black
-  matte.
-- Never invent product specifications. Any field not confirmed by the April
-  2026 profile or a controlled datasheet must remain `—` on the site. The
-  active profile reference is `Assets/Webber_ElectroCorp Profile April 2026.pdf`.
-- `docs/Webber_BMS_Product_Data_Template.xlsx` is the intake source for missing
-  catalogue and detail-page data. Yellow cells are user-editable;
-  unknown values stay blank in the workbook / `—` on the website, and the
-  Source / notes column should accompany every new specification (that column
-  is provenance for maintainers — it is deliberately not rendered on the
-  site).
-- Automotive and BESS controls in `ProductExplorer.client.tsx` are active
-  filters (renamed from Vehicle/ESS). Automotive has Two-wheeler/3-wheeler
-  sub-filters read from `applications`; BESS has voltage-band sub-filters
-  (12/24V, 48V, 96/102V, 120–500V) read from `nominalVoltage` — since that
-  field is `—` for every product today, the voltage sub-filters honestly
-  return zero results until intake data lands, which is correct, not a bug.
-  Sub-filter rows only appear once their parent chip is active.
+  live in `public/images/products/bms-renders/` as `<slug>-<n>.webp`,
+  generated via `sharp`/`ffmpeg` from the much larger source PNGs (kept out
+  of the delivered bundle) — filenames should track the current slug, so
+  rename the files (`git mv`) if a product's slug ever changes rather than
+  leaving stale names.
+- Never invent product specifications. Any field left blank in the workbook
+  must remain `—` on the site.
 
 ## Brand & design tokens
 

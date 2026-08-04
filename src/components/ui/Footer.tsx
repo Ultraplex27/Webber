@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { contact } from "@/content/company";
 import { ReduceMotionToggle } from "@/components/motion/ReduceMotionToggle.client";
@@ -23,7 +24,6 @@ const columns = [
     links: [
       { href: "/company", label: "About" },
       { href: "/company#leadership", label: "Leadership" },
-      { href: "/contact#careers", label: "Careers" },
     ],
   },
   {
@@ -62,8 +62,17 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col gap-6 border-t border-grey-200 pt-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-[560] tracking-tight text-ink">WEBBER ELECTRO CORP</p>
-            <p className="micro-label mt-1">BATTERY INTELLIGENCE / 12V–1200V</p>
+            {/* Source asset is dark-navy for light backgrounds (see
+                BRAND_GUIDELINES.md); reversed to white for this dark footer
+                since no separate reversed export exists. */}
+            <Image
+              src="/logos/webber-masthead.png"
+              alt="Webber Electro Corp"
+              width={520}
+              height={109}
+              className="h-7 w-auto brightness-0 invert"
+            />
+            <p className="micro-label mt-3">BATTERY INTELLIGENCE / 12V–1200V</p>
           </div>
           <div className="flex items-center gap-6">
             <ReduceMotionToggle />

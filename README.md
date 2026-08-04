@@ -65,8 +65,12 @@ a technical placeholder when a file is missing, so assets can land incrementally
 
 The hero is a video (`Assets/hero-video/`) extracted to a still sequence at
 `public/images/hero/frames/` with a `manifest.json` giving the frame count; the
-hero scrubs those on a canvas. To swap the footage, re-extract at 24fps and
-update the count. Same pattern for the exploded board on the technology page.
+hero scrubs those on a canvas. To swap the footage, re-extract at the source's
+native fps (check with `ffprobe`, don't assume a fixed rate) and update the
+count in the manifest, then re-derive `FRAME_TOTAL`/`SNAP_POINTS`/`PILLAR_COPY`
+in `HeroShell.client.tsx` against the new footage's actual content beats — they
+name specific frame numbers, not just proportions. Same pattern for the
+exploded board on the technology page.
 
 ## Before launch
 

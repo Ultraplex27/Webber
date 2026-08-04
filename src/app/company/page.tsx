@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { partners, team, timeline } from "@/content/company";
 import { Recognition } from "@/components/home/Recognition";
 import { SmartImage } from "@/components/ui/SmartImage.client";
@@ -256,23 +255,6 @@ export default function CompanyPage() {
       </section>
 
       <Recognition heading="AWARDS" measure="07 / AWARDS" />
-
-      {/* Careers CTA */}
-      <section className="band-gradient section relative">
-        <BlueprintMeasure label="08 / JOIN US" accent />
-        <div className="wrap">
-          <Reveal>
-            <h2 className="type-h2 max-w-[24ch]">
-              The energy transition is a hardware problem, a software problem
-              and a people problem.
-            </h2>
-            <p className="type-lead mt-6">Join the team solving all three.</p>
-            <Link href="/contact#careers" className="btn btn-primary mt-10">
-              View open roles
-            </Link>
-          </Reveal>
-        </div>
-      </section>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 {
-  "count": 246,
+  "count": 177,
   "dir": "/images/hero/frames",
   "pattern": "frame-%04d.webp",
-  "source": "Webber Hero Video.mp4 (Seedance 2.0 via Higgsfield, 8.53s 1080p, extracted at native 30fps)"
+  "source": "Webber_Hero_Final.mp4 (5.9s, 3840x2160 source downscaled to 1080p, extracted at native 30fps)"
 }

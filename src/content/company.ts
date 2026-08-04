@@ -74,13 +74,11 @@ export const partners = [
   },
   {
     role: "Electronics manufacturing",
-    names: ["Kinetic Communications"],
-    logos: ["/logos/partners/kinetic-communications.png"],
-  },
-  {
-    role: "Semiconductor supply chain",
-    names: ["Arrow"],
-    logos: ["/logos/partners/arrow.png"],
+    names: ["Kinetic Communications", "PG Electroplast"],
+    logos: [
+      "/logos/partners/kinetic-communications.png",
+      "/logos/partners/PG Electroplast.png",
+    ],
   },
 ] as const;
 
@@ -110,34 +108,6 @@ export const timeline = [
 export const contact = {
   email: "connect@webberec.com",
   phone: "+91 94254 08221",
+  address: "Plot No 4/25, Sector 10, PCNTDA, Bhosari, Pimpri-Chinchwad, Pune, Maharashtra 411026",
 } as const;
 
-export const jobs = [
-  {
-    slug: "embedded-firmware-engineer",
-    role: "Embedded Firmware Engineer",
-    department: "Software",
-    location: "India",
-    experience: "2–6 years",
-    type: "Full-time",
-    posted: "2026-06-01",
-  },
-  {
-    slug: "power-electronics-hardware-engineer",
-    role: "Power Electronics Hardware Engineer",
-    department: "Hardware",
-    location: "India",
-    experience: "3–8 years",
-    type: "Full-time",
-    posted: "2026-06-15",
-  },
-  {
-    slug: "battery-algorithms-engineer",
-    role: "Battery Algorithms Engineer",
-    department: "Systems",
-    location: "India",
-    experience: "2–5 years",
-    type: "Full-time",
-    posted: "2026-07-01",
-  },
-] as const;

@@ -9,7 +9,6 @@ const nav = [
   { href: "/products", label: "Products" },
   { href: "/technology", label: "Technology" },
   { href: "/company", label: "Company" },
-  { href: "/contact#careers", label: "Careers" },
 ];
 
 export function Header() {
@@ -65,8 +64,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               className={`text-[0.9375rem] font-[480] transition-colors hover:text-ink ${
-                pathname.startsWith(item.href.split("#")[0]) &&
-                item.href !== "/contact#careers"
+                pathname.startsWith(item.href.split("#")[0])
                   ? "text-ink"
                   : "text-grey-700"
               }`}

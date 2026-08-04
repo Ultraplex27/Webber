@@ -9,9 +9,12 @@ type Category = "automotive" | "bess";
 type AutomotiveSub = "all" | "2w" | "3w";
 type BessSub = "all" | "12-24" | "48" | "96-102" | "120-500";
 
+// "48" is widened past the literal 48V nameplate to the 40-67V a 16S LFP/NMC
+// pack actually reports (nominal ~51.2V/59.2V), since that's the class of
+// pack this band is meant to catch.
 const BESS_BANDS: Record<Exclude<BessSub, "all">, [number, number]> = {
   "12-24": [12, 24],
-  "48": [48, 48],
+  "48": [40, 67],
   "96-102": [96, 102],
   "120-500": [120, 500],
 };
@@ -21,14 +24,14 @@ function numbersIn(value: string): number[] {
 }
 
 function matchesAutomotive(product: Product, sub: AutomotiveSub): boolean {
-  if (!/2W|3W|Forklift/i.test(product.applications)) return false;
-  if (sub === "2w") return /2W/i.test(product.applications);
-  if (sub === "3w") return /3W/i.test(product.applications);
+  if (product.application !== "Automotive") return false;
+  if (sub === "2w") return /2W/i.test(product.otherApplications);
+  if (sub === "3w") return /3W/i.test(product.otherApplications);
   return true;
 }
 
 function matchesBess(product: Product, sub: BessSub): boolean {
-  if (!/ESS/i.test(product.applications)) return false;
+  if (product.application !== "BESS") return false;
   if (sub === "all") return true;
   const [min, max] = BESS_BANDS[sub];
   return numbersIn(product.nominalVoltage).some((n) => n >= min && n <= max);
