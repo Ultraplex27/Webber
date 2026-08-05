@@ -32,13 +32,13 @@ const INTRO_END = 0.12;
  * (via frameFraction) if the sequence is ever re-extracted at a different
  * frame count.
  */
-const FRAME_TOTAL = 177;
+const FRAME_TOTAL = 158;
 /** Scroll fraction at which 1-indexed frame `n` of FRAME_TOTAL is shown. */
 function frameFraction(n: number) {
   return (n - 1) / (FRAME_TOTAL - 1);
 }
-/** Composed stops: start (logo/board), 2W/3W riding (frame 75), fleet + BESS yard (frame 125), finale (last frame). */
-const SNAP_POINTS = [0, frameFraction(75), frameFraction(125), 1];
+/** Composed stops: start (logo/board), 2W/3W riding (frame 63), fleet + BESS yard (frame 106), finale (last frame). */
+const SNAP_POINTS = [0, frameFraction(63), frameFraction(106), 1];
 
 /** Pillar call-outs that appear only while lingering at their snap point. */
 const PILLAR_COPY = [
