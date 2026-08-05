@@ -372,27 +372,41 @@ export function HeroShell() {
         ) : (
           /* Static hero: mobile / reduced motion / no frames. No masthead here —
              the header already carries it, and the cinematic splash is the only
-             place the lockup earns a second showing. */
-          <div className="wrap relative z-10">
-            <p className="micro-label micro-label--blue mb-6">
-              BATTERY MANAGEMENT SYSTEMS
-            </p>
-            <p className="type-display max-w-[10ch]" aria-hidden="true">
-              Rewire the Planet.
-            </p>
-            <p className="type-lead mt-8 max-w-[46ch]">
-              Electronics and software engineered in India, powering electric
-              mobility and energy storage worldwide.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/products" className="btn btn-primary">
-                Explore the BMS stack
-              </Link>
-              <Link href="/contact" className="btn btn-secondary">
-                Talk to engineering
-              </Link>
+             place the lockup earns a second showing. Backed by the sequence's
+             last frame (the white CAD/blueprint finale) instead of blank space. */
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element -- decorative static background, not the LCP content */}
+            <img
+              src={frameSrc(FRAME_TOTAL - 1)}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 z-0 h-full w-full object-cover object-bottom"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 z-[5] bg-gradient-to-b from-white via-white/85 to-white/30"
+            />
+            <div className="wrap relative z-10">
+              <p className="micro-label micro-label--blue mb-6">
+                BATTERY MANAGEMENT SYSTEMS
+              </p>
+              <p className="type-display max-w-[10ch]" aria-hidden="true">
+                Rewire the Planet.
+              </p>
+              <p className="type-lead mt-8 max-w-[46ch]">
+                Electronics and software engineered in India, powering electric
+                mobility and energy storage worldwide.
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link href="/products" className="btn btn-primary">
+                  Explore the BMS stack
+                </Link>
+                <Link href="/contact" className="btn btn-secondary">
+                  Talk to engineering
+                </Link>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Pillar call-outs: brief copy that appears only while parked on the

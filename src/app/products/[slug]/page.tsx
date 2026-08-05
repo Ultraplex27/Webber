@@ -62,8 +62,7 @@ export default async function ProductDetailPage({
           </nav>
           <div className="grid items-start gap-12 lg:grid-cols-2">
             <div>
-              <TechnicalLabel blue className="mb-4 flex items-center gap-2">
-                <img src={product.application === "BESS" ? "/images/icons/icon_bess.png" : "/images/icons/icon_automotive.png"} alt="" width={16} height={16} className="opacity-75 mix-blend-multiply" />
+              <TechnicalLabel blue className="mb-4">
                 {product.application} / {product.otherApplications}
               </TechnicalLabel>
               <h1 className="type-h2">{product.name}</h1>
@@ -72,17 +71,14 @@ export default async function ProductDetailPage({
               )}
               <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[6px] border border-grey-200 bg-grey-200">
                 {[
-                  ["Nominal voltage", product.nominalVoltage, "/images/icons/icon_voltage.png"],
-                  ["Continuous current", product.continuousCurrent, "/images/icons/icon_current.png"],
-                  ["Cell configuration", product.cellConfiguration, "/images/icons/icon_cell.png"],
-                  ["Battery capacity", product.batteryCapacity, "/images/icons/icon_capacity.png"],
-                ].map(([label, value, icon]) => (
+                  ["Nominal voltage", product.nominalVoltage],
+                  ["Continuous current", product.continuousCurrent],
+                  ["Cell configuration", product.cellConfiguration],
+                  ["Battery capacity", product.batteryCapacity],
+                ].map(([label, value]) => (
                   <div key={label} className="bg-white px-5 py-4">
                     <dd className="spec-value text-ink">{value}</dd>
-                    <dt className="micro-label mt-2 flex items-center gap-2">
-                      <img src={icon} alt="" width={16} height={16} className="opacity-60 mix-blend-multiply" />
-                      {label}
-                    </dt>
+                    <dt className="micro-label mt-1">{label}</dt>
                   </div>
                 ))}
               </dl>
