@@ -32,75 +32,81 @@ export function Header() {
   }, [open]);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled || open
-          ? // frosted glass over the drafting paper: the grid stays legible
-            // through the bar rather than being covered by it
-            "border-b border-grey-200 bg-blue-50/70 backdrop-blur-xl backdrop-saturate-150"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <div className="wrap flex h-16 items-center justify-between gap-6">
-        <Link
-          href="/"
-          className="flex items-center gap-3"
-          aria-label="Webber Electro Corp home"
-        >
-          <Image
-            src="/logos/webber-masthead.png"
-            alt="Webber Electro Corp"
-            width={520}
-            height={109}
-            className="h-9 w-auto transition-opacity duration-300"
-            priority
-            data-hero-logo-target
-          />
-        </Link>
-
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`text-[0.9375rem] font-[480] transition-colors hover:text-ink ${
-                pathname.startsWith(item.href.split("#")[0])
-                  ? "text-ink"
-                  : "text-grey-700"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Link href="/contact" className="btn btn-primary">
-            Talk to engineering
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+          scrolled || open
+            ? // frosted glass over the drafting paper: the grid stays legible
+              // through the bar rather than being covered by it
+              "border-b border-grey-200 bg-blue-50/70 backdrop-blur-xl backdrop-saturate-150"
+            : "border-b border-transparent bg-transparent"
+        }`}
+      >
+        <div className="wrap flex h-16 items-center justify-between gap-6">
+          <Link
+            href="/"
+            className="flex items-center gap-3"
+            aria-label="Webber Electro Corp home"
+          >
+            <Image
+              src="/logos/webber-masthead.png"
+              alt="Webber Electro Corp"
+              width={520}
+              height={109}
+              className="h-9 w-auto transition-opacity duration-300"
+              priority
+              data-hero-logo-target
+            />
           </Link>
-        </nav>
 
-        <button
-          type="button"
-          className="flex h-11 w-11 items-center justify-center md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="relative block h-3 w-6" aria-hidden="true">
-            <span
-              className={`absolute left-0 top-0 h-px w-full bg-ink transition-transform duration-200 ${
-                open ? "translate-y-[6px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`absolute bottom-0 left-0 h-px w-full bg-ink transition-transform duration-200 ${
-                open ? "-translate-y-[6px] -rotate-45" : ""
-              }`}
-            />
-          </span>
-        </button>
-      </div>
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`text-[0.9375rem] font-[480] transition-colors hover:text-ink ${
+                  pathname.startsWith(item.href.split("#")[0])
+                    ? "text-ink"
+                    : "text-grey-700"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link href="/contact" className="btn btn-primary">
+              Talk to engineering
+            </Link>
+          </nav>
 
-      {/* Full-screen white index: mobile */}
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="relative block h-3 w-6" aria-hidden="true">
+              <span
+                className={`absolute left-0 top-0 h-px w-full bg-ink transition-transform duration-200 ${
+                  open ? "translate-y-[6px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`absolute bottom-0 left-0 h-px w-full bg-ink transition-transform duration-200 ${
+                  open ? "-translate-y-[6px] -rotate-45" : ""
+                }`}
+              />
+            </span>
+          </button>
+        </div>
+      </header>
+
+      {/* Full-screen white index: mobile. Rendered as a sibling of <header>,
+          not a child — <header> gets backdrop-blur-xl while `open` is true,
+          and a filter/backdrop-filter ancestor becomes the containing block
+          for position:fixed descendants, which would shrink this overlay to
+          header height instead of the full viewport. */}
       {open && (
         <nav
           id="mobile-nav"
@@ -130,6 +136,6 @@ export function Header() {
           </div>
         </nav>
       )}
-    </header>
+    </>
   );
 }
