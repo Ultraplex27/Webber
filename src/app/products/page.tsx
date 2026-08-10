@@ -53,7 +53,7 @@ export default function ProductsPage() {
                   IN DEVELOPMENT
                 </span>
                 <h3 className="type-h4 mt-4">{item.name}</h3>
-                <p className="type-body mt-2 !text-[0.9375rem]">{item.note}</p>
+                <p className="type-body mt-2 !text-[1rem]">{item.note}</p>
               </Reveal>
             ))}
           </ul>

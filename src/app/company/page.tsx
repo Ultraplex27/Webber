@@ -122,7 +122,7 @@ export default function CompanyPage() {
                 <div className="grid grid-cols-[64px_1fr] gap-6 border-t border-grey-200 py-6 md:grid-cols-[96px_280px_1fr]">
                   <span className="spec-value !text-blue-700">{t.year}</span>
                   <h3 className="type-h4 !text-[1.1rem]">{t.event}</h3>
-                  <p className="type-body col-span-2 !text-[0.9375rem] md:col-span-1">
+                  <p className="type-body col-span-2 !text-[1rem] md:col-span-1">
                     {t.detail}
                     {"pending" in t && t.pending ? (
                       <span className="micro-label ml-2 !text-grey-400">DATE TBC</span>
@@ -143,7 +143,7 @@ export default function CompanyPage() {
             <Reveal key={m.label}>
               <p className="spec-value !text-[2.25rem] !leading-none text-ink">{m.value}</p>
               <p className="micro-label micro-label--blue mt-3">{m.label}</p>
-              <p className="type-body mt-3 !text-[0.9375rem]">{m.body}</p>
+              <p className="type-body mt-3 !text-[1rem]">{m.body}</p>
             </Reveal>
           ))}
         </div>

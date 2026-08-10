@@ -64,7 +64,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-[0.9375rem] font-[480] transition-colors hover:text-ink ${
+                className={`text-base font-[480] transition-colors hover:text-ink ${
                   pathname.startsWith(item.href.split("#")[0])
                     ? "text-ink"
                     : "text-grey-700"

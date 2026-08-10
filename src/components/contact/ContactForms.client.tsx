@@ -70,7 +70,7 @@ export function ContactForms() {
             name="message"
             rows={5}
             required
-            className="rounded-[3px] border border-grey-300 bg-white px-4 py-3 text-[0.9375rem] text-ink"
+            className="rounded-[3px] border border-grey-300 bg-white px-4 py-3 text-base text-ink"
           />
         </Field>
       </fieldset>
@@ -122,7 +122,7 @@ function Field({
           name={name}
           type={type}
           required={required}
-          className="min-h-[44px] rounded-[3px] border border-grey-300 bg-white px-4 text-[0.9375rem] text-ink placeholder:text-grey-400"
+          className="min-h-[44px] rounded-[3px] border border-grey-300 bg-white px-4 text-base text-ink placeholder:text-grey-400"
         />
       )}
     </div>

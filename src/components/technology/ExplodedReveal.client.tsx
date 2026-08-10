@@ -447,7 +447,7 @@ export function ExplodedReveal({ variant = "full" }: { variant?: "full" | "media
               </span>
               {l.label}
             </p>
-            <p className="type-body mt-1 !text-[0.9375rem]">{l.note}</p>
+            <p className="type-body mt-1 !text-[1rem]">{l.note}</p>
           </li>
         ))}
       </ol>

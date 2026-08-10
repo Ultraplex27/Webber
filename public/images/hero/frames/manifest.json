@@ -1,6 +1,6 @@
 {
-  "count": 158,
+  "count": 180,
   "dir": "/images/hero/frames",
   "pattern": "frame-%04d.webp",
-  "source": "Webber_Hero_Final.mp4 (5.9s, 3840x2160 source downscaled to 1080p, extracted at native 30fps), then renumbered after pruning 19 blurry transition frames"
+  "source": "Webber Hero.mp4 (6.0s, native 1920x1080, extracted at native 30fps)"
 }

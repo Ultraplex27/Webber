@@ -133,7 +133,7 @@ body {
   background: var(--canvas);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
   line-height: 1.62;
   -webkit-font-smoothing: antialiased;
 }
@@ -186,27 +186,27 @@ body {
   color: var(--ink);
 }
 .type-lead {
-  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
   line-height: 1.48;
   font-weight: 400;
   color: var(--grey-700);
   max-width: 34em;
 }
 .type-body {
-  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
   line-height: 1.62;
   color: var(--grey-700);
   max-width: 40em;
 }
 .type-small {
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5;
   font-weight: 450;
   color: var(--grey-500);
 }
 .micro-label {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   line-height: 1.35;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -218,7 +218,7 @@ body {
 }
 .spec-value {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.4;
   font-weight: 500;
   color: var(--ink-soft);
@@ -254,7 +254,7 @@ body {
   min-height: 46px;
   padding: 10px 24px;
   border-radius: 12px;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: background-color 180ms var(--ease-ui-out), color 180ms var(--ease-ui-out),
     border-color 180ms var(--ease-ui-out), transform 120ms var(--ease-ui-out);
@@ -720,7 +720,7 @@ html[data-reduced-motion="true"] .marquee {
   background: rgba(237, 241, 246, 0.7);
   border-bottom: 1px solid var(--grey-200);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -740,7 +740,7 @@ html[data-reduced-motion="true"] .marquee {
 .spec-card th {
   width: 42%;
   font-weight: 400;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--grey-500);
 }
 .spec-card td {
@@ -752,7 +752,7 @@ html[data-reduced-motion="true"] .marquee {
   border: 1px solid var(--grey-300);
   border-radius: 3px;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.08em;
   color: var(--grey-400);
   white-space: nowrap;
@@ -762,7 +762,7 @@ html[data-reduced-motion="true"] .marquee {
 .spec-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 .spec-table th,
 .spec-table td {
@@ -773,7 +773,7 @@ html[data-reduced-motion="true"] .marquee {
 }
 .spec-table th {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 500;

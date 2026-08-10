@@ -31,7 +31,7 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
           <span className="type-small text-grey-400">{product.otherApplications}</span>
         </div>
-        <h3 className="type-h4 mt-3 leading-snug group-hover:text-blue-700">{product.name}</h3>
+        <h3 className="type-h4 mt-3 min-h-[3.9rem] leading-snug group-hover:text-blue-700">{product.name}</h3>
         <dl className="mt-5 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-grey-100 pt-5">
           <div><dt className="micro-label">Nominal voltage</dt><dd className="spec-value mt-1 text-ink">{product.nominalVoltage}</dd></div>
           <div><dt className="micro-label">Continuous current</dt><dd className="spec-value mt-1 text-ink">{product.continuousCurrent}</dd></div>
