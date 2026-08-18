@@ -31,6 +31,12 @@ export function Header() {
     };
   }, [open]);
 
+  // The homepage hero is a dark video; every other page opens on the light
+  // `.pencil-grid` background. While the header is still transparent (not
+  // scrolled, not open) over that dark hero, the dark-navy logo/nav text
+  // need to flip to a light treatment to stay visible.
+  const overDarkHero = pathname === "/" && !scrolled && !open;
+
   return (
     <>
       <header
@@ -53,7 +59,9 @@ export function Header() {
               alt="Webber Electro Corp"
               width={520}
               height={109}
-              className="h-9 w-auto transition-opacity duration-300"
+              className={`h-9 w-auto transition-all duration-300 ${
+                overDarkHero ? "brightness-0 invert" : ""
+              }`}
               priority
               data-hero-logo-target
             />
@@ -64,10 +72,18 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-base font-[480] transition-colors hover:text-ink ${
-                  pathname.startsWith(item.href.split("#")[0])
-                    ? "text-ink"
-                    : "text-grey-700"
+                className={`text-base font-[480] transition-colors ${
+                  overDarkHero
+                    ? `hover:text-white ${
+                        pathname.startsWith(item.href.split("#")[0])
+                          ? "text-white"
+                          : "text-white/70"
+                      }`
+                    : `hover:text-ink ${
+                        pathname.startsWith(item.href.split("#")[0])
+                          ? "text-ink"
+                          : "text-grey-700"
+                      }`
                 }`}
               >
                 {item.label}
@@ -88,14 +104,14 @@ export function Header() {
           >
             <span className="relative block h-3 w-6" aria-hidden="true">
               <span
-                className={`absolute left-0 top-0 h-px w-full bg-ink transition-transform duration-200 ${
-                  open ? "translate-y-[6px] rotate-45" : ""
-                }`}
+                className={`absolute left-0 top-0 h-px w-full transition-transform duration-200 ${
+                  overDarkHero ? "bg-white" : "bg-ink"
+                } ${open ? "translate-y-[6px] rotate-45" : ""}`}
               />
               <span
-                className={`absolute bottom-0 left-0 h-px w-full bg-ink transition-transform duration-200 ${
-                  open ? "-translate-y-[6px] -rotate-45" : ""
-                }`}
+                className={`absolute bottom-0 left-0 h-px w-full transition-transform duration-200 ${
+                  overDarkHero ? "bg-white" : "bg-ink"
+                } ${open ? "-translate-y-[6px] -rotate-45" : ""}`}
               />
             </span>
           </button>

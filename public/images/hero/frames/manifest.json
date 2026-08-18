@@ -1,6 +1,6 @@
 {
-  "count": 180,
+  "count": 167,
   "dir": "/images/hero/frames",
   "pattern": "frame-%04d.webp",
-  "source": "Webber Hero.mp4 (6.0s, native 1920x1080, extracted at native 30fps)"
+  "source": "Webber Hero.mp4, re-cut Aug 17 (5.57s, native 1920x1080, extracted at native 30fps)"
 }
