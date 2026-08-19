@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 
 const HOLD_MS = 3000;
@@ -8,30 +9,28 @@ const HOLD_MS = 3000;
  * Pillar call-outs cross-fade in sync with the hero video's three acts — a
  * BMS board install, a 2W/3W street ride, then a fleet + BESS yard — instead
  * of being tied to scroll position like the old canvas-scrubbed hero. Each
- * `time` is that act's rough midpoint in the ~5.6s clip (confirmed by eye
+ * `time` is that act's rough midpoint in the ~4.9s clip (confirmed by eye
  * against the extracted frames); whichever pillar's `time` the video is
  * currently closest to is shown, so the copy just tracks playback. The last
- * pillar holds through the post-loop pause.
+ * beat is the brand moment (logo + tagline) and holds through the post-loop
+ * pause, so it has no label/accent split like the other two.
  */
 const PILLARS = [
   {
     time: 1.0,
+    kind: "pillar" as const,
     label: "ENGINEERING THAT SCALES",
     accent: "From mobility electronics",
     heading: "to a connected grid stack.",
   },
   {
     time: 3.0,
+    kind: "pillar" as const,
     label: "TWO-WHEELERS & THREE-WHEELERS",
     accent: "75K+ BMS units riding",
     heading: "today, 12V–96V.",
   },
-  {
-    time: 4.8,
-    label: "ENERGY STORAGE SYSTEMS",
-    accent: "Isolated CAN monitoring,",
-    heading: "sized for the grid.",
-  },
+  { time: 4.5, kind: "brand" as const },
 ] as const;
 
 /**
@@ -69,7 +68,7 @@ export function HeroShell() {
         autoPlay
         muted
         playsInline
-        poster="/images/hero/frames/frame-0167.webp"
+        poster="/images/hero/frames/frame-0147.webp"
         aria-hidden="true"
         onTimeUpdate={trackTime}
         onEnded={() => {
@@ -91,18 +90,35 @@ export function HeroShell() {
       />
 
       <div className="wrap relative z-10">
-        <div className="relative min-h-[168px] max-w-[460px]" aria-hidden="true">
+        <div className="relative min-h-[220px] max-w-[460px]" aria-hidden="true">
           {PILLARS.map((pillar, i) => (
             <div
-              key={pillar.label}
+              key={pillar.kind === "pillar" ? pillar.label : "brand"}
               className={`absolute inset-0 transition-all duration-700 ease-out motion-reduce:transition-none ${
                 activePillar === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
-              <p className="micro-label !text-white/60 mb-3">{pillar.label}</p>
-              <p className="font-display font-bold tracking-tight text-white text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12]">
-                <span className="text-spindle">{pillar.accent}</span> {pillar.heading}
-              </p>
+              {pillar.kind === "brand" ? (
+                <div className="flex flex-col items-start gap-5">
+                  <Image
+                    src="/logos/webber-masthead.png"
+                    alt="Webber Electro Corp"
+                    width={520}
+                    height={109}
+                    className="h-12 w-auto brightness-0 invert sm:h-14"
+                  />
+                  <p className="font-display font-bold tracking-tight text-white text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12]">
+                    Rewiring the Planet.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="micro-label !text-white/60 mb-3">{pillar.label}</p>
+                  <p className="font-display font-bold tracking-tight text-white text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12]">
+                    <span className="text-spindle">{pillar.accent}</span> {pillar.heading}
+                  </p>
+                </>
+              )}
             </div>
           ))}
         </div>
