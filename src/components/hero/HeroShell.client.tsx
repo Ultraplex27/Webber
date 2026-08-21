@@ -6,14 +6,16 @@ import { useRef, useState } from "react";
 const HOLD_MS = 3000;
 
 /**
- * Pillar call-outs cross-fade in sync with the hero video's three acts — a
- * BMS board install, a 2W/3W street ride, then a fleet + BESS yard — instead
- * of being tied to scroll position like the old canvas-scrubbed hero. Each
- * `time` is that act's rough midpoint in the ~4.9s clip (confirmed by eye
- * against the extracted frames); whichever pillar's `time` the video is
- * currently closest to is shown, so the copy just tracks playback. The last
- * beat is the brand moment (logo + tagline) and holds through the post-loop
- * pause, so it has no label/accent split like the other two.
+ * Pillar call-outs cross-fade in sync with the hero video's acts — a BMS
+ * board install, a 2W/3W street ride, then a fleet showroom shot that
+ * dissolves into a white blueprint line-art finale — instead of being tied
+ * to scroll position like the old canvas-scrubbed hero. Each `time` is that
+ * act's rough midpoint in the ~7.2s clip (confirmed by eye against the
+ * extracted frames); whichever pillar's `time` the video is currently
+ * closest to is shown, so the copy just tracks playback. The last beat is
+ * the brand moment (logo + tagline), timed to land as the blueprint finale
+ * resolves, and holds through the post-loop pause — so it has no
+ * label/accent split like the other two.
  */
 const PILLARS = [
   {
@@ -24,13 +26,13 @@ const PILLARS = [
     heading: "to a connected grid stack.",
   },
   {
-    time: 3.0,
+    time: 3.2,
     kind: "pillar" as const,
     label: "TWO-WHEELERS & THREE-WHEELERS",
     accent: "75K+ BMS units riding",
     heading: "today, 12V–96V.",
   },
-  { time: 4.5, kind: "brand" as const },
+  { time: 6.0, kind: "brand" as const },
 ] as const;
 
 /**
@@ -68,7 +70,7 @@ export function HeroShell() {
         autoPlay
         muted
         playsInline
-        poster="/images/hero/frames/frame-0147.webp"
+        poster="/images/hero/frames/frame-0215.webp"
         aria-hidden="true"
         onTimeUpdate={trackTime}
         onEnded={() => {
