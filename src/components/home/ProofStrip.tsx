@@ -4,7 +4,7 @@ import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 const metrics = [
   { value: 100, suffix: "K+", label: "BMS deployments" },
   { text: "12V–1200V", label: "System range" },
-  { value: 75, suffix: "+", label: "Engineers and operators" },
+  { value: 75, suffix: "+", label: "Team" },
   { text: "AIS 156 PH-2", label: "Certified BMS variants" },
 ] as const;
 
