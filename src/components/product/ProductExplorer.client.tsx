@@ -106,10 +106,10 @@ export function ProductExplorer() {
           {(
             [
               ["all", "All"],
-              ["12-24", "12/24V"],
+              ["12-24", "12V/24V"],
               ["48", "48V"],
-              ["96-102", "96/102V"],
-              ["120-500", "120–500V"],
+              ["96-102", "96V/102V"],
+              ["120-500", "120V–500V"],
             ] as [BessSub, string][]
           ).map(([value, label]) => (
             <button
@@ -125,14 +125,18 @@ export function ProductExplorer() {
         </div>
       )}
 
-      <p className="micro-label mt-5" aria-live="polite">{visibleProducts.length} BMS PRODUCTS</p>
-      <ul className="gap-module mt-6 grid sm:grid-cols-2 xl:grid-cols-3">
-        {visibleProducts.map((product, index) => (
-          <Reveal as="li" key={product.slug} at={0.88} delayMs={(index % 3) * 50}>
-            <ProductCard product={product} />
-          </Reveal>
-        ))}
-      </ul>
+      <p className="micro-label mt-5" aria-live="polite">
+        {visibleProducts.length === 0 ? "COMING SOON" : `${visibleProducts.length} BMS PRODUCTS`}
+      </p>
+      {visibleProducts.length > 0 && (
+        <ul className="gap-module mt-6 grid sm:grid-cols-2 xl:grid-cols-3">
+          {visibleProducts.map((product, index) => (
+            <Reveal as="li" key={product.slug} at={0.88} delayMs={(index % 3) * 50}>
+              <ProductCard product={product} />
+            </Reveal>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
