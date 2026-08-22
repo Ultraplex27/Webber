@@ -23,7 +23,6 @@ const columns = [
     heading: "Company",
     links: [
       { href: "/company", label: "About" },
-      { href: "/company#leadership", label: "Leadership" },
     ],
   },
   {
@@ -31,7 +30,6 @@ const columns = [
     links: [
       { href: "/contact", label: "Talk to engineering" },
       { href: `mailto:${contact.email}`, label: contact.email },
-      { href: "/privacy", label: "Privacy" },
     ],
   },
 ];

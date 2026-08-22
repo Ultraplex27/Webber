@@ -5,6 +5,14 @@ import { contact } from "@/content/company";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+const APPLICATION_OPTIONS = ["2 Wheeler", "3 Wheeler", "ESS", "Forklifts", "Telecom", "Others"];
+const VOLTAGE_OPTIONS = [
+  "12V", "24V", "48V", "60V", "72V", "96V", "102V", "120V",
+  "150V–180V", "250V–300V", "350V–450V", "450V–500V",
+];
+const CURRENT_OPTIONS = ["30A", "45A", "60A", "80A", "125A", "150A", "200A", "250A", "300A", "500A"];
+const CHEMISTRY_OPTIONS = ["NMC", "LFP"];
+
 /**
  * Submits directly to FormSubmit (https://formsubmit.co) — no backend of our
  * own, no API keys. The destination inbox (`contact.email`) must click the
@@ -64,6 +72,14 @@ export function ContactForms() {
         <Field label="NAME" name="name" required />
         <Field label="EMAIL" name="email" type="email" required />
         <Field label="PHONE NUMBER" name="phone" type="tel" />
+        <div className="grid grid-cols-2 gap-6">
+          <SelectField label="APPLICATION" name="application" options={APPLICATION_OPTIONS} />
+          <SelectField label="NOMINAL VOLTAGE" name="nominal_voltage" options={VOLTAGE_OPTIONS} />
+        </div>
+        <div className="grid grid-cols-2 gap-6">
+          <SelectField label="NOMINAL CURRENT" name="nominal_current" options={CURRENT_OPTIONS} />
+          <SelectField label="CELL CHEMISTRY" name="cell_chemistry" options={CHEMISTRY_OPTIONS} />
+        </div>
         <Field label="MESSAGE" name="message" required>
           <textarea
             id="f-message"
@@ -125,6 +141,40 @@ function Field({
           className="min-h-[44px] rounded-[3px] border border-grey-300 bg-white px-4 text-base text-ink placeholder:text-grey-400"
         />
       )}
+    </div>
+  );
+}
+
+function SelectField({
+  label,
+  name,
+  options,
+}: {
+  label: string;
+  name: string;
+  options: string[];
+}) {
+  const id = `f-${name}`;
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="micro-label !text-ink-soft">
+        {label}
+      </label>
+      <select
+        id={id}
+        name={name}
+        defaultValue=""
+        className="min-h-[44px] rounded-[3px] border border-grey-300 bg-white px-4 text-base text-ink"
+      >
+        <option value="" disabled>
+          Select…
+        </option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

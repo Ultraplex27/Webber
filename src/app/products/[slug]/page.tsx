@@ -86,9 +86,6 @@ export default async function ProductDetailPage({
                 <Link href="/contact" className="btn btn-primary">
                   Request datasheet
                 </Link>
-                <Link href="/contact" className="btn btn-secondary">
-                  Integration enquiry
-                </Link>
               </div>
             </div>
             <ProductGallery name={product.name} images={product.images} />

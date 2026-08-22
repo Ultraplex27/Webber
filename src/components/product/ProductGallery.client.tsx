@@ -20,9 +20,9 @@ export function ProductGallery({ name, images }: { name: string; images: string[
         />
       </div>
       {images.length > 1 && (
-        <ul className="mt-4 flex flex-wrap gap-3" aria-label="Product views">
+        <ul className="mt-4 flex flex-nowrap gap-3 overflow-x-auto pb-1" aria-label="Product views">
           {images.map((src, i) => (
-            <li key={src}>
+            <li key={src} className="shrink-0">
               <button
                 type="button"
                 onClick={() => setActive(i)}

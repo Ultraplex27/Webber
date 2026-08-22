@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Roboto, IBM_Plex_Mono } from "next/font/google";
+import { Space_Grotesk, Roboto } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion/MotionProvider.client";
 import { Header } from "@/components/ui/Header";
@@ -17,12 +17,6 @@ const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
-});
-
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -52,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${roboto.variable} ${plexMono.variable}`}
+      className={`${spaceGrotesk.variable} ${roboto.variable}`}
     >
       <body suppressHydrationWarning>
         <MotionProvider>

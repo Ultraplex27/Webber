@@ -57,10 +57,11 @@ checking that file first — it's the source of truth, not this summary.
   component** — add or reuse a token so brand changes cascade from one place.
 - Primary heading font is **Space Grotesk** (`--font-display`), a free stand-in
   for Aguda Black — the brand's actual primary typeface, a paid Graviton font
-  not available as a webfont. Body copy is **Roboto** (`--font-sans`). IBM Plex
-  Mono remains for technical/spec micro-labels (`--font-mono`), predating the
-  brand pass. Don't swap these without re-reading the licensing note in
-  `BRAND_GUIDELINES.md`.
+  not available as a webfont. Body copy is **Roboto** (`--font-sans`). The
+  guideline specifies only these two typefaces, so technical/spec
+  micro-labels also alias to Roboto via `--font-mono` (a third face, IBM Plex
+  Mono, was removed for this reason). Don't swap these without re-reading the
+  licensing note in `BRAND_GUIDELINES.md`.
 - `.btn-primary` / `.btn-secondary` active/hover/click/disabled colors are
   sampled directly from the guideline's button artwork — don't restyle button
   states from first principles, match the table in `BRAND_GUIDELINES.md`.

@@ -14,7 +14,7 @@ import { customerLogos, partners } from "@/content/company";
 export const metadata: Metadata = {
   title: "Webber Electrocorp",
   description:
-    "One control layer, mobility to grid. BMS from 12V to 1200V, 75K+ deployments, engineered in India for electric mobility and energy storage worldwide.",
+    "One control layer, mobility to grid. BMS from 12V to 1200V, 100K+ deployments, engineered in India for electric mobility and energy storage worldwide.",
 };
 
 const partnerLogoItems = partners.flatMap((group) =>

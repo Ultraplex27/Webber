@@ -47,7 +47,7 @@ export function FirstPrinciples() {
   return (
     <div ref={wrapRef} className="relative mt-16" style={{ height: "220vh" }}>
       <div className="sticky top-16 grid min-h-[80vh] grid-cols-2 items-center gap-16">
-        <BoardDiagram active={active} progress={progress} />
+        <DialDiagram active={active} progress={progress} />
         <div className="relative">
           {differentiators.map((d, i) => (
             <div
@@ -81,94 +81,143 @@ function DiffPanel({
 }) {
   return (
     <article className={`card p-8 ${active ? "border-blue-200" : ""}`}>
-      <p className="micro-label micro-label--blue">
+      {/* Index/label line stays the small tracked micro-label; the Problem/
+          Approach/Advantage labels below match the body copy's own font,
+          size and case, just bold, instead of the shouting all-caps
+          mono/tracking treatment — headline stays display, so the card
+          reads as two fonts, not three. */}
+      <p className="micro-label micro-label--blue !font-sans">
         0{index + 1} / {d.label}
       </p>
       <h3 className="type-h4 mt-4">{d.headline}</h3>
       <dl className="mt-6 space-y-4">
         <div>
-          <dt className="micro-label">THE PROBLEM</dt>
+          <dt className="type-body font-bold">The problem</dt>
           <dd className="type-body mt-1">{d.problem}</dd>
         </div>
         <div>
-          <dt className="micro-label">THE APPROACH</dt>
+          <dt className="type-body font-bold">The approach</dt>
           <dd className="type-body mt-1">{d.approach}</dd>
         </div>
         <div>
-          <dt className="micro-label">THE SYSTEM ADVANTAGE</dt>
+          <dt className="type-body font-bold">The system advantage</dt>
           <dd className="type-body mt-1">{d.advantage}</dd>
         </div>
       </dl>
-      <p className="spec-value mt-6 border-t border-grey-200 pt-4">{d.ipStatus}</p>
     </article>
   );
 }
 
-/** Abstract board cross-section; the active zone lights up. */
-function BoardDiagram({ active, progress }: { active: number; progress: number }) {
+const STOP_ANGLES = [-135, -67.5, 0, 67.5, 135];
+const SWEEP_START = STOP_ANGLES[0];
+const SWEEP_END = STOP_ANGLES[STOP_ANGLES.length - 1];
+const TICK_COUNT = 37; // spaced so every 9th tick lands exactly on a stop (270/36 * 9 = 67.5)
+const DIAL_CX = 290;
+const DIAL_CY = 180;
+const R_BEZEL = 75;
+const R_FACE = 64;
+const R_POINTER = 52;
+const R_TICK_IN = 86;
+const R_TICK_OUT = 96;
+const R_TICK_OUT_MAJOR = 106;
+const R_ICONS = 150;
+
+/** Point at `angleDeg` (0 = up, clockwise-positive) and radius `r` from the dial center. */
+function polar(angleDeg: number, r: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: DIAL_CX + r * Math.sin(rad), y: DIAL_CY - r * Math.cos(rad) };
+}
+
+/**
+ * Rotary knob styled like a physical instrument dial: a dense tick ring
+ * fills continuously with scroll `progress` (a level-meter reading of how
+ * far through the section you are), while a single pointer sits on the
+ * knob face and steps to each of the 5 stops as `active` changes — the
+ * same prop that drives which label glows, so the pointer and the glowing
+ * label can never disagree (the previous version interpolated the pointer
+ * toward the *next* stop for a fraction's worth of scroll while the
+ * *current* stop was still the one glowing, which read as a visual bug).
+ * The step itself animates via a CSS transition on the pointer's rotation,
+ * not manual angle interpolation, so it still turns smoothly.
+ */
+function DialDiagram({ active, progress }: { active: number; progress: number }) {
   const iconNames: TechnicalIconName[] = ["parallel", "charge", "balance", "thermal", "isolation"];
   const labels = ["PARALLEL", "CHARGE", "BALANCE", "METAL CORE", "ISOLATION"];
-  const zones = [
-    { x: 30, y: 150, w: 110, h: 70 },
-    { x: 170, y: 60, w: 120, h: 70 },
-    { x: 320, y: 150, w: 110, h: 70 },
-    { x: 170, y: 240, w: 120, h: 60 },
-    { x: 460, y: 130, w: 80, h: 110 },
-  ];
+  const pointerAngle = STOP_ANGLES[active];
+  const fillAngle = SWEEP_START + Math.min(1, Math.max(0, progress)) * (SWEEP_END - SWEEP_START);
+
   return (
-    <div className="relative overflow-hidden rounded-[8px] border border-blue-200 bg-[linear-gradient(135deg,#215090_0%,#0F253F_100%)] p-[1px] shadow-[0_20px_50px_rgba(15,37,63,0.16)]">
-      <div className="absolute inset-x-0 top-0 h-px bg-white/55" />
-      <svg viewBox="0 0 580 360" className="relative block w-full" aria-hidden="true">
+    <svg viewBox="0 0 580 360" className="block w-full" aria-hidden="true">
       <defs>
-        <linearGradient id="board-active" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="knob-bezel" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#215090" />
           <stop offset="100%" stopColor="#0F253F" />
         </linearGradient>
+        <radialGradient id="knob-face" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stopColor="#2c5a94" />
+          <stop offset="100%" stopColor="#0F253F" />
+        </radialGradient>
         <filter id="board-glow" x="-80%" y="-80%" width="260%" height="260%">
           <feGaussianBlur stdDeviation="4" />
         </filter>
       </defs>
-      <rect x="10" y="30" width="560" height="300" rx="6" fill="rgba(255,255,255,.94)" stroke="rgba(179,205,235,.78)" />
-      <rect x="30" y="43" width={Math.max(0, 520 * progress)} height="2" rx="1" fill="url(#board-active)" style={{ transition: "width 160ms linear" }} />
-      {/* connective traces */}
-      <g stroke="var(--grey-300)" fill="none" strokeWidth="1">
-        <path d="M140 185 H 170" />
-        <path d="M230 130 V 150" />
-        <path d="M290 185 H 320" />
-        <path d="M230 220 V 240" />
-        <path d="M430 185 H 460" />
-      </g>
-      {zones.map((z, i) => (
-        <g key={i} style={{ opacity: active === i ? 1 : 0.64, transformOrigin: `${z.x + z.w / 2}px ${z.y + z.h / 2}px`, transform: active === i ? "scale(1.2)" : "scale(.94)", transition: "opacity 420ms var(--ease-ui-out), transform 420ms var(--ease-ui-out)" }}>
-          {active === i && <rect x={z.x - 5} y={z.y - 5} width={z.w + 10} height={z.h + 10} rx="6" fill="var(--blue-500)" opacity=".28" filter="url(#board-glow)" />}
-          <rect
-            x={z.x}
-            y={z.y}
-            width={z.w}
-            height={z.h}
-            rx="3"
-            fill={active === i ? "url(#board-active)" : "var(--canvas)"}
-            stroke={active === i ? "#215090" : "var(--grey-300)"}
-            style={{ transition: "all 400ms var(--ease-ui-out)" }}
+      {/* tick ring: dense minor ticks, every 9th is a longer "stop" tick; fills as progress advances */}
+      {Array.from({ length: TICK_COUNT }, (_, i) => {
+        const angle = SWEEP_START + (i / (TICK_COUNT - 1)) * (SWEEP_END - SWEEP_START);
+        const major = i % 9 === 0;
+        const filled = angle <= fillAngle + 0.01;
+        const inner = polar(angle, R_TICK_IN);
+        const outer = polar(angle, major ? R_TICK_OUT_MAJOR : R_TICK_OUT);
+        return (
+          <line
+            key={i}
+            x1={inner.x}
+            y1={inner.y}
+            x2={outer.x}
+            y2={outer.y}
+            stroke={filled ? "#215090" : "var(--grey-300)"}
+            strokeWidth={major ? 2 : 1}
+            strokeLinecap="round"
+            style={{ transition: "stroke 200ms linear" }}
           />
-          <foreignObject x={z.x + z.w / 2 - 17} y={z.y + 10} width="34" height="34">
-            <div
-              className="flex h-full w-full items-center justify-center"
-              style={{ color: active === i ? "#ffffff" : "var(--grey-500)", transition: "color 400ms var(--ease-ui-out)" }}
+        );
+      })}
+
+      {/* knob body: dark bezel + lit face, the only "boxed" surface left */}
+      <circle cx={DIAL_CX} cy={DIAL_CY} r={R_BEZEL} fill="url(#knob-bezel)" />
+      <circle cx={DIAL_CX} cy={DIAL_CY} r={R_FACE} fill="url(#knob-face)" stroke="rgba(255,255,255,.18)" />
+
+      {/* pointer: steps to the active stop, smoothly animated by CSS transition */}
+      <g style={{ transformOrigin: `${DIAL_CX}px ${DIAL_CY}px`, transform: `rotate(${pointerAngle}deg)`, transition: "transform 550ms var(--ease-ui-out)" }}>
+        <circle cx={DIAL_CX} cy={DIAL_CY - R_POINTER} r="9" fill="var(--blue-500)" opacity=".45" filter="url(#board-glow)" />
+        <path d={`M ${DIAL_CX} ${DIAL_CY - R_POINTER - 8} l 8 13 h -16 Z`} fill="#ffffff" />
+      </g>
+
+      {/* five stops: icon + label, fixed positions around the dial */}
+      {STOP_ANGLES.map((angle, i) => {
+        const iconPt = polar(angle, R_ICONS);
+        const isActive = active === i;
+        return (
+          <g key={i}>
+            <foreignObject x={iconPt.x - 22} y={iconPt.y - 22} width="44" height="44">
+              <div
+                className="flex h-full w-full items-center justify-center"
+                style={{ color: isActive ? "#215090" : "var(--grey-500)", transition: "color 400ms var(--ease-ui-out)" }}
+              >
+                <TechnicalIcon name={iconNames[i]} className="h-9 w-9" />
+              </div>
+            </foreignObject>
+            <text
+              x={iconPt.x}
+              y={iconPt.y + 38}
+              textAnchor="middle"
+              style={{ font: `${isActive ? 600 : 500} 10px var(--font-sans)`, letterSpacing: "0.08em", fill: isActive ? "#215090" : "var(--grey-500)", transition: "fill 400ms var(--ease-ui-out)" }}
             >
-              <TechnicalIcon name={iconNames[i]} className="h-7 w-7" />
-            </div>
-          </foreignObject>
-          <text x={z.x + z.w / 2} y={z.y + z.h - 12} textAnchor="middle" style={{ font: "500 8px var(--font-mono)", letterSpacing: "0.08em", fill: active === i ? "#ffffff" : "var(--grey-500)", transition: "fill 400ms var(--ease-ui-out)" }}>
-            {labels[i]}
-          </text>
-        </g>
-      ))}
-      </svg>
-      <div className="flex items-center justify-between border-t border-white/20 px-4 py-2 text-[9px] font-medium tracking-[.12em] text-white/80">
-        <span>WEBBER ENERGY ARCHITECTURE</span>
-        <span>0{active + 1} / 05</span>
-      </div>
-    </div>
+              {labels[i]}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
   );
 }

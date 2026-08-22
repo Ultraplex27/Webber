@@ -55,14 +55,16 @@ site inherits the brand palette without touching each component file.
   substitute with a similar modular/display character.
 - **Secondary typeface (body/UI): Roboto, Regular.** Loaded via
   `next/font/google`.
-- IBM Plex Mono is retained (outside the guideline's scope) for the site's
-  existing technical/spec micro-labels — that pattern predates this brand
-  pass and isn't contradicted by it.
+- The guideline specifies exactly these two typefaces — no third face.
+  Technical/spec micro-labels (`.micro-label`, `.spec-value`, `.spec-tbc`,
+  spec table headers) previously used IBM Plex Mono; they now use Roboto
+  via `--font-mono`, keeping the uppercase + letter-spacing treatment for a
+  technical feel without introducing a third font family.
 
 **Implementation:** `src/app/layout.tsx` (font loaders: `Space_Grotesk`,
-`Roboto`, `IBM_Plex_Mono`), `src/app/globals.css` (`--font-heading`,
-`--font-sans`, `--font-mono`, and the `.type-*` scale set to the heading
-font at heavier weights).
+`Roboto`), `src/app/globals.css` (`--font-heading`, `--font-sans`,
+`--font-mono` — aliased to Roboto — and the `.type-*` scale set to the
+heading font at heavier weights).
 
 ## Buttons
 

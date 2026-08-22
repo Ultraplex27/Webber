@@ -19,13 +19,6 @@ export const metadata: Metadata = {
   openGraph: { images: ["/og/og-technology.png"] },
 };
 
-const patentLedger = [
-  { tech: "Metal-core PCB architecture", status: "Patented", note: "Patent number to be published after legal confirmation" },
-  { tech: "Battery paralleling without CAN dependency", status: "Status under confirmation", note: "Published as proprietary architecture until filing status is confirmed" },
-  { tech: "Enhanced charging algorithm", status: "Status under confirmation", note: "Published as proprietary algorithm until filing status is confirmed" },
-  { tech: "Balancing algorithms", status: "Trade secret / proprietary", note: "" },
-];
-
 const labShots = [
   { file: "thermal-testing.webp", label: "Thermal testing" },
   { file: "dead-short-testing.webp", label: "Dead-short testing" },
@@ -141,43 +134,9 @@ export default function TechnologyPage() {
         </div>
       </section>
 
-      {/* Patent ledger */}
-      <section className="section--tight relative border-t border-grey-200">
-        <BlueprintMeasure label="03 / IP LEDGER" />
-        <div className="wrap">
-          <Reveal>
-            <SectionIntro
-              label="INTELLECTUAL PROPERTY"
-              title="Patent ledger."
-              lead="Precise legal states only. No technology is presented as 'patentable'. All statuses pending legal confirmation before publication."
-            />
-          </Reveal>
-          <div className="mt-12 overflow-x-auto">
-            <table className="spec-table min-w-[640px]">
-              <thead>
-                <tr>
-                  <th scope="col">Technology</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Note</th>
-                </tr>
-              </thead>
-              <tbody>
-                {patentLedger.map((row) => (
-                  <tr key={row.tech}>
-                    <td className="text-ink-soft">{row.tech}</td>
-                    <td className="spec-value">{row.status}</td>
-                    <td className="type-small">{row.note}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
       {/* Certification */}
       <section id="certification" className="section relative bg-canvas-soft/70">
-        <BlueprintMeasure label="04 / COMPLIANCE" />
+        <BlueprintMeasure label="03 / COMPLIANCE" />
         <div className="wrap grid gap-16 lg:grid-cols-2">
           <Reveal>
             <SectionIntro
@@ -201,8 +160,8 @@ export default function TechnologyPage() {
                 {[
                   ["Applicable variants", "WBMS-SW 16S / 24S (certified configuration)"],
                   ["Functional scope", "µSD card and buzzer integration per AIS 156 PH-2"],
-                  ["Test laboratory", "To be published"],
-                  ["Certificate reference", "To be published"],
+                  ["Test laboratory", "—"],
+                  ["Certificate reference", "—"],
                 ].map(([k, v]) => (
                   <div key={k} className="flex flex-col gap-1 border-b border-grey-100 pb-3 sm:flex-row sm:justify-between">
                     <dt className="micro-label">{k}</dt>
@@ -210,11 +169,6 @@ export default function TechnologyPage() {
                   </div>
                 ))}
               </dl>
-              <p className="type-small mt-6 text-grey-400">
-                Certification applies to tested configurations only. Individual products do not
-                inherit certification from other tested configurations. Confirm applicability per
-                variant with our applications team.
-              </p>
             </div>
           </Reveal>
         </div>
@@ -222,7 +176,7 @@ export default function TechnologyPage() {
 
       {/* Validation and testing */}
       <section id="validation" className="section relative">
-        <BlueprintMeasure label="05 / VALIDATION" />
+        <BlueprintMeasure label="04 / VALIDATION" />
         <div className="wrap">
           <Reveal>
             <SectionIntro
@@ -234,7 +188,7 @@ export default function TechnologyPage() {
                   Proven in the field.
                 </>
               }
-              lead="Every design passes through thermal, abuse, vibration and environmental testing, hardware-in-loop validation, production end-of-line testing, and 75K+ systems of field data feed back into the next revision."
+              lead="Every design passes through thermal, abuse, vibration and environmental testing, hardware-in-loop validation, production end-of-line testing, and 100K+ systems of field data feed back into the next revision."
             />
           </Reveal>
           <ul className="gap-module mt-14 grid sm:grid-cols-2 lg:grid-cols-3">
@@ -257,7 +211,7 @@ export default function TechnologyPage() {
 
       {/* Software and data layer */}
       <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
-        <BlueprintMeasure label="06 / SOFTWARE" />
+        <BlueprintMeasure label="05 / SOFTWARE" />
         <div className="wrap">
           <Reveal>
             <SectionIntro
@@ -280,7 +234,7 @@ export default function TechnologyPage() {
         body="Voltage. Current. Packaging. Thermal constraints. Communication. Certification. Deployment volume."
         ctaLabel="Speak with the engineering team"
         ctaHref="/contact"
-        measure="07 / ENGAGE"
+        measure="06 / ENGAGE"
       />
     </div>
   );

@@ -7,7 +7,6 @@ export interface Differentiator {
   advantage: string;
   /** legal status: never publish "patentable" as a right */
   ipStatus: string;
-  ipPending?: boolean;
 }
 
 export const differentiators: Differentiator[] = [
@@ -19,8 +18,7 @@ export const differentiators: Differentiator[] = [
     approach:
       "A proprietary paralleling architecture that does not depend on inter-pack CAN communication.",
     advantage: "Simpler swapping architecture and uninterrupted power delivery.",
-    ipStatus: "Proprietary architecture, patent status to be confirmed",
-    ipPending: true,
+    ipStatus: "Proprietary architecture",
   },
   {
     id: "charging",
@@ -30,8 +28,7 @@ export const differentiators: Differentiator[] = [
     approach:
       "Enhanced charging algorithms with charging-profile control and balancing interventions during charge.",
     advantage: "Enhanced usable capacity: the pack actually reaches full charge.",
-    ipStatus: "Proprietary algorithm, patent status to be confirmed",
-    ipPending: true,
+    ipStatus: "Proprietary algorithm",
   },
   {
     id: "balancing",

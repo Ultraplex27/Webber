@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { partners, team, timeline } from "@/content/company";
+import { partners, timeline } from "@/content/company";
 import { Recognition } from "@/components/home/Recognition";
 import { SmartImage } from "@/components/ui/SmartImage.client";
 import { Logo } from "@/components/ui/LogoRail";
@@ -23,7 +22,7 @@ const scaleMetrics = [
     body: "Hardware, software, product, integration and operations.",
   },
   {
-    value: <CountUp value={75} suffix="K+" />,
+    value: <CountUp value={100} suffix="K+" />,
     label: "DEPLOYMENTS",
     body: "Across two-wheelers, three-wheelers, ESS and drones.",
   },
@@ -94,9 +93,6 @@ export default function CompanyPage() {
               “We started with a simple conviction: battery intelligence must be
               designed around the realities of the machine it protects.”
             </blockquote>
-            <p className="type-small mt-4 text-grey-400">
-              Draft statement, pending founder approval before publication.
-            </p>
             <p className="spec-value mt-6">
               MANUJ AGRAWAL / FOUNDER &amp; CEO
             </p>
@@ -124,9 +120,6 @@ export default function CompanyPage() {
                   <h3 className="type-h4 !text-[1.1rem]">{t.event}</h3>
                   <p className="type-body col-span-2 !text-[1rem] md:col-span-1">
                     {t.detail}
-                    {"pending" in t && t.pending ? (
-                      <span className="micro-label ml-2 !text-grey-400">DATE TBC</span>
-                    ) : null}
                   </p>
                 </div>
               </Reveal>
@@ -149,46 +142,9 @@ export default function CompanyPage() {
         </div>
       </section>
 
-      {/* Leadership grid */}
-      <section
-        id="leadership"
-        className="section relative border-t border-grey-200 bg-canvas-soft/70"
-      >
-        <BlueprintMeasure label="04 / LEADERSHIP" />
-        <div className="wrap">
-          <Reveal>
-            <SectionIntro label="LEADERSHIP" title="Role relevance, not long biographies." />
-          </Reveal>
-          <ul className="gap-module mt-12 grid sm:grid-cols-2 lg:grid-cols-3">
-            {team.map((member, i) => (
-              <Reveal
-                as="li"
-                key={member.slug}
-                delayMs={(i % 3) * 50}
-                className="card flex gap-4 p-5"
-              >
-                <Image
-                  src={`/images/company/leadership/${member.slug}.webp`}
-                  alt={`${member.name}, ${member.role}`}
-                  width={160}
-                  height={200}
-                  className="h-28 w-24 shrink-0 rounded-[4px] border border-grey-200 object-cover object-top"
-                />
-                <div>
-                  <h3 className="type-h4 !text-[1.15rem]">{member.name}</h3>
-                  <p className="micro-label micro-label--blue mt-1">{member.role}</p>
-                  <p className="type-small mt-3">{member.credentials}</p>
-                  <p className="type-small mt-1 text-grey-700">{member.focus}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* The wider team mosaic */}
       <section className="section relative">
-        <BlueprintMeasure label="05 / THE WIDER TEAM" />
+        <BlueprintMeasure label="04 / THE WIDER TEAM" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="THE WIDER TEAM" title="Documentary, not stock." />
@@ -215,7 +171,7 @@ export default function CompanyPage() {
 
       {/* Partner ecosystem */}
       <section className="section--tight relative border-t border-grey-200 bg-canvas-soft/70">
-        <BlueprintMeasure label="06 / ECOSYSTEM" />
+        <BlueprintMeasure label="05 / ECOSYSTEM" />
         <div className="wrap">
           <Reveal>
             <SectionIntro label="ECOSYSTEM" title="Partners, organised by role." />
@@ -239,7 +195,7 @@ export default function CompanyPage() {
                         {p.names.map((name, i) => (
                           <li key={name} className="flex flex-col items-center gap-2">
                             <span className="logo-card logo-card--sm">
-                              <Logo name={name} logo={p.logos[i]} />
+                              <Logo name={name} logo={p.logos[i]} size="sm" />
                             </span>
                             <span className="micro-label text-center">{name}</span>
                           </li>
@@ -254,7 +210,7 @@ export default function CompanyPage() {
         </div>
       </section>
 
-      <Recognition heading="AWARDS" measure="07 / AWARDS" />
+      <Recognition heading="AWARDS" measure="06 / AWARDS" />
     </div>
   );
 }

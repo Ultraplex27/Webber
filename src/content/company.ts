@@ -83,9 +83,9 @@ export const partners = [
 ] as const;
 
 export const customerLogos = [
-  { name: "Greaves Electric Mobility", logo: "/logos/customers/greaves-electric-mobility.png" },
+  { name: "Greaves Electric Mobility", logo: "/logos/customers/greaves-electric-mobility.png", scale: 1.3 },
   { name: "Kinetic Green", logo: "/logos/customers/kinetic-green.png" },
-  { name: "EKA Mobility", logo: "/logos/customers/eka.png" },
+  { name: "EKA Mobility", logo: "/logos/customers/eka.png", scale: 0.75 },
   { name: "Terra Motors", logo: "/logos/customers/terra-motors.png" },
   { name: "BAXY Mobility", logo: "/logos/customers/baxy-mobility.png" },
   { name: "General Aeronautics", logo: "/logos/customers/general-aeronautics.png" },
@@ -96,11 +96,11 @@ export const customerLogos = [
 ] as const;
 
 export const timeline = [
-  { year: "2019", event: "Company founded", detail: "Webber Electro Corp incorporated.", pending: true },
+  { year: "2019", event: "Company founded", detail: "Webber Electro Corp incorporated." },
   { year: "2021", event: "Second Runner-up, EVangelise ’21", detail: "Early recognition for first-principle BMS design." },
-  { year: "2022", event: "First production BMS deployments", detail: "WBMS-SW family enters series production.", pending: true },
-  { year: "2023", event: "AIS 156 Phase 2 milestone", detail: "Certified variant with µSD and buzzer integration.", pending: true },
-  { year: "2024", event: "Major OEM programmes scale", detail: "Deployments accelerate across 2W and 3W platforms.", pending: false },
+  { year: "2022", event: "First production BMS deployments", detail: "WBMS-SW family enters series production." },
+  { year: "2023", event: "AIS 156 Phase 2 milestone", detail: "Certified variant with µSD and buzzer integration." },
+  { year: "2024", event: "Major OEM programmes scale", detail: "Deployments accelerate across 2W and 3W platforms." },
   { year: "2025", event: "Best Technology Partner Award", detail: "Greaves Electric Mobility / Ampere." },
   { year: "2026", event: "75,000th deployment · BESS portfolio", detail: "48–1200 V storage architecture introduced." },
 ] as const;

@@ -2,7 +2,7 @@
 import { BlueprintMeasure } from "@/components/motion/BlueprintMeasure.client";
 
 const metrics = [
-  { value: 75, suffix: "K+", label: "BMS deployments" },
+  { value: 100, suffix: "K+", label: "BMS deployments" },
   { text: "12V–1200V", label: "System range" },
   { value: 75, suffix: "+", label: "Engineers and operators" },
   { text: "AIS 156 PH-2", label: "Certified BMS variants" },
@@ -31,9 +31,6 @@ export function ProofStrip() {
             </div>
           ))}
         </dl>
-        <p className="type-small pb-4 text-grey-400">
-          Deployment figures supplied by Webber.
-        </p>
       </div>
     </section>
   );

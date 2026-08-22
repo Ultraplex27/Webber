@@ -61,8 +61,6 @@ export function SpecificationTable({ product }: { product: Product }) {
     rows: g.rows.map((row) => ({ field: row.field, value: row.value(product) })),
   }));
 
-  const hasUnconfirmed = grouped.some((g) => g.rows.some((row) => row.value === "—"));
-
   return (
     <div>
       <div className="gap-module grid items-start md:grid-cols-2 lg:grid-cols-3">
@@ -82,12 +80,6 @@ export function SpecificationTable({ product }: { product: Product }) {
           </table>
         ))}
       </div>
-      {hasUnconfirmed && (
-        <p className="type-small mt-8 text-grey-400">
-          —: not yet confirmed from controlled product data. Request the
-          datasheet for released specifications.
-        </p>
-      )}
     </div>
   );
 }

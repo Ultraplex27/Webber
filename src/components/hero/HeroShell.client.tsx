@@ -1,9 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const HOLD_MS = 3000;
+/** Slowed down from native speed so the pillar captions get enough time to
+ * be read as their act plays, rather than racing by at 1x. */
+const PLAYBACK_RATE = 0.65;
 
 /**
  * Pillar call-outs cross-fade in sync with the hero video's acts — a BMS
@@ -29,8 +32,8 @@ const PILLARS = [
     time: 3.2,
     kind: "pillar" as const,
     label: "TWO-WHEELERS & THREE-WHEELERS",
-    accent: "75K+ BMS units riding",
-    heading: "today, 12V–96V.",
+    accent: "100K+ BMS units riding",
+    heading: "today.",
   },
   { time: 6.0, kind: "brand" as const },
 ] as const;
@@ -44,6 +47,10 @@ const PILLARS = [
 export function HeroShell() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [activePillar, setActivePillar] = useState(0);
+
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.playbackRate = PLAYBACK_RATE;
+  }, []);
 
   const trackTime = () => {
     const t = videoRef.current?.currentTime ?? 0;
@@ -72,6 +79,9 @@ export function HeroShell() {
         playsInline
         poster="/images/hero/frames/frame-0215.webp"
         aria-hidden="true"
+        onLoadedMetadata={(e) => {
+          e.currentTarget.playbackRate = PLAYBACK_RATE;
+        }}
         onTimeUpdate={trackTime}
         onEnded={() => {
           window.setTimeout(() => {
