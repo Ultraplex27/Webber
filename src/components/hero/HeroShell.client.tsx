@@ -117,9 +117,7 @@ export function HeroShell() {
                 </div>
               ) : (
                 <>
-                  <p className="font-display font-bold tracking-tight text-white/60 text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12] mb-3">
-                    {pillar.label}
-                  </p>
+                  <p className="micro-label !font-display !text-white/60 mb-3">{pillar.label}</p>
                   <p className="font-display font-bold tracking-tight text-white text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12]">
                     <span className="text-spindle">{pillar.accent}</span> {pillar.heading}
                   </p>
