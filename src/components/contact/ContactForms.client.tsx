@@ -71,14 +71,14 @@ export function ContactForms() {
       <fieldset className="grid gap-6">
         <Field label="NAME" name="name" required />
         <Field label="EMAIL" name="email" type="email" required />
-        <Field label="PHONE NUMBER" name="phone" type="tel" />
+        <Field label="PHONE NUMBER" name="phone" type="tel" required />
         <div className="grid grid-cols-2 gap-6">
-          <SelectField label="APPLICATION" name="application" options={APPLICATION_OPTIONS} />
-          <SelectField label="NOMINAL VOLTAGE" name="nominal_voltage" options={VOLTAGE_OPTIONS} />
+          <SelectField label="APPLICATION" name="application" options={APPLICATION_OPTIONS} required />
+          <SelectField label="NOMINAL VOLTAGE" name="nominal_voltage" options={VOLTAGE_OPTIONS} required />
         </div>
         <div className="grid grid-cols-2 gap-6">
-          <SelectField label="NOMINAL CURRENT" name="nominal_current" options={CURRENT_OPTIONS} />
-          <SelectField label="CELL CHEMISTRY" name="cell_chemistry" options={CHEMISTRY_OPTIONS} />
+          <SelectField label="NOMINAL CURRENT" name="nominal_current" options={CURRENT_OPTIONS} required />
+          <SelectField label="CELL CHEMISTRY" name="cell_chemistry" options={CHEMISTRY_OPTIONS} required />
         </div>
         <Field label="MESSAGE" name="message" required>
           <textarea
@@ -96,7 +96,7 @@ export function ContactForms() {
           {status === "sending" ? "Sending…" : "Submit"}
         </button>
         <p className="type-small">
-          Or email directly:{" "}
+          Or email on{" "}
           <a href={`mailto:${contact.email}`} className="text-blue-700 underline-offset-4 hover:underline">
             {contact.email}
           </a>
@@ -149,21 +149,25 @@ function SelectField({
   label,
   name,
   options,
+  required,
 }: {
   label: string;
   name: string;
   options: string[];
+  required?: boolean;
 }) {
   const id = `f-${name}`;
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="micro-label !text-ink-soft">
         {label}
+        {required && <span className="text-error"> *</span>}
       </label>
       <select
         id={id}
         name={name}
         defaultValue=""
+        required={required}
         className="min-h-[44px] rounded-[3px] border border-grey-300 bg-white px-4 text-base text-ink"
       >
         <option value="" disabled>

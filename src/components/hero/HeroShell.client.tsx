@@ -30,8 +30,8 @@ const PILLARS = [
   {
     time: 3.2,
     kind: "pillar" as const,
-    label: "TWO-WHEELERS & THREE-WHEELERS",
-    accent: "100K+ BMS units riding",
+    label: "2-WHEELERS, 3-WHEELERS & ESS",
+    accent: "100K+ BMS units powering",
     heading: "today.",
   },
   { time: 6.0, kind: "brand" as const },
@@ -117,7 +117,9 @@ export function HeroShell() {
                 </div>
               ) : (
                 <>
-                  <p className="micro-label !text-white/60 mb-3">{pillar.label}</p>
+                  <p className="font-display font-bold tracking-tight text-white/60 text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12] mb-3">
+                    {pillar.label}
+                  </p>
                   <p className="font-display font-bold tracking-tight text-white text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12]">
                     <span className="text-spindle">{pillar.accent}</span> {pillar.heading}
                   </p>
