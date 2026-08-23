@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const HOLD_MS = 3000;
@@ -112,13 +111,6 @@ export function HeroShell() {
             >
               {pillar.kind === "brand" ? (
                 <div className="flex flex-col items-start gap-5">
-                  <Image
-                    src="/logos/webber-masthead.png"
-                    alt="Webber Electro Corp"
-                    width={520}
-                    height={109}
-                    className="h-12 w-auto brightness-0 invert sm:h-14"
-                  />
                   <p className="font-display font-bold tracking-tight text-white text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12]">
                     Rewiring the Planet.
                   </p>

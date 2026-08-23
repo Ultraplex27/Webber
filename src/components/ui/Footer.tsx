@@ -60,15 +60,14 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col gap-6 border-t border-grey-200 pt-8 md:flex-row md:items-end md:justify-between">
           <div>
-            {/* Source asset is dark-navy for light backgrounds (see
-                BRAND_GUIDELINES.md); reversed to white for this dark footer
-                since no separate reversed export exists. */}
+            {/* Reversed-white export of the navy masthead (see
+                BRAND_GUIDELINES.md) for this dark footer band. */}
             <Image
-              src="/logos/webber-masthead.png"
+              src="/logos/webber-masthead-white.png"
               alt="Webber Electro Corp"
               width={520}
               height={109}
-              className="h-7 w-auto brightness-0 invert"
+              className="h-7 w-auto"
             />
             <p className="micro-label mt-3">BATTERY INTELLIGENCE / 12V–1200V</p>
           </div>

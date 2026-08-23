@@ -6,7 +6,7 @@ import { ProductCard } from "./ProductCard";
 import { Reveal } from "@/components/motion/Reveal.client";
 
 type Category = "automotive" | "bess";
-type AutomotiveSub = "all" | "2w" | "3w";
+type AutomotiveSub = "all" | "48-51" | "60" | "72" | "96-102";
 type BessSub = "all" | "12-24" | "48" | "96-102" | "120-500";
 
 // "48" is widened past the literal 48V nameplate to the 40-67V a 16S LFP/NMC
@@ -19,15 +19,22 @@ const BESS_BANDS: Record<Exclude<BessSub, "all">, [number, number]> = {
   "120-500": [120, 500],
 };
 
+const AUTOMOTIVE_VOLTAGE_BANDS: Record<Exclude<AutomotiveSub, "all">, number[]> = {
+  "48-51": [48, 51],
+  "60": [60],
+  "72": [72],
+  "96-102": [96, 102],
+};
+
 function numbersIn(value: string): number[] {
   return (value.match(/\d+(\.\d+)?/g) ?? []).map(Number);
 }
 
 function matchesAutomotive(product: Product, sub: AutomotiveSub): boolean {
   if (product.application !== "Automotive") return false;
-  if (sub === "2w") return /2W/i.test(product.otherApplications);
-  if (sub === "3w") return /3W/i.test(product.otherApplications);
-  return true;
+  if (sub === "all") return true;
+  const targets = AUTOMOTIVE_VOLTAGE_BANDS[sub];
+  return numbersIn(product.nominalVoltage).some((n) => targets.includes(n));
 }
 
 function matchesBess(product: Product, sub: BessSub): boolean {
@@ -83,8 +90,10 @@ export function ProductExplorer() {
           {(
             [
               ["all", "All"],
-              ["2w", "Two-wheeler"],
-              ["3w", "3-wheeler"],
+              ["48-51", "48V/51V"],
+              ["60", "60V"],
+              ["72", "72V"],
+              ["96-102", "96V/102V"],
             ] as [AutomotiveSub, string][]
           ).map(([value, label]) => (
             <button
